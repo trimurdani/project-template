@@ -1,0 +1,47 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.artivisi.pos.model.master;
+
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+/**
+ *
+ * @author ifnu
+ */
+@Entity
+@Table(name="MST_SYSTEM_PROPERTY")
+public class SystemProperty implements Serializable{
+
+    @Id
+    @Column(name="ID")
+    private String id;
+
+    @Column(name="VAL")
+    private String val;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getVal() {
+        return val;
+    }
+
+    public void setVal(String val) {
+        this.val = val;
+    }
+
+    
+
+}
