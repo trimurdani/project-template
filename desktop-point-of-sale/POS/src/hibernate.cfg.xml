@@ -1,0 +1,24 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+
+        <property name="show_sql">true</property>
+
+        <!-- daftar class yang dimapping -->
+        <mapping class="training.pos.model.master.Produk" />
+        <mapping class="training.pos.model.master.Cabang" />
+        <mapping class="training.pos.model.master.RunningNumber" />
+        <mapping class="training.pos.model.master.SystemProperty" />
+        <mapping class="training.pos.model.sekuriti.Menu" />
+        <mapping class="training.pos.model.sekuriti.Pengguna" />
+        <mapping class="training.pos.model.sekuriti.Peran" />
+        <mapping class="training.pos.model.transaksi.Penjualan" />
+        <mapping class="training.pos.model.transaksi.PenjualanDetail" />
+        <mapping class="training.pos.model.transaksi.Pembelian" />
+        <mapping class="training.pos.model.transaksi.PembelianDetail" />
+        
+	</session-factory>
+</hibernate-configuration>
