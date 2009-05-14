@@ -110,8 +110,9 @@ public class FrameUtama extends javax.swing.JFrame {
 
         transaksiService = (TransaksiService) ctx.getBean("tokoService");
         masterService = (MasterService) ctx.getBean("masterService");
-        sekuritiService = (SekuritiService) ctx.getBean("sekuritiService");
-        reportService = (ReportService) ctx.getBean("reportService");
+        //aku remark dulu (aldi)
+        //sekuritiService = (SekuritiService) ctx.getBean("sekuritiService");
+        //reportService = (ReportService) ctx.getBean("reportService");
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
