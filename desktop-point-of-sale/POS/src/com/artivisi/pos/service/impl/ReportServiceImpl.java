@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author ifnu
  */
-@Service("masterService")
+@Service("reportService")
 @Transactional(readOnly=true)
 public class ReportServiceImpl {
 
