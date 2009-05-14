@@ -33,72 +33,75 @@ public class TransaksiPembelianPanel extends javax.swing.JInternalFrame {
     }
 
     private void initiateListener(){
-        buttonPanelTransaksi1.getBtnTambah().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                
-                
-            }
-        });
-        buttonPanelTransaksi1.getBtnEdit().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-
-
-            }
-        });
-        buttonPanelTransaksi1.getBtnHapus().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-
-
-            }
-        });
-        buttonPanelTransaksi1.getBtnSimpan().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-
-
-            }
-        });
-        buttonPanelTransaksi1.getBtnBatal().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-
-
-            }
-        });
-        buttonPanelTransaksi1.getBtnCari().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-
-
-            }
-        });
-        buttonPanelTransaksi1.getBtnCetak().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-
-
-            }
-        });
-        buttonPanelTransaksi1.getBtnExit().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                
-            }
-        });
+     // aku (winzaldi) remark dulu
+//
+//        buttonPanelTransaksi1.getBtnTambah().addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//
+//
+//
+//            }
+//        });
+//        buttonPanelTransaksi1.getBtnEdit().addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//
+//
+//
+//            }
+//        });
+//        buttonPanelTransaksi1.getBtnHapus().addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//
+//
+//
+//            }
+//        });
+//        buttonPanelTransaksi1.getBtnSimpan().addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//
+//
+//
+//            }
+//        });
+//        buttonPanelTransaksi1.getBtnBatal().addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//
+//
+//
+//            }
+//        });
+//        buttonPanelTransaksi1.getBtnCari().addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//
+//
+//
+//            }
+//        });
+//        buttonPanelTransaksi1.getBtnCetak().addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//
+//
+//
+//            }
+//        });
+//        buttonPanelTransaksi1.getBtnExit().addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
     }
 
     private boolean validasi(){
-
+       // aku rubah dulu biar bisa jalan aja
+       return false;
     }
 
     private void loadFormToModel(){
@@ -120,7 +123,6 @@ public class TransaksiPembelianPanel extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonPanelTransaksi1 = new com.artivisi.pos.ui.toolbar.ButtonPanelTransaksi();
         jPanel3 = new javax.swing.JPanel();
         btnTambah = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -188,7 +190,7 @@ public class TransaksiPembelianPanel extends javax.swing.JInternalFrame {
                     .addComponent(btnEdit)
                     .addComponent(btnHapus))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -224,7 +226,7 @@ public class TransaksiPembelianPanel extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jdcTanggalPemesanan, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(345, Short.MAX_VALUE))
+                .addContainerGap(389, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,16 +252,13 @@ public class TransaksiPembelianPanel extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonPanelTransaksi1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(buttonPanelTransaksi1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(33, 33, 33)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -281,7 +280,6 @@ public class TransaksiPembelianPanel extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHapus;
     private javax.swing.JButton btnTambah;
-    private com.artivisi.pos.ui.toolbar.ButtonPanelTransaksi buttonPanelTransaksi1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
