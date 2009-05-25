@@ -28,6 +28,9 @@ public class Pengguna extends BaseEntity implements Serializable {
     @Column(name="ID_PENGGUNA")
     private String id;
 
+    @Column(name="NAMA_LENGKAP",length=100)
+    private String namaLengkap;
+
     @ManyToMany(mappedBy="penggunas",cascade=CascadeType.ALL)
     private List<Peran> perans;
 
@@ -63,6 +66,14 @@ public class Pengguna extends BaseEntity implements Serializable {
 
     public void setKataSandi(String kataSandi) {
         this.kataSandi = kataSandi;
+    }
+
+    public String getNamaLengkap() {
+        return namaLengkap;
+    }
+
+    public void setNamaLengkap(String namaLengkap) {
+        this.namaLengkap = namaLengkap;
     }
 
 }

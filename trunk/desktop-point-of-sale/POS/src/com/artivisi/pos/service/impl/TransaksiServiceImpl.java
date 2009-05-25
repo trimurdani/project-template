@@ -19,9 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author endy
  */
-@Service("tokoService")
+@Service("transaksiService")
 @Transactional(readOnly=false)
-public class TransactionServiceImpl implements TransaksiService{
+public class TransaksiServiceImpl implements TransaksiService{
     @Autowired private PenjualanDao penjualanDao;
     @Autowired private PembelianDao pembelianDao;
 
