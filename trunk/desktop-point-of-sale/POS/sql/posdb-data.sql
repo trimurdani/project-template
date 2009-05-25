@@ -57,7 +57,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `SEC_MENU` WRITE;
 /*!40000 ALTER TABLE `SEC_MENU` DISABLE KEYS */;
-INSERT INTO `SEC_MENU` (`ID_MENU`, `MENU_LEVEL`, `PANEL_CLASS`, `URUTAN`, `ID_PARENT`) VALUES ('Bantuan',0,NULL,5,NULL),('Laporan',0,NULL,3,NULL),('Master',0,NULL,1,NULL),('Master Produk',1,'com.artivisi.pos.ui.master.MasterProdukPanel',1,'Master'),('Master Running Number',1,'com.artivisi.pos.ui.master.MasterRunningNumberPanel',2,'Master'),('Master System Property',1,'com.artivisi.pos.ui.master.MasterSystemPropertyPanel',3,'Master'),('Sekuriti',0,NULL,4,NULL),('Transaksi',0,NULL,2,NULL);
+INSERT INTO `SEC_MENU` (`ID_MENU`, `MENU_LEVEL`, `PANEL_CLASS`, `URUTAN`, `ID_PARENT`) VALUES ('Bantuan',0,NULL,5,NULL),('Laporan',0,NULL,3,NULL),('Master',0,NULL,1,NULL),('Master Produk',1,'com.artivisi.pos.ui.master.MasterProdukPanel',1,'Master'),('Master Running Number',1,'com.artivisi.pos.ui.master.RunningNumberPanel',2,'Master'),('Master System Property',1,'com.artivisi.pos.ui.master.SystemPropertyPanel',3,'Master'),('Menu',1,'com.artivisi.pos.ui.sekuriti.MenuPanel',3,'Sekuriti'),('Pengguna',1,'com.artivisi.pos.ui.sekuriti.PenggunaPanel',1,'Sekuriti'),('Peran',1,'com.artivisi.pos.ui.sekuriti.PeranPanel',2,'Sekuriti'),('Sekuriti',0,NULL,4,NULL),('Transaksi',0,NULL,2,NULL);
 /*!40000 ALTER TABLE `SEC_MENU` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -67,7 +67,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `SEC_PENGGUNA` WRITE;
 /*!40000 ALTER TABLE `SEC_PENGGUNA` DISABLE KEYS */;
-INSERT INTO `SEC_PENGGUNA` (`ID_PENGGUNA`, `KATA_SANDI`) VALUES ('ADMIN','f6fdffe48c908deb0f4c3bd36c032e72');
+INSERT INTO `SEC_PENGGUNA` (`ID_PENGGUNA`, `NAMA_LENGKAP`, `KATA_SANDI`) VALUES ('ADMIN','SUPER USER','f6fdffe48c908deb0f4c3bd36c032e72');
 /*!40000 ALTER TABLE `SEC_PENGGUNA` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,7 +87,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `SEC_PERAN_MENU` WRITE;
 /*!40000 ALTER TABLE `SEC_PERAN_MENU` DISABLE KEYS */;
-INSERT INTO `SEC_PERAN_MENU` (`ID_PERAN`, `ID_MENU`) VALUES ('SUPER USER','Master'),('SUPER USER','Transaksi'),('SUPER USER','Laporan'),('SUPER USER','Bantuan');
+INSERT INTO `SEC_PERAN_MENU` (`ID_PERAN`, `ID_MENU`) VALUES ('SUPER USER','Master'),('SUPER USER','Transaksi'),('SUPER USER','Laporan'),('SUPER USER','Bantuan'),('SUPER USER','Sekuriti'),('SUPER USER','Master Produk'),('SUPER USER','Master Running Number'),('SUPER USER','Master System Property'),('SUPER USER','Pengguna'),('SUPER USER','Peran'),('SUPER USER','Menu');
 /*!40000 ALTER TABLE `SEC_PERAN_MENU` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,4 +146,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-05-24 12:58:14
+-- Dump completed on 2009-05-25  9:19:21

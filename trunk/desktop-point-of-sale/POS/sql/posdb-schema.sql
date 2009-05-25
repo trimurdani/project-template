@@ -82,11 +82,11 @@ DROP TABLE IF EXISTS `SEC_MENU`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `SEC_MENU` (
-  `ID_MENU` varchar(10) NOT NULL,
+  `ID_MENU` varchar(50) NOT NULL,
   `MENU_LEVEL` int(11) NOT NULL,
   `PANEL_CLASS` varchar(70) default NULL,
   `URUTAN` int(11) NOT NULL,
-  `ID_PARENT` varchar(10) default NULL,
+  `ID_PARENT` varchar(50) default NULL,
   PRIMARY KEY  (`ID_MENU`),
   KEY `FK67C2FCAD37D2A8C2` (`ID_PARENT`),
   CONSTRAINT `FK67C2FCAD37D2A8C2` FOREIGN KEY (`ID_PARENT`) REFERENCES `sec_menu` (`ID_MENU`)
@@ -102,6 +102,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `SEC_PENGGUNA` (
   `ID_PENGGUNA` varchar(255) NOT NULL,
+  `NAMA_LENGKAP` varchar(100) default NULL,
   `KATA_SANDI` varchar(100) NOT NULL,
   PRIMARY KEY  (`ID_PENGGUNA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -130,7 +131,7 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `SEC_PERAN_MENU` (
   `ID_PERAN` varchar(20) NOT NULL,
-  `ID_MENU` varchar(10) NOT NULL,
+  `ID_MENU` varchar(50) NOT NULL,
   KEY `FK55093362D0314E77` (`ID_MENU`),
   KEY `FK55093362364D277B` (`ID_PERAN`),
   CONSTRAINT `FK55093362364D277B` FOREIGN KEY (`ID_PERAN`) REFERENCES `sec_peran` (`ID_PERAN`),
@@ -238,4 +239,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-05-24 11:16:31
+-- Dump completed on 2009-05-25  9:19:08
