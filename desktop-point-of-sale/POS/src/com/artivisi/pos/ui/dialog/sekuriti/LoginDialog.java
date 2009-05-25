@@ -13,6 +13,9 @@ package com.artivisi.pos.ui.dialog.sekuriti;
 
 import com.artivisi.pos.model.sekuriti.Pengguna;
 import com.artivisi.pos.ui.frame.FrameUtama;
+import com.artivisi.pos.util.TextComponentUtils;
+import com.twmacinta.util.MD5;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,6 +29,8 @@ public class LoginDialog extends javax.swing.JDialog {
     public LoginDialog() {
         super(FrameUtama.getInstance(), true);
         initComponents();
+        setLocationRelativeTo(null);
+        TextComponentUtils.setAutoUpperCaseText(txtPengguna);
     }
 
     /** This method is called from within the constructor to
@@ -41,8 +46,8 @@ public class LoginDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         txtPengguna = new javax.swing.JTextField();
         txtKataSandi = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnLogin = new javax.swing.JButton();
+        btnKeluar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -51,10 +56,25 @@ public class LoginDialog extends javax.swing.JDialog {
         jLabel2.setText("Kata Sandi");
 
         txtKataSandi.setEchoChar(' ');
+        txtKataSandi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtKataSandiActionPerformed(evt);
+            }
+        });
 
-        jButton1.setText("Login");
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Keluar");
+        btnKeluar.setText("Keluar");
+        btnKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKeluarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,9 +88,9 @@ public class LoginDialog extends javax.swing.JDialog {
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(btnLogin)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2))
+                        .addComponent(btnKeluar))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(txtPengguna, javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(txtKataSandi, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)))
@@ -91,13 +111,48 @@ public class LoginDialog extends javax.swing.JDialog {
                         .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(btnLogin)
+                    .addComponent(btnKeluar))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+
+        //cek user dan password
+        if(validateForm()){
+            Pengguna p = FrameUtama.getSekuritiService().penggunaBerdasarId(txtPengguna.getText());
+            String kataSandi = new MD5(new String(txtKataSandi.getPassword())).asHex();
+            if(p!=null && p.getKataSandi().equals(kataSandi)){
+                pengguna = p;
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Nama Pengguna atau Kata Sandi tidak cocok!");
+            }
+        } 
+
+}//GEN-LAST:event_btnLoginActionPerformed
+
+    public boolean validateForm(){
+        if(txtPengguna.getText().length()==0){
+            JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Nama Pengguna tidak boleh kosong!");
+            return false;
+        } else if(txtKataSandi.getPassword() == null || txtKataSandi.getPassword().length==0){
+            JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Kata Sandi tidak boleh kosong!");
+            return false;
+        }
+        return true;
+    }
+
+    private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btnKeluarActionPerformed
+
+    private void txtKataSandiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKataSandiActionPerformed
+        btnLoginActionPerformed(evt);
+    }//GEN-LAST:event_txtKataSandiActionPerformed
 
     public Pengguna showDialog(){
         setVisible(true);
@@ -105,8 +160,8 @@ public class LoginDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnKeluar;
+    private javax.swing.JButton btnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPasswordField txtKataSandi;

@@ -10,12 +10,34 @@
  */
 package com.artivisi.pos.ui.frame;
 
+import com.artivisi.pos.model.sekuriti.Menu;
+import com.artivisi.pos.model.sekuriti.Pengguna;
+import com.artivisi.pos.model.sekuriti.Peran;
 import com.artivisi.pos.service.MasterService;
 import com.artivisi.pos.service.ReportService;
 import com.artivisi.pos.service.SekuritiService;
 import com.artivisi.pos.service.TransaksiService;
+import com.artivisi.pos.ui.dialog.sekuriti.LoginDialog;
 import com.artivisi.pos.ui.master.MasterProdukPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -35,6 +57,7 @@ public class FrameUtama extends javax.swing.JFrame {
     public FrameUtama() {
         initComponents();
         instance = this;
+        menuBar.setVisible(false);
     }
 
     /** This method is called from within the constructor to
@@ -47,10 +70,24 @@ public class FrameUtama extends javax.swing.JFrame {
     private void initComponents() {
 
         destktopPane = new javax.swing.JDesktopPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        menuBar = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        mnuLogin = new javax.swing.JMenuItem();
+        mnuUbahPassword = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setJMenuBar(jMenuBar1);
+
+        jMenu1.setText("File");
+
+        mnuLogin.setText("Login");
+        jMenu1.add(mnuLogin);
+
+        mnuUbahPassword.setText("Ubah Password");
+        jMenu1.add(mnuUbahPassword);
+
+        menuBar.add(jMenu1);
+
+        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -62,7 +99,7 @@ public class FrameUtama extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 296, Short.MAX_VALUE)
+            .addGap(0, 275, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(destktopPane, javax.swing.GroupLayout.Alignment.TRAILING))
         );
@@ -76,6 +113,9 @@ public class FrameUtama extends javax.swing.JFrame {
     private static MasterService masterService;
     private static ReportService reportService;
     private static SekuritiService sekuritiService;
+
+    //Pengguna yang berhasil login
+    private static Pengguna pengguna;
 
     public static TransaksiService getTransaksiService(){
         return transaksiService;
@@ -97,6 +137,144 @@ public class FrameUtama extends javax.swing.JFrame {
         return sekuritiService;
     }
 
+    public static Pengguna getPengguna() {
+        return pengguna;
+    }
+
+    private void initApplication(){
+        Pengguna p = new LoginDialog().showDialog();
+        if(p!=null){
+            pengguna = p;
+            //construct menu
+            constructMenu();
+        }
+    }
+
+    private void constructMenu(){
+        Set<Menu> menus = new HashSet<Menu>();
+        for(Peran p : pengguna.getPerans()){
+            menus.addAll(p.getMenus());
+        }
+        //Map level dan menunya
+        Map<Integer,List<Menu>> menuMap = new HashMap<Integer, List<Menu>>();
+        for(Menu m:menus){
+            List<Menu> menuList = null;
+            if(menuMap.get(m.getMenuLevel()) == null){
+                menuList = new ArrayList<Menu>();
+                menuMap.put(m.getMenuLevel(),menuList);
+            } else {
+                menuList = menuMap.get(m.getMenuLevel());
+            }
+            menuList.add(m);
+        }
+        //Ambil menu level 0 dan tambahkan dalam menubar
+        Set<Menu> menuLevel0 = new TreeSet<Menu>(new UrutanComparator());//mendapatkan menu level 0 yang diurutkan berdasarkan urutan
+        if(menuMap.get(0) == null){
+            throw new IllegalStateException("Menu level 0 tidak ada !!!");
+        } else {
+            menuLevel0.addAll(menuMap.get(0));
+        }
+        //pasang menu level 0 di dalam menu bar
+        Map<Menu,JMenuItem> menuItemMap = new HashMap<Menu, JMenuItem>();
+        for(Menu m : menuLevel0){
+            JMenu jMenu = new JMenu();
+            jMenu.setText(m.getId());
+            menuBar.add(jMenu);
+            menuItemMap.put(m, jMenu);
+        }
+        //level berikutnya dipasang
+        //construct parent child tree
+        List<Menu> parents = menuMap.get(0);
+        if(parents==null){
+            throw new IllegalStateException("Menu level 0 tidak ada!");
+        }
+        List<Menu> childs = null;
+        Integer maximumLevel = FrameUtama.getSekuritiService().maximumMenuLevel();
+        for(int i=1;i<=maximumLevel;i++){
+            childs = menuMap.get(i);
+            if(childs!=null){
+                for(Menu m : childs){
+                    if(parents.indexOf(m.getParent())>=0){
+                        Menu parent = parents.get(parents.indexOf(m.getParent()));
+                        parent.addChild(m);
+                    }
+                    //bikin menu berdasarkan panelClass, kalau nilainya null dibikin JMenu, kalau ada berarti JMenuItem
+                    if(m.getPanelClass() == null){
+                        JMenu jMenu = new JMenu();
+                        jMenu.setText(m.getId());
+                        menuItemMap.put(m, jMenu);
+                        JMenuItem parent = menuItemMap.get(m.getParent());
+                        if(parent!=null && parent instanceof JMenu){
+                            JMenu parentMenu = (JMenu) parent;
+                            parentMenu.add(jMenu);
+                        } 
+                    } else {
+                        JMenuItem jMenuItem = new JMenuItem();
+                        jMenuItem.setText(m.getId());
+                        jMenuItem.addActionListener(createActionListener(m));
+                        menuItemMap.put(m, jMenuItem);
+                        JMenuItem parent = menuItemMap.get(m.getParent());
+                        if(parent!=null && parent instanceof JMenu){
+                            JMenu parentMenu = (JMenu) parent;
+                            parentMenu.add(jMenuItem);
+                        }
+                    }
+                }
+            }
+            parents = childs;
+        }
+        menuBar.setVisible(true);
+        menuBar.updateUI();
+    }
+
+    private Map<String,JInternalFrame> internalFrameMap = new HashMap<String, JInternalFrame>();
+
+    private ActionListener createActionListener(final Menu menu){
+        return new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    //cek apakah sudah ada
+                    JInternalFrame internalFrame = internalFrameMap.get(menu.getId());
+                    if (internalFrame == null) {
+                        Object o = Class.forName(menu.getPanelClass()).newInstance();
+                        if (o instanceof JInternalFrame) {
+                            internalFrame = (JInternalFrame) o;
+                            internalFrame.addInternalFrameListener(new InternalFrameAdapter() {
+
+                                @Override
+                                public void internalFrameClosing(InternalFrameEvent e) {
+                                    internalFrameMap.remove(menu.getId());
+                                }
+                            });
+                            destktopPane.add(internalFrame);
+                            internalFrameMap.put(menu.getId(), internalFrame);
+                        }
+                    } else {
+                        internalFrame.toFront();
+                    }
+                    internalFrame.setVisible(true);
+                    internalFrame.setSelected(true);
+                    internalFrame.setSize(destktopPane.getSize());
+                } catch (PropertyVetoException ex) {
+                    Logger.getLogger(FrameUtama.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(FrameUtama.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(FrameUtama.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InstantiationException ex) {
+                    Logger.getLogger(FrameUtama.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        };
+    }
+
+    private static class UrutanComparator implements Comparator<Menu>{
+
+        public int compare(Menu o1, Menu o2) {
+            return o1.getUrutan().compareTo(o2.getUrutan());
+        }
+        
+    }
     
     /**
      * @param args the command line arguments
@@ -108,23 +286,26 @@ public class FrameUtama extends javax.swing.JFrame {
             ("classpath:applicationContext.xml");
           ctx.registerShutdownHook();
 
-        transaksiService = (TransaksiService) ctx.getBean("tokoService");
+        transaksiService = (TransaksiService) ctx.getBean("transaksiService");
         masterService = (MasterService) ctx.getBean("masterService");
-        //aku remark dulu (aldi)
-        //sekuritiService = (SekuritiService) ctx.getBean("sekuritiService");
-        //reportService = (ReportService) ctx.getBean("reportService");
+        sekuritiService = (SekuritiService) ctx.getBean("sekuritiService");
+        reportService = (ReportService) ctx.getBean("reportService");
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 FrameUtama fu = new FrameUtama();
                 fu.setVisible(true);
                 fu.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                fu.initApplication();
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane destktopPane;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem mnuLogin;
+    private javax.swing.JMenuItem mnuUbahPassword;
     // End of variables declaration//GEN-END:variables
 }

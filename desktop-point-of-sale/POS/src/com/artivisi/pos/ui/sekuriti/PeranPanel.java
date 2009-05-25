@@ -210,7 +210,7 @@ public class PeranPanel extends javax.swing.JInternalFrame {
         buttonPanelMaster1 = new com.artivisi.pos.ui.toolbar.ButtonPanelMaster();
 
         setClosable(true);
-        setTitle("Master Produk");
+        setTitle("Peran");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Form"));
 

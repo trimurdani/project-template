@@ -6,12 +6,17 @@
 package com.artivisi.pos.model.sekuriti;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -23,10 +28,10 @@ import javax.persistence.Table;
 public class Menu implements Serializable {
 
     @Id
-    @Column(name="ID_MENU",length=10)
+    @Column(name="ID_MENU",length=50)
     private String id;
 
-    @Column(name="PANEL_CLASS",length=70,nullable=false)
+    @Column(name="PANEL_CLASS",length=70)
     private String panelClass;
 
     @Column(name="MENU_LEVEL",nullable=false)
@@ -37,6 +42,33 @@ public class Menu implements Serializable {
 
     @ManyToMany(mappedBy = "menus",cascade=CascadeType.ALL)
     private List<Peran> perans;
+
+    @OneToOne
+    @JoinColumn(name="ID_PARENT")
+    private Menu parent;
+
+    private transient Set<Menu> childs;
+
+    public void addChild(Menu m) {
+        if(childs==null){
+            childs = new TreeSet<Menu>(new Comparator<Menu>() {
+
+                public int compare(Menu o1, Menu o2) {
+                    return o1.getUrutan().compareTo(o2.getUrutan());
+                }
+            });
+        }
+    }
+
+    public void removeChild(Menu m){
+        if(childs!=null && !childs.isEmpty()){
+            childs.remove(m);
+        }
+    }
+
+    public Set<Menu> getChilds() {
+        return childs;
+    }
 
     public List<Peran> getPerans() {
         return perans;
@@ -76,6 +108,36 @@ public class Menu implements Serializable {
 
     public void setUrutan(Integer urutan) {
         this.urutan = urutan;
+    }
+
+    public Menu getParent() {
+        return parent;
+    }
+
+    public void setParent(Menu parent) {
+        this.parent = parent;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Menu other = (Menu) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
     }
 
 }

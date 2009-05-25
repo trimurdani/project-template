@@ -24,12 +24,13 @@ public interface SekuritiService {
     public void hapus(Pengguna p);
     public void simpan(Pengguna p);
     public List<Pengguna> semuaPengguna();
-    public Pengguna PenggunaBerdasarId(String id);
+    public Pengguna penggunaBerdasarId(String id);
 
     public void hapus(Menu p);
     public void simpan(Menu p);
     public List<Menu> semuaMenu();
-    public Menu MenuBerdasarId(String id);
+    public Menu menuBerdasarId(String id);
+    public Integer maximumMenuLevel();
 
 
 }
