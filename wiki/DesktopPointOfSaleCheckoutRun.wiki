@@ -10,8 +10,7 @@ Halaman ini berisi bagaimana caranya mendapatkan source code desktop-point-of-sa
 Langkah-langkah yang harus dalakukan :
   * Menginstall subversion
     Netbeans sudah dilengkapi dengan tools untuk bekerja dengan repository. Ada modul mercury, Subversion dan CVS. Google code menggunakan subversion sebagai source repository server, sehingga kita perlu mensetting environtment agar subversion berjalan normal. Ketika pertama kali menginstall NetBeans biasanya tidak ada subversion yang terinstall. Ada 2 cara menggunakan subversion cleint : dengan tools yang ada di netbeans atau dengan external tools. Mau pilih yang mana saja tidak masalah. Di lingkungan windows ada subversion client yang sangat terkenal, namanya tortoiseSVN, sangat bagus dan powerfull. 
-    Saya menulis tutorial panjang lebar tentang tortoise svn, bisa didownload di sini : 
-http://ifnubima.googlepages.com/subversion.pdf
+    Saya menulis tutorial panjang lebar tentang tortoise svn, bisa didownload di sini : http://ifnubima.googlepages.com/subversion.pdf
     atau kalau ingin lebih lengkap penjelasan tentang Subversion bisa pesan buku subversion dari artivisi.com
 
 Kalau ingin menggunakan NetBeans langsung sebagai Subversion client, maka kita harus menginstall subversion client. Ada 2 cara :
