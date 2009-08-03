@@ -1,0 +1,16 @@
+#summary One-sentence summary of this page.
+#labels Featured,Phase-Support
+
+= Introduction =
+Halaman ini berisi bagaimana caranya mendapatkan source code desktop-point-of-sale kemudian membukanya di netbeans, menyiapkan databasenya dan menjalankan aplikasi dari netbeans.
+
+
+= Details =
+
+Langkah-langkah yang harus dalakukan :
+  * Menginstall subversion
+    Netbeans sudah dilengkapi dengan tools untuk bekerja dengan repository. Ada modul mercury, Subversion dan CVS. Google code menggunakan subversion sebagai source repository server, sehingga kita perlu mensetting environtment agar subversion berjalan normal. Ketika pertama kali menginstall NetBeans biasanya tidak ada subversion yang terinstall. Ada 2 cara menggunakan subversion cleint : dengan tools yang ada di netbeans atau dengan external tools. Mau pilih yang mana saja tidak masalah. Di lingkungan windows ada subversion client yang sangat terkenal, namanya tortoiseSVN, sangat bagus dan powerfull. Saya menulis tutorial panjang lebar tentang tortoise svn, bisa didownload di sini : 
+  * Mengambil source code dari repository
+svn checkout http://project-template.googlecode.com/svn/trunk/desktop-point-of-sale desktop-point-of-sale-readonly
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
