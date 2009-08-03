@@ -19,10 +19,10 @@ import javax.persistence.Table;
  *
  * @author endy
  */
-@Entity @Table(name="T_PENJUALAN_DETAIL")
+@Entity @Table(name="TR_PENJUALAN_DETAIL")
 public class PenjualanDetail implements Serializable {
     @Id
-    @Column(name="ID_PENJUALAN_DETAIL")
+    @Column(name="ID_PENJUALAN_DETAIL",length=19)
     private String id;
 
     @ManyToOne

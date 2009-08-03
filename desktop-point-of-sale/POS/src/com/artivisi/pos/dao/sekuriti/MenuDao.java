@@ -7,7 +7,7 @@ package com.artivisi.pos.dao.sekuriti;
 
 import com.artivisi.pos.dao.BaseDaoHibernate;
 import com.artivisi.pos.model.sekuriti.Menu;
-import java.util.List;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -20,9 +20,10 @@ public class MenuDao extends BaseDaoHibernate<Menu>{
         return (Integer) sessionFactory.getCurrentSession().createQuery("select max(menuLevel) from Menu").uniqueResult();
     }
 
-    @Override
-    public List<Menu> semua() {
-        return sessionFactory.getCurrentSession().createQuery("from Menu m left join fetch m.parent order by m.menuLevel,m.urutan").list();
+    public Menu berdasarId(String id){
+        Menu menu = (Menu) sessionFactory.getCurrentSession().get(Menu.class, id);
+        Hibernate.initialize(menu.getChilds());
+        return menu;
     }
 
 }

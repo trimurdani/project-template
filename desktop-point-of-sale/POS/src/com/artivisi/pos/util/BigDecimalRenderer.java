@@ -7,39 +7,23 @@ package com.artivisi.pos.util;
 
 import java.awt.Component;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
  * @author ifnu
  */
-public class BigDecimalRenderer extends JFormattedTextField implements TableCellRenderer {
-
-    public BigDecimalRenderer() {
-        setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#,##0"))));
-        setAlignmentY(JFormattedTextField.RIGHT_ALIGNMENT);
-    }
+public class BigDecimalRenderer extends DefaultTableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         if(value instanceof BigDecimal){
-            try {
-                setValue(value);
-                commitEdit();
-                return this;
-            } catch (ParseException ex) {
-                Logger.getLogger(BigDecimalRenderer.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            label.setText(TextComponentUtils.formatNumber((BigDecimal)value));
         }
-        return this;
+        return label;
     }
 
 }

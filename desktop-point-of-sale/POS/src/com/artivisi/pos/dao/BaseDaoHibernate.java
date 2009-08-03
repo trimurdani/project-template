@@ -4,14 +4,9 @@
  */
 package com.artivisi.pos.dao;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
-import javax.persistence.Table;
-import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Example;
-import org.hibernate.criterion.MatchMode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -22,6 +17,7 @@ public class BaseDaoHibernate<T> {
 
     @SuppressWarnings("unchecked")
     protected Class domainClass;
+    
     @Autowired protected SessionFactory sessionFactory;
     
 
@@ -32,7 +28,11 @@ public class BaseDaoHibernate<T> {
 
 
     public void simpan(T domain) {
-        sessionFactory.getCurrentSession().save(domain);
+        sessionFactory.getCurrentSession().saveOrUpdate(domain);
+    }
+
+    public void merge(T domain) {
+        sessionFactory.getCurrentSession().merge(domain);
     }
 
     public void hapus(T domain) {

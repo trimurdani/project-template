@@ -10,13 +10,30 @@
  */
 package com.artivisi.pos.ui.sekuriti;
 
+import com.artivisi.pos.model.sekuriti.Menu;
+import com.artivisi.pos.model.sekuriti.Pengguna;
 import com.artivisi.pos.model.sekuriti.Peran;
+import com.artivisi.pos.ui.dialog.sekuriti.PeranMenuDialog;
+import com.artivisi.pos.ui.dialog.sekuriti.PeranPenggunaDialog;
 import com.artivisi.pos.ui.frame.FrameUtama;
 import com.artivisi.pos.util.BigDecimalRenderer;
+import com.artivisi.pos.util.TextComponentUtils;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+import java.util.TreeSet;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -28,162 +45,351 @@ import javax.swing.table.AbstractTableModel;
  */
 public class PeranPanel extends javax.swing.JInternalFrame {
 
-    private List<Peran> daftarPeran;
-    private Peran pilihanPeran;
-
+    private List<Peran> perans;
+    private Peran peran;
+    private List<Pengguna> penggunas;
+    private Pengguna pengguna;
+    private List<Menu> orderedMenu;
+    private List<Menu> menus;
+    private Menu menu;
+    
     /** Creates new form MasterPeran */
     public PeranPanel() {
         initComponents();
 
-        initListener();
-        kondisiAwal();
-        isiTableDaftarPeran();
+        TextComponentUtils.setAutoUpperCaseText(txtDeskripsi);
+        TextComponentUtils.setAutoUpperCaseText(txtId);
+
         tblPeran.setAutoCreateColumnsFromModel(false);
-        tblPeran.setDefaultRenderer(BigDecimal.class, new BigDecimalRenderer());
+        tblPengguna.setAutoCreateColumnsFromModel(false);
+
+        perans = FrameUtama.getSekuritiService().semuaPeran();
+        tblPeran.setModel(new PeranModel(perans));
+        tblPeran.getSelectionModel().addListSelectionListener(new SelectionListener());
+        tblPengguna.getSelectionModel().addListSelectionListener(new SelectionListener());
+        lstMenu.getSelectionModel().addListSelectionListener(new SelectionListener());
+
+        enableForm(false);
+        initListener();
+        
+        lstMenu.setCellRenderer(new MenuListRenderer());
     }
 
-    private void initListener() {
-        // Listener untuk table ketika table di Klik 
-        tblPeran.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+    private void initListener(){
+        masterToolbarPanel1.getBtnTambah().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                enableForm(true);
+                masterToolbarPanel1.kondisiTambah();
+            }
+        });
 
-            public void valueChanged(ListSelectionEvent arg0) {
-                //kalau tidak ada row yang di pilih maka akan menghasilkan -1
-                if (tblPeran.getSelectedRow() > -1) {
-                    //ambil row yang di Pilihan
-                    int row = tblPeran.getSelectedRow();
+        masterToolbarPanel1.getBtnBatal().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                clearForm();
+                masterToolbarPanel1.kondisiAwal();
+            }
+        });
 
-                    pilihanPeran = daftarPeran.get(row);
+        masterToolbarPanel1.getBtnEdit().addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                enableForm(true);
+                txtId.setEnabled(false);
+                masterToolbarPanel1.kondisiTambah();
+            }
+        });
 
-                    txtNama.setText(pilihanPeran.getId());
-                    txtDeskripsi.setText(pilihanPeran.getDeskripsi());
+        masterToolbarPanel1.getBtnHapus().addActionListener(new ActionListener() {
 
-                    buttonPanelMaster1.getBtnEdit().setEnabled(true);
-                    buttonPanelMaster1.getBtnHapus().setEnabled(true);
+            public void actionPerformed(ActionEvent e) {
+                if(peran!=null){
+                    FrameUtama.getSekuritiService().hapus(peran);
+                    peran = null;
+                    clearForm();
+                    enableForm(false);
+                    perans = FrameUtama.getSekuritiService().semuaPeran();
+                    tblPeran.setModel(new PeranModel(perans));
+                    masterToolbarPanel1.kondisiAwal();
+                } else {
+                    JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Pilih Peran terlebih dahulu di sebelah kiri!",
+                            "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
-        //button edit di Klik
-        buttonPanelMaster1.getBtnEdit().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnSimpan().addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent arg0) {
-                kondisiEdit();
-                buttonPanelMaster1.kondisiTambah();
-            }
-        });
-
-        // Ketika Button Tambah di Klick
-        buttonPanelMaster1.getBtnTambah().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent arg0) {
-                kondisiTambah();
-                buttonPanelMaster1.kondisiTambah();
-            }
-        });
-
-        // Ketika Tombol Batal di Klik
-        buttonPanelMaster1.getBtnBatal().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent arg0) {
-                kondisiAwal();
-            }
-        });
-
-        // Ketika Tombol Keluar di Klik
-        buttonPanelMaster1.getBtnKeluar().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent arg0) {
-                dispose();
-            }
-        });
-
-        // Ketika tombol Simpan di Klik
-        buttonPanelMaster1.getBtnSimpan().addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent arg0) {
-
-                //buat Object Peran terlebih dahulu
-                if (validasi()) {
-                    //buat Object Peran terlebih dahulu
-                    if (pilihanPeran == null) {
-                        pilihanPeran = new Peran();
-                    }
-
-                    //ambil value kemudian dari text field kemudian di save ke dalam database
-                    pilihanPeran.setId(txtNama.getText());
-                    pilihanPeran.setDeskripsi(txtDeskripsi.getText());
-
-                    //simpan ke database dengan Menggunakan Method Simpan di Object Service
-                    FrameUtama.getSekuritiService().simpan(pilihanPeran);
-
-                    //Kembali Kondisi Awal
-                    kondisiAwal();
-                    //refresh table Peran
-                    isiTableDaftarPeran();
+            public void actionPerformed(ActionEvent e) {
+                if(validateForm()){
+                    if(peran == null) peran = new Peran();
+                    loadFormToModel();
+                    FrameUtama.getSekuritiService().simpan(peran);
+                    clearForm();
+                    enableForm(false);
+                    perans = FrameUtama.getSekuritiService().semuaPeran();
+                    tblPeran.setModel(new PeranModel(perans));
+                    masterToolbarPanel1.kondisiAwal();
                 }
             }
         });
+
+        masterToolbarPanel1.getBtnKeluar().addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                FrameUtama.getInstance().removeInternalFrame(PeranPanel.this);
+            }
+        });
+
     }
 
-    private void isiTableDaftarPeran() {
-        daftarPeran = FrameUtama.getSekuritiService().semuaPeran();
-        tblPeran.setModel(new PeranTableModel(daftarPeran));
+    private class PeranModel extends AbstractTableModel{
 
-    }
+        private List<Peran> peransModel;
 
-    private boolean validasi() {
-        // Periksa Kalau Kode Kosong tampilkan Message Box
-        if (txtNama.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Kode Harus di isi", "Field Harus di isi", JOptionPane.ERROR_MESSAGE);
-            txtNama.requestFocus();
-            return false;
-        }
-        // Periksa Kalau Nama Kosong tampilkan Message Box
-        if (txtDeskripsi.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Nama Harus di isi", "Field Harus di isi", JOptionPane.ERROR_MESSAGE);
-            txtDeskripsi.requestFocus();
-            return false;
+        public PeranModel(List<Peran> peransModel) {
+            this.peransModel = peransModel;
         }
 
-        return true;
+        public int getRowCount() {
+            return peransModel.size();
+        }
+
+        public int getColumnCount() {
+            return 2;
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Peran peran = peransModel.get(rowIndex);
+            switch(columnIndex){
+                case 0 : return peran.getId();
+                case 1 : return peran.getDeskripsi();
+                default : return "";
+            }
+        }
+    }
+    private class PenggunaModel extends AbstractTableModel{
+
+        private List<Pengguna> penggunasModel;
+
+        public PenggunaModel(List<Pengguna> penggunasModel) {
+            this.penggunasModel = penggunasModel;
+        }
+
+        public int getRowCount() {
+            return penggunasModel.size();
+        }
+
+        public int getColumnCount() {
+            return 2;
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Pengguna peran = penggunasModel.get(rowIndex);
+            switch(columnIndex){
+                case 0 : return peran.getId();
+                case 1 : return peran.getNamaLengkap();
+                default : return "";
+            }
+        }
     }
 
-    private void kondisiAwal() {
-        txtNama.setEnabled(false);
-        txtDeskripsi.setEnabled(false);
+    private class SelectionListener implements ListSelectionListener{
 
-        tblPeran.setEnabled(true);
-        buttonPanelMaster1.kondisiAwal();
-
+        public void valueChanged(ListSelectionEvent e) {
+            if(e.getSource().equals(tblPeran.getSelectionModel())){
+                if(tblPeran.getSelectedRow()>=0){
+                    Peran selectedPeran = perans.get(tblPeran.getSelectedRow());
+                    peran = FrameUtama.getSekuritiService().peranBerdasarId(selectedPeran.getId());
+                    penggunas = peran.getPenggunas();
+                    menus = peran.getMenus();
+                    loadModelToForm();
+                    masterToolbarPanel1.kondisiTabelTerpilih();
+                }
+            } else if(e.getSource().equals(tblPengguna.getSelectionModel())){
+                if(tblPengguna.getSelectedRow()>=0){
+                    Pengguna selectedPengguna = penggunas.get(tblPengguna.getSelectedRow());
+                    pengguna = FrameUtama.getSekuritiService().penggunaBerdasarId(selectedPengguna.getId());
+                    btnHapusPengguna.setEnabled(true);
+                } else {
+                    btnHapusPengguna.setEnabled(false);
+                }
+            } else if(e.getSource().equals(lstMenu.getSelectionModel())){
+                if(lstMenu.getSelectedIndex()>=0){
+                    Menu selectedMenu = orderedMenu.get(lstMenu.getSelectedIndex());
+                    menu = FrameUtama.getSekuritiService().menuBerdasarId(selectedMenu.getId());
+                    btnHapusMenu.setEnabled(true);
+                } else {
+                    btnHapusMenu.setEnabled(false);
+                }
+            }
+        }
     }
 
-    public void kondisiTambah() {
-        //hilangkan Pilihan Peran
-        pilihanPeran = null;
-        //hilangkan Pilihan di table
-        tblPeran.clearSelection();
+    private void loadModelToForm(){
+        txtDeskripsi.setText(peran.getDeskripsi());
+        txtId.setText(peran.getId());
+        constructMenu();
+        tblPengguna.setModel(new PenggunaModel(penggunas));
+    }
 
-        txtNama.setText("");
+    private void loadFormToModel(){
+        peran.setId(txtId.getText());
+        peran.setDeskripsi(txtDeskripsi.getText());
+        peran.setMenus(orderedMenu);
+        peran.setPenggunas(penggunas);
+    }
+
+    private void enableForm(boolean status){
+        txtId.setEnabled(status);
+        txtDeskripsi.setEnabled(status);
+        btnTambahMenu.setEnabled(status);
+        btnTambahPengguna.setEnabled(status);
+        lstMenu.setEnabled(status);
+        tblPengguna.setEnabled(status);
+    }
+
+    private void clearForm(){
+        txtId.setText("");
         txtDeskripsi.setText("");
-
-        txtNama.requestFocus();
-        txtNama.setEnabled(true);
-        txtDeskripsi.setEnabled(true);
-
-        tblPeran.setEnabled(false);
+        peran = null;
+        menu = null;
+        pengguna = null;
+        penggunas = null;
+        orderedMenu = null;
+        tblPeran.getSelectionModel().clearSelection();
+        tblPengguna.setModel(new PenggunaModel(new ArrayList<Pengguna>()));
+        lstMenu.setModel(new MenuListModel(new ArrayList<Menu>()));
     }
 
-    public void kondisiEdit() {
-        txtDeskripsi.requestFocus();
-        txtNama.setEnabled(false);
-        txtDeskripsi.setEnabled(true);
+    private boolean validateForm(){
+        if(txtId.getText().length()>0 &&
+                txtDeskripsi.getText().length()>0){
+            return true;
+        } else if(txtId.getText().length()==0){
+            JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Nama Peran harus diisi!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } else if(txtDeskripsi.getText().length()==0){
+            JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Deskripsi Peran harus diisi!",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return false;
+    }
 
-        tblPeran.setEnabled(false);
+    private void constructMenu(){
+        if(orderedMenu!=null) orderedMenu.clear();
+        else orderedMenu = new ArrayList<Menu>();
+        Map<Integer,List<Menu>> menuMap = new HashMap<Integer, List<Menu>>();
+        for(Menu m : menus){
+            List<Menu> menuList = null;
+            if(menuMap.get(m.getMenuLevel()) == null){
+                menuList = new ArrayList<Menu>();
+                menuMap.put(m.getMenuLevel(),menuList);
+            } else {
+                menuList = menuMap.get(m.getMenuLevel());
+            }
+            menuList.add(m);
+        }
+        //construct child and parent
+        Integer maximumLevel = FrameUtama.getSekuritiService().maximumMenuLevel();
+        List<Menu> parents = menuMap.get(0);
+        
+        //
+        List<Menu> childs = null;
+        for(int i=1;i<=maximumLevel;i++){
+            childs = menuMap.get(i);
+            if(childs!=null){
+                for(Menu m : childs){
+                    if(parents.indexOf(m.getParent())>=0){
+                        Menu parent = parents.get(parents.indexOf(m.getParent()));
+                        parent.addChild(m);
+                        m.setParent(parent);
+                    }
+                }
+            }
+            parents = childs;
+        }
+        Stack<Set<Menu>> stack = new Stack<Set<Menu>>();
+        Set<Menu> parentsOrdered = new TreeSet<Menu>(new UrutanComparator());
+        if(menuMap.get(0) == null) {
+            lstMenu.setModel(new MenuListModel(orderedMenu));
+            return;
+        }
+        parentsOrdered.addAll(menuMap.get(0));
+        stack.push(parentsOrdered);
+
+        while(true){
+            if(stack.isEmpty()) break;
+            Set<Menu> current = stack.pop();
+            if(current!=null && !current.isEmpty()){
+                Menu currMenu = current.iterator().next();
+                current.remove(currMenu);
+                orderedMenu.add(currMenu);
+                if(!current.isEmpty()) {
+                    stack.push(current);
+                }
+                if(currMenu.getChilds()!=null && !currMenu.getChilds().isEmpty()) {
+                    Set<Menu> currentChilds = new TreeSet<Menu>(new UrutanComparator());
+                    currentChilds.addAll(currMenu.getChilds());
+                    stack.push(currentChilds);
+                }
+            } else if(stack.isEmpty()){
+                break;
+            }
+        }
+        lstMenu.setModel(new MenuListModel(orderedMenu));
+    }
+
+    private static class MenuListModel extends AbstractListModel{
+        private List<Menu> orderedMenu;
+
+        public MenuListModel(List<Menu> orderedMenu) {
+            this.orderedMenu=orderedMenu;
+        }
+
+        public int getSize() {
+            return orderedMenu.size();
+        }
+
+        public Object getElementAt(int index) {
+            return orderedMenu.get(index);
+        }
 
     }
 
+    private static String padTabs(String data,int num){
+        if(num<=0) return data;
+        else {
+            StringBuilder builder = new StringBuilder();
+            for(int i=0;i<num;i++){
+                builder.append("  ");
+            }
+            builder.append(data);
+            return builder.toString();
+        }
+    }
+
+    private static class UrutanComparator implements Comparator<Menu>{
+
+        public int compare(Menu o1, Menu o2) {
+            return o1.getUrutan().compareTo(o2.getUrutan());
+        }
+
+    }
+
+    private static class MenuListRenderer extends DefaultListCellRenderer{
+
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if(c instanceof JLabel && value instanceof Menu){
+                Menu m = (Menu) value;
+                JLabel label = (JLabel) c;
+                label.setText(padTabs(m.getId(), m.getMenuLevel()));
+                return label;
+            }
+            return c;
+        }
+
+    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -196,18 +402,24 @@ public class PeranPanel extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtNama = new javax.swing.JTextField();
+        txtId = new javax.swing.JTextField();
         txtDeskripsi = new javax.swing.JTextField();
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        btnTambahPengguna = new javax.swing.JButton();
+        btnHapusPengguna = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblPengguna = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        btnTambahMenu = new javax.swing.JButton();
+        btnHapusMenu = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        lstMenu = new javax.swing.JList();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPeran = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
-        buttonPanelMaster1 = new com.artivisi.pos.ui.toolbar.ButtonPanelMaster();
+        masterToolbarPanel1 = new com.artivisi.pos.ui.toolbar.MasterToolbarPanel();
 
         setClosable(true);
         setTitle("Peran");
@@ -218,47 +430,103 @@ public class PeranPanel extends javax.swing.JInternalFrame {
 
         jLabel4.setText("Deskripsi");
 
-        txtDeskripsi.addActionListener(new java.awt.event.ActionListener() {
+        btnTambahPengguna.setText("Tambah");
+        btnTambahPengguna.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDeskripsiActionPerformed(evt);
+                btnTambahPenggunaActionPerformed(evt);
             }
         });
 
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+        btnHapusPengguna.setText("Hapus");
+        btnHapusPengguna.setEnabled(false);
+        btnHapusPengguna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusPenggunaActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblPengguna.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Kode", "Nama"
+                "ID", "Nama Lengkap"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
-        jTable1.getColumnModel().getColumn(0).setMinWidth(150);
-        jTable1.getColumnModel().getColumn(0).setMaxWidth(150);
+        jScrollPane2.setViewportView(tblPengguna);
 
-        jTabbedPane1.addTab("Pengguna", jScrollPane2);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnTambahPengguna)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnHapusPengguna)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnTambahPengguna)
+                    .addComponent(btnHapusPengguna))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        jTabbedPane1.addTab("Pengguna", jPanel1);
 
-            },
-            new String [] {
-                "Kode", "Nama", "Insert", "Update", "Delete"
+        btnTambahMenu.setText("Tambah");
+        btnTambahMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahMenuActionPerformed(evt);
             }
-        ));
-        jScrollPane3.setViewportView(jTable2);
-        jTable2.getColumnModel().getColumn(0).setMinWidth(100);
-        jTable2.getColumnModel().getColumn(0).setMaxWidth(100);
-        jTable2.getColumnModel().getColumn(2).setMinWidth(40);
-        jTable2.getColumnModel().getColumn(2).setMaxWidth(40);
-        jTable2.getColumnModel().getColumn(3).setMinWidth(40);
-        jTable2.getColumnModel().getColumn(3).setMaxWidth(40);
-        jTable2.getColumnModel().getColumn(4).setMinWidth(40);
-        jTable2.getColumnModel().getColumn(4).setMaxWidth(40);
+        });
 
-        jTabbedPane1.addTab("Menu", jScrollPane3);
+        btnHapusMenu.setText("Hapus");
+        btnHapusMenu.setEnabled(false);
+        btnHapusMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusMenuActionPerformed(evt);
+            }
+        });
+
+        jScrollPane3.setViewportView(lstMenu);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 589, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(btnTambahMenu)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnHapusMenu)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnTambahMenu)
+                    .addComponent(btnHapusMenu))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Menu", jPanel3);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -271,31 +539,28 @@ public class PeranPanel extends javax.swing.JInternalFrame {
                 .addGap(31, 31, 31)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtDeskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(352, 352, 352))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 608, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel4)
                     .addComponent(txtDeskripsi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 443, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtDeskripsi, txtNama});
-
-        jTabbedPane1.getAccessibleContext().setAccessibleName("tab 1");
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtDeskripsi, txtId});
 
         tblPeran.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -306,11 +571,6 @@ public class PeranPanel extends javax.swing.JInternalFrame {
             }
         ));
         tblPeran.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tblPeran.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblPeranMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tblPeran);
         tblPeran.getColumnModel().getColumn(0).setMinWidth(100);
         tblPeran.getColumnModel().getColumn(0).setMaxWidth(100);
@@ -333,13 +593,13 @@ public class PeranPanel extends javax.swing.JInternalFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(buttonPanelMaster1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(buttonPanelMaster1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -348,77 +608,74 @@ public class PeranPanel extends javax.swing.JInternalFrame {
                             .addComponent(jLabel1)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtDeskripsiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDeskripsiActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_txtDeskripsiActionPerformed
-
-    private void tblPeranMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPeranMouseClicked
-//        System.out.println("di Klik table nya");
-}//GEN-LAST:event_tblPeranMouseClicked
-
-    private class PeranTableModel extends AbstractTableModel{
-        private List<Peran> daftarPeran;
-
-        public PeranTableModel(List<Peran> daftarPeran) {
-            this.daftarPeran = daftarPeran;
+    private void btnTambahMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahMenuActionPerformed
+        Menu currMenu = new PeranMenuDialog().showDialog();
+        if(currMenu!=null){
+            menus.add(currMenu);
+            constructMenu();
         }
+    }//GEN-LAST:event_btnTambahMenuActionPerformed
 
-        public int getRowCount() {
-            return daftarPeran.size();
+    private void btnTambahPenggunaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahPenggunaActionPerformed
+        Pengguna currPengguna = new PeranPenggunaDialog().showDialog();
+        if(currPengguna!=null){
+            penggunas.add(currPengguna);
+            tblPengguna.setModel(new PenggunaModel(penggunas));
         }
+    }//GEN-LAST:event_btnTambahPenggunaActionPerformed
 
-        public int getColumnCount() {
-            return 2;
+    private void btnHapusPenggunaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusPenggunaActionPerformed
+        if(pengguna!=null){
+            penggunas.remove(pengguna);
+            pengguna = null;
+            tblPengguna.setModel(new PenggunaModel(penggunas));
         }
+    }//GEN-LAST:event_btnHapusPenggunaActionPerformed
 
-        @Override
-        public String getColumnName(int col) {
-            switch(col){
-                case 0 : return "Key";
-                case 1 : return "Value";
-                default : return "";
+    private void btnHapusMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusMenuActionPerformed
+        if(menu!=null){
+            menus.remove(menu);
+            menu = orderedMenu.get(orderedMenu.indexOf(menu));
+            if(menu!=null && menu.getParent()!=null && menu.getParent().getChilds()!=null){
+                menu.getParent().getChilds().remove(menu);
             }
-
-        }
-
-        public Object getValueAt(int row, int col) {
-            Peran p = daftarPeran.get(row);
-            switch(row){
-                case 0 : return p.getId();
-                case 1 : return p.getDeskripsi();
-                default : return "";
+            if(menu!=null){
+                menu.setParent(null);
             }
+            menu = null;
+            constructMenu();
         }
-
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            return String.class;
-        }
-    }
+    }//GEN-LAST:event_btnHapusMenuActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.artivisi.pos.ui.toolbar.ButtonPanelMaster buttonPanelMaster1;
+    private javax.swing.JButton btnHapusMenu;
+    private javax.swing.JButton btnHapusPengguna;
+    private javax.swing.JButton btnTambahMenu;
+    private javax.swing.JButton btnTambahPengguna;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JList lstMenu;
+    private com.artivisi.pos.ui.toolbar.MasterToolbarPanel masterToolbarPanel1;
+    private javax.swing.JTable tblPengguna;
     private javax.swing.JTable tblPeran;
     private javax.swing.JTextField txtDeskripsi;
-    private javax.swing.JTextField txtNama;
+    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

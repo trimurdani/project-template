@@ -102,5 +102,17 @@ public class MasterServiceImpl implements MasterService{
     public String ambilBerikutnya(TransaksiRunningNumberEnum id, Date date, String idCabang) {
         return runningNumberDao.ambilBerikutnya(id, date, idCabang);
     }
+    
+    @Transactional
+    public String ambilBerikutnya(TransaksiRunningNumberEnum id) {
+        Date date = systemPropertyDao.tanggalKerja();
+        SystemProperty cabang = systemPropertyDao.cariBerdasarId(SystemProperty.CABANG);
+        return runningNumberDao.ambilBerikutnya(id, date, cabang.getVal());
+    }
+
+    @Transactional
+    public Date tanggalKerja(){
+        return systemPropertyDao.tanggalKerja();
+    }
 
 }

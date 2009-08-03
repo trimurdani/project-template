@@ -1,8 +1,8 @@
--- MySQL dump 10.11
+-- MySQL dump 10.13
 --
 -- Host: localhost    Database: posdb
 -- ------------------------------------------------------
--- Server version	5.0.67
+-- Server version	5.1.22-rc-community
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,125 +16,125 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping data for table `MST_CABANG`
+-- Dumping data for table `mst_cabang`
 --
 
-LOCK TABLES `MST_CABANG` WRITE;
-/*!40000 ALTER TABLE `MST_CABANG` DISABLE KEYS */;
-/*!40000 ALTER TABLE `MST_CABANG` ENABLE KEYS */;
+LOCK TABLES `mst_cabang` WRITE;
+/*!40000 ALTER TABLE `mst_cabang` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mst_cabang` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `MST_PRODUK`
+-- Dumping data for table `mst_produk`
 --
 
-LOCK TABLES `MST_PRODUK` WRITE;
-/*!40000 ALTER TABLE `MST_PRODUK` DISABLE KEYS */;
-/*!40000 ALTER TABLE `MST_PRODUK` ENABLE KEYS */;
+LOCK TABLES `mst_produk` WRITE;
+/*!40000 ALTER TABLE `mst_produk` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mst_produk` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `MST_RUNNING_NUMBER`
+-- Dumping data for table `mst_running_number`
 --
 
-LOCK TABLES `MST_RUNNING_NUMBER` WRITE;
-/*!40000 ALTER TABLE `MST_RUNNING_NUMBER` DISABLE KEYS */;
-/*!40000 ALTER TABLE `MST_RUNNING_NUMBER` ENABLE KEYS */;
+LOCK TABLES `mst_running_number` WRITE;
+/*!40000 ALTER TABLE `mst_running_number` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mst_running_number` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `MST_SYSTEM_PROPERTY`
+-- Dumping data for table `mst_system_property`
 --
 
-LOCK TABLES `MST_SYSTEM_PROPERTY` WRITE;
-/*!40000 ALTER TABLE `MST_SYSTEM_PROPERTY` DISABLE KEYS */;
-/*!40000 ALTER TABLE `MST_SYSTEM_PROPERTY` ENABLE KEYS */;
+LOCK TABLES `mst_system_property` WRITE;
+/*!40000 ALTER TABLE `mst_system_property` DISABLE KEYS */;
+/*!40000 ALTER TABLE `mst_system_property` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `SEC_MENU`
+-- Dumping data for table `sec_menu`
 --
 
-LOCK TABLES `SEC_MENU` WRITE;
-/*!40000 ALTER TABLE `SEC_MENU` DISABLE KEYS */;
-INSERT INTO `SEC_MENU` (`ID_MENU`, `MENU_LEVEL`, `PANEL_CLASS`, `URUTAN`, `ID_PARENT`) VALUES ('Bantuan',0,NULL,5,NULL),('Laporan',0,NULL,3,NULL),('Master',0,NULL,1,NULL),('Master Produk',1,'com.artivisi.pos.ui.master.MasterProdukPanel',1,'Master'),('Master Running Number',1,'com.artivisi.pos.ui.master.RunningNumberPanel',2,'Master'),('Master System Property',1,'com.artivisi.pos.ui.master.SystemPropertyPanel',3,'Master'),('Menu',1,'com.artivisi.pos.ui.sekuriti.MenuPanel',3,'Sekuriti'),('Pengguna',1,'com.artivisi.pos.ui.sekuriti.PenggunaPanel',1,'Sekuriti'),('Peran',1,'com.artivisi.pos.ui.sekuriti.PeranPanel',2,'Sekuriti'),('Sekuriti',0,NULL,4,NULL),('Transaksi',0,NULL,2,NULL);
-/*!40000 ALTER TABLE `SEC_MENU` ENABLE KEYS */;
+LOCK TABLES `sec_menu` WRITE;
+/*!40000 ALTER TABLE `sec_menu` DISABLE KEYS */;
+INSERT INTO `sec_menu` (`ID_MENU`, `MENU_LEVEL`, `PANEL_CLASS`, `URUTAN`, `ID_PARENT`) VALUES ('Bantuan',0,NULL,5,NULL),('Laporan',0,NULL,3,NULL),('Master',0,NULL,1,NULL),('Master Produk',1,'com.artivisi.pos.ui.master.MasterProdukPanel',1,'Master'),('Master Running Number',1,'com.artivisi.pos.ui.master.RunningNumberPanel',2,'Master'),('Master System Property',1,'com.artivisi.pos.ui.master.SystemPropertyPanel',3,'Master'),('Menu',1,'com.artivisi.pos.ui.sekuriti.MenuPanel',3,'Sekuriti'),('Pembelian',1,'com.artivisi.pos.ui.transaksi.PembelianPanel',0,'Transaksi'),('Pengguna',1,'com.artivisi.pos.ui.sekuriti.PenggunaPanel',1,'Sekuriti'),('Penjualan',1,'com.artivisi.pos.ui.transaksi.PenjualanPanel',1,'Transaksi'),('Peran',1,'com.artivisi.pos.ui.sekuriti.PeranPanel',2,'Sekuriti'),('Sekuriti',0,NULL,4,NULL),('Transaksi',0,NULL,2,NULL);
+/*!40000 ALTER TABLE `sec_menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `SEC_PENGGUNA`
+-- Dumping data for table `sec_pengguna`
 --
 
-LOCK TABLES `SEC_PENGGUNA` WRITE;
-/*!40000 ALTER TABLE `SEC_PENGGUNA` DISABLE KEYS */;
-INSERT INTO `SEC_PENGGUNA` (`ID_PENGGUNA`, `NAMA_LENGKAP`, `KATA_SANDI`) VALUES ('ADMIN','SUPER USER','f6fdffe48c908deb0f4c3bd36c032e72');
-/*!40000 ALTER TABLE `SEC_PENGGUNA` ENABLE KEYS */;
+LOCK TABLES `sec_pengguna` WRITE;
+/*!40000 ALTER TABLE `sec_pengguna` DISABLE KEYS */;
+INSERT INTO `sec_pengguna` (`ID_PENGGUNA`, `NAMA_LENGKAP`, `KATA_SANDI`) VALUES ('ADMIN','SUPER USER','f6fdffe48c908deb0f4c3bd36c032e72');
+/*!40000 ALTER TABLE `sec_pengguna` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `SEC_PERAN`
+-- Dumping data for table `sec_peran`
 --
 
-LOCK TABLES `SEC_PERAN` WRITE;
-/*!40000 ALTER TABLE `SEC_PERAN` DISABLE KEYS */;
-INSERT INTO `SEC_PERAN` (`ID_PERAN`, `DESKRIPSI`) VALUES ('SUPER USER','USER YANG BISA MELIHAT SEMUA MENU');
-/*!40000 ALTER TABLE `SEC_PERAN` ENABLE KEYS */;
+LOCK TABLES `sec_peran` WRITE;
+/*!40000 ALTER TABLE `sec_peran` DISABLE KEYS */;
+INSERT INTO `sec_peran` (`ID_PERAN`, `DESKRIPSI`) VALUES ('SUPER USER','USER YANG BISA MELIHAT SEMUA MENU');
+/*!40000 ALTER TABLE `sec_peran` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `SEC_PERAN_MENU`
+-- Dumping data for table `sec_peran_menu`
 --
 
-LOCK TABLES `SEC_PERAN_MENU` WRITE;
-/*!40000 ALTER TABLE `SEC_PERAN_MENU` DISABLE KEYS */;
-INSERT INTO `SEC_PERAN_MENU` (`ID_PERAN`, `ID_MENU`) VALUES ('SUPER USER','Master'),('SUPER USER','Transaksi'),('SUPER USER','Laporan'),('SUPER USER','Bantuan'),('SUPER USER','Sekuriti'),('SUPER USER','Master Produk'),('SUPER USER','Master Running Number'),('SUPER USER','Master System Property'),('SUPER USER','Pengguna'),('SUPER USER','Peran'),('SUPER USER','Menu');
-/*!40000 ALTER TABLE `SEC_PERAN_MENU` ENABLE KEYS */;
+LOCK TABLES `sec_peran_menu` WRITE;
+/*!40000 ALTER TABLE `sec_peran_menu` DISABLE KEYS */;
+INSERT INTO `sec_peran_menu` (`ID_PERAN`, `ID_MENU`) VALUES ('SUPER USER','Master'),('SUPER USER','Master Produk'),('SUPER USER','Master Running Number'),('SUPER USER','Master System Property'),('SUPER USER','Transaksi'),('SUPER USER','Pembelian'),('SUPER USER','Penjualan'),('SUPER USER','Laporan'),('SUPER USER','Sekuriti'),('SUPER USER','Pengguna'),('SUPER USER','Peran'),('SUPER USER','Menu'),('SUPER USER','Bantuan');
+/*!40000 ALTER TABLE `sec_peran_menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `SEC_PERAN_PENGGUNA`
+-- Dumping data for table `sec_peran_pengguna`
 --
 
-LOCK TABLES `SEC_PERAN_PENGGUNA` WRITE;
-/*!40000 ALTER TABLE `SEC_PERAN_PENGGUNA` DISABLE KEYS */;
-INSERT INTO `SEC_PERAN_PENGGUNA` (`ID_PERAN`, `ID_PENGGUNA`) VALUES ('SUPER USER','ADMIN');
-/*!40000 ALTER TABLE `SEC_PERAN_PENGGUNA` ENABLE KEYS */;
+LOCK TABLES `sec_peran_pengguna` WRITE;
+/*!40000 ALTER TABLE `sec_peran_pengguna` DISABLE KEYS */;
+INSERT INTO `sec_peran_pengguna` (`ID_PERAN`, `ID_PENGGUNA`) VALUES ('SUPER USER','ADMIN');
+/*!40000 ALTER TABLE `sec_peran_pengguna` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `TR_PEMBELIAN`
+-- Dumping data for table `tr_pembelian`
 --
 
-LOCK TABLES `TR_PEMBELIAN` WRITE;
-/*!40000 ALTER TABLE `TR_PEMBELIAN` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TR_PEMBELIAN` ENABLE KEYS */;
+LOCK TABLES `tr_pembelian` WRITE;
+/*!40000 ALTER TABLE `tr_pembelian` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tr_pembelian` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `TR_PEMBELIAN_DETAIL`
+-- Dumping data for table `tr_pembelian_detail`
 --
 
-LOCK TABLES `TR_PEMBELIAN_DETAIL` WRITE;
-/*!40000 ALTER TABLE `TR_PEMBELIAN_DETAIL` DISABLE KEYS */;
-/*!40000 ALTER TABLE `TR_PEMBELIAN_DETAIL` ENABLE KEYS */;
+LOCK TABLES `tr_pembelian_detail` WRITE;
+/*!40000 ALTER TABLE `tr_pembelian_detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tr_pembelian_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `T_PENJUALAN`
+-- Dumping data for table `tr_penjualan`
 --
 
-LOCK TABLES `T_PENJUALAN` WRITE;
-/*!40000 ALTER TABLE `T_PENJUALAN` DISABLE KEYS */;
-/*!40000 ALTER TABLE `T_PENJUALAN` ENABLE KEYS */;
+LOCK TABLES `tr_penjualan` WRITE;
+/*!40000 ALTER TABLE `tr_penjualan` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tr_penjualan` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `T_PENJUALAN_DETAIL`
+-- Dumping data for table `tr_penjualan_detail`
 --
 
-LOCK TABLES `T_PENJUALAN_DETAIL` WRITE;
-/*!40000 ALTER TABLE `T_PENJUALAN_DETAIL` DISABLE KEYS */;
-/*!40000 ALTER TABLE `T_PENJUALAN_DETAIL` ENABLE KEYS */;
+LOCK TABLES `tr_penjualan_detail` WRITE;
+/*!40000 ALTER TABLE `tr_penjualan_detail` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tr_penjualan_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -146,4 +146,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-05-25  9:19:21
+-- Dump completed on 2009-08-03  7:07:32

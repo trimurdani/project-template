@@ -35,7 +35,7 @@ public class ProdukDao{
     }
 
     public Produk cariBerdasarId(String id){
-        return (Produk) sessionFactory.getCurrentSession().load(Produk.class, id);
+        return (Produk) sessionFactory.getCurrentSession().get(Produk.class, id);
     }
 
 }

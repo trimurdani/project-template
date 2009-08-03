@@ -6,6 +6,7 @@
 package com.artivisi.pos.dao.master;
 
 import com.artivisi.pos.model.master.RunningNumber;
+import com.artivisi.pos.model.master.SystemProperty;
 import com.artivisi.pos.model.master.constant.MasterRunningNumberEnum;
 import com.artivisi.pos.model.master.constant.TransaksiRunningNumberEnum;
 import com.artivisi.pos.util.StringUtils;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Repository;
 public class RunningNumberDao {
 
     @Autowired private SessionFactory sessionFactory;
+    @Autowired private SystemPropertyDao systemPropertyDao;
 
     public void simpan(RunningNumber p){
         sessionFactory.getCurrentSession()
@@ -41,7 +43,7 @@ public class RunningNumberDao {
     }
 
     public String ambilBerikutnya(MasterRunningNumberEnum id, String idCabang){
-        RunningNumber r = (RunningNumber) sessionFactory.getCurrentSession().load(RunningNumber.class, id.getId());
+        RunningNumber r = (RunningNumber) sessionFactory.getCurrentSession().get(RunningNumber.class, id.getId());
         if(r==null){
             r = new RunningNumber();
             r.setId(id.getId());
@@ -53,18 +55,18 @@ public class RunningNumberDao {
 
     public String ambilBerikutnya(TransaksiRunningNumberEnum id,Date tanggal, String idCabang){
         String strTanggal =  new SimpleDateFormat("yyMM").format(tanggal);
-        RunningNumber r = (RunningNumber) sessionFactory.getCurrentSession().load(RunningNumber.class, id.getId() + strTanggal);
+        RunningNumber r = (RunningNumber) sessionFactory.getCurrentSession().get(RunningNumber.class, id.getId() + strTanggal);
         if(r==null){
             r = new RunningNumber();
             r.setId(id.getId() + strTanggal);
             r.setNumber(0);
-            sessionFactory.getCurrentSession().save(r);
+            simpan(r);
         }
         return id.getPrefix() + idCabang + strTanggal + StringUtils.padWithZero(r.getNumber() + 1, id.getDigit());
     }
 
     public String ambilBerikutnyaDanSimpan(MasterRunningNumberEnum id, String idCabang) {
-        RunningNumber r = (RunningNumber) sessionFactory.getCurrentSession().load(RunningNumber.class, id.getId());
+        RunningNumber r = (RunningNumber) sessionFactory.getCurrentSession().get(RunningNumber.class, id.getId());
         if(r == null){
             r = new RunningNumber();
             r.setId(id.getId());
@@ -78,7 +80,23 @@ public class RunningNumberDao {
 
     public String ambilBerikutnyaDanSimpan(TransaksiRunningNumberEnum id,Date tanggal, String idCabang){
         String strTanggal =  new SimpleDateFormat("yyMM").format(tanggal);
-        RunningNumber r = (RunningNumber) sessionFactory.getCurrentSession().load(RunningNumber.class, id.getId() + strTanggal);
+        RunningNumber r = (RunningNumber) sessionFactory.getCurrentSession().get(RunningNumber.class, id.getId() + strTanggal);
+        if(r==null){
+            r = new RunningNumber();
+            r.setId(id.getId() + strTanggal);
+            r.setNumber(1);
+        } else {
+            r.setNumber(r.getNumber()+1);
+        }
+        sessionFactory.getCurrentSession().saveOrUpdate(r);
+        return id.getPrefix() + idCabang + strTanggal + StringUtils.padWithZero(r.getNumber(), id.getDigit());
+    }
+    
+    public String ambilBerikutnyaDanSimpan(TransaksiRunningNumberEnum id){
+        Date tanggal = systemPropertyDao.tanggalKerja();
+        String idCabang = systemPropertyDao.cariBerdasarId(SystemProperty.CABANG).getVal();
+        String strTanggal =  new SimpleDateFormat("yyMM").format(tanggal);
+        RunningNumber r = (RunningNumber) sessionFactory.getCurrentSession().get(RunningNumber.class, id.getId() + strTanggal);
         if(r==null){
             r = new RunningNumber();
             r.setId(id.getId() + strTanggal);

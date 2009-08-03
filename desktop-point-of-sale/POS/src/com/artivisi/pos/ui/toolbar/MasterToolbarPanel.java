@@ -16,10 +16,10 @@ import javax.swing.JButton;
  *
  * @author kurusgw
  */
-public class ButtonPanelMaster extends javax.swing.JPanel {
+public class MasterToolbarPanel extends javax.swing.JPanel {
 
     /** Creates new form ButtonPanel */
-    public ButtonPanelMaster() {
+    public MasterToolbarPanel() {
         initComponents();
         kondisiAwal();
     }
@@ -41,6 +41,15 @@ public class ButtonPanelMaster extends javax.swing.JPanel {
         btnSimpan.setEnabled(true);
         btnHapus.setEnabled(false);
         btnBatal.setEnabled(true);
+    }
+
+    public void kondisiTabelTerpilih() {
+        btnTambah.setEnabled(false);
+        btnKeluar.setEnabled(true);
+        btnEdit.setEnabled(true);
+        btnSimpan.setEnabled(false);
+        btnHapus.setEnabled(true);
+        btnBatal.setEnabled(false);
     }
 
     public JButton getBtnBatal() {

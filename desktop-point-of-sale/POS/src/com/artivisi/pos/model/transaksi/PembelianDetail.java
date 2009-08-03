@@ -24,7 +24,7 @@ import javax.persistence.Table;
 public class PembelianDetail implements Serializable{
 
     @Id
-    @Column(name="ID_PEMBELIAN_DETAIL",length=16)
+    @Column(name="ID_PEMBELIAN_DETAIL",length=19)
     private String id;//menambahkan index di belakang id pembelian. misalnya pembelian:PEMJKT0908000001 => detailnya : PEMJKT0908000011
 
     @ManyToOne
