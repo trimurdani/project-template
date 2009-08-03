@@ -25,7 +25,7 @@ import javax.persistence.Table;
 public class Pengguna extends BaseEntity implements Serializable {
 
     @Id
-    @Column(name="ID_PENGGUNA")
+    @Column(name="ID_PENGGUNA",length=30)
     private String id;
 
     @Column(name="NAMA_LENGKAP",length=100)

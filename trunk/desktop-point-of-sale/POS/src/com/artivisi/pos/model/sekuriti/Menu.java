@@ -40,9 +40,6 @@ public class Menu implements Serializable {
     @Column(name="URUTAN",nullable=false)
     private Integer urutan;
 
-    @ManyToMany(mappedBy = "menus",cascade=CascadeType.ALL)
-    private List<Peran> perans;
-
     @OneToOne
     @JoinColumn(name="ID_PARENT")
     private Menu parent;
@@ -58,6 +55,7 @@ public class Menu implements Serializable {
                 }
             });
         }
+        childs.add(m);
     }
 
     public void removeChild(Menu m){
@@ -68,14 +66,6 @@ public class Menu implements Serializable {
 
     public Set<Menu> getChilds() {
         return childs;
-    }
-
-    public List<Peran> getPerans() {
-        return perans;
-    }
-
-    public void setPerans(List<Peran> perans) {
-        this.perans = perans;
     }
 
     public String getId() {
@@ -138,6 +128,11 @@ public class Menu implements Serializable {
         int hash = 7;
         hash = 97 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
+    }
+
+    @Override
+    public String toString() {
+        return id;
     }
 
 }

@@ -34,6 +34,8 @@ public interface MasterService {
     public List<RunningNumber> semuaRunningNumber();
     public String ambilBerikutnya(MasterRunningNumberEnum id, String idCabang);
     public String ambilBerikutnya(TransaksiRunningNumberEnum id,Date date,String idCabang);
+    public String ambilBerikutnya(TransaksiRunningNumberEnum id);
+    public Date tanggalKerja();
 
     public void simpan(SystemProperty p);
     public List<SystemProperty> semuaSystemProperty();

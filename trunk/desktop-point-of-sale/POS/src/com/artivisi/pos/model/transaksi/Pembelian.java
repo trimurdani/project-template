@@ -18,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Version;
 import org.hibernate.annotations.Cascade;
 
 /**
@@ -43,6 +44,9 @@ public class Pembelian extends BaseEntity implements Serializable{
     @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private List<PembelianDetail> details;
 
+    @Version
+    private Integer version = 0;
+
     public String getId() {
         return id;
     }
@@ -65,6 +69,11 @@ public class Pembelian extends BaseEntity implements Serializable{
 
     public void setDetails(List<PembelianDetail> details) {
         this.details = details;
+        if(details!=null && !details.isEmpty()){
+            for(PembelianDetail detail : details){
+                detail.setPembelian(this);
+            }
+        }
     }
 
     public Date getTanggal() {
@@ -81,6 +90,14 @@ public class Pembelian extends BaseEntity implements Serializable{
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
     
 }

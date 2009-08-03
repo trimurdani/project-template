@@ -91,7 +91,7 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
         buttonPanelMaster1.getBtnKeluar().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                dispose();
+                FrameUtama.getInstance().removeInternalFrame(SystemPropertyPanel.this);
             }
         });
 
@@ -201,7 +201,7 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
         tblSystemProperty = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
-        buttonPanelMaster1 = new com.artivisi.pos.ui.toolbar.ButtonPanelMaster();
+        buttonPanelMaster1 = new com.artivisi.pos.ui.toolbar.MasterToolbarPanel();
 
         setClosable(true);
         setTitle("Master Produk");
@@ -354,7 +354,7 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.artivisi.pos.ui.toolbar.ButtonPanelMaster buttonPanelMaster1;
+    private com.artivisi.pos.ui.toolbar.MasterToolbarPanel buttonPanelMaster1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

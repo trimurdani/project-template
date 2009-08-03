@@ -12,8 +12,8 @@ package com.artivisi.pos.ui.master;
 
 import com.artivisi.pos.model.master.Produk;
 import com.artivisi.pos.ui.frame.FrameUtama;
-import com.artivisi.pos.ui.table.model.ProdukTableModel;
 import com.artivisi.pos.util.BigDecimalRenderer;
+import com.artivisi.pos.util.TextComponentUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
@@ -21,6 +21,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -36,10 +37,19 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
         initComponents();
 
         initListener();
-        kondisiAwal();
         isiTableDaftarProduk();
+
+        enableForm(false);
+
         tblProduk.setAutoCreateColumnsFromModel(false);
         tblProduk.setDefaultRenderer(BigDecimal.class, new BigDecimalRenderer());
+
+        TextComponentUtils.setAutoUpperCaseText(txtKode);
+        TextComponentUtils.setAutoUpperCaseText(txtNama);
+        TextComponentUtils.setAutoUpperCaseText(txtSearch);
+        TextComponentUtils.setNumericTextOnly(txtStok);
+        TextComponentUtils.setCurrency(txtHargaBeli);
+        TextComponentUtils.setCurrency(txtHargaJual);
     }
 
     private void initListener() {
@@ -48,7 +58,7 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
 
             public void valueChanged(ListSelectionEvent arg0) {
                 //kalau tidak ada row yang di pilih maka akan menghasilkan -1
-                if (tblProduk.getSelectedRow() > -1) {
+                if (tblProduk.getSelectedRow() >= 0) {
                     //ambil row yang di Pilihan
                     int row = tblProduk.getSelectedRow();
 
@@ -56,62 +66,68 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
 
                     txtKode.setText(pilihanProduk.getId());
                     txtNama.setText(pilihanProduk.getNama());
-                    txtHargaBeli.setValue(pilihanProduk.getHargaBeli());
+                    txtHargaBeli.setText(TextComponentUtils.formatNumber(pilihanProduk.getHargaBeli()));
+                    txtHargaJual.setText(TextComponentUtils.formatNumber(pilihanProduk.getHargaJual()));
+                    txtStok.setText(pilihanProduk.getStok().toString());
 
-                    buttonPanelMaster1.getBtnEdit().setEnabled(true);
-                    buttonPanelMaster1.getBtnHapus().setEnabled(true);
+                    masterToolbarPanel1.kondisiTabelTerpilih();
                 }
             }
         });
 
         //ketika tombol delete di Klik
-        buttonPanelMaster1.getBtnHapus().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnHapus().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
                 askDelete();
                 FrameUtama.getMasterService().hapus(pilihanProduk);
-                kondisiAwal();
                 isiTableDaftarProduk();
+                clearForm();
+                enableForm(false);
+                masterToolbarPanel1.kondisiAwal();
             }
         });
 
         
         //button edit di Klik
-        buttonPanelMaster1.getBtnEdit().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnEdit().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                kondisiEdit();
-                buttonPanelMaster1.kondisiTambah();
+                enableForm(true);
+                masterToolbarPanel1.kondisiTambah();
             }
         });
 
         // Ketika Button Tambah di Klick
-        buttonPanelMaster1.getBtnTambah().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnTambah().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                kondisiTambah();
-                buttonPanelMaster1.kondisiTambah();
+                clearForm();
+                enableForm(true);
+                masterToolbarPanel1.kondisiTambah();
             }
         });
 
         // Ketika Tombol Batal di Klik
-        buttonPanelMaster1.getBtnBatal().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnBatal().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                kondisiAwal();
+                enableForm(false);
+                clearForm();
+                masterToolbarPanel1.kondisiAwal();
             }
         });
 
         // Ketika Tombol Keluar di Klik
-        buttonPanelMaster1.getBtnKeluar().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnKeluar().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                dispose();
+                FrameUtama.getInstance().removeInternalFrame(MasterProdukPanel.this);
             }
         });
 
         // Ketika tombol Simpan di Klik
-        buttonPanelMaster1.getBtnSimpan().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnSimpan().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
 
@@ -125,13 +141,17 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
                     //ambil value kemudian dari text field kemudian di save ke dalam database
                     pilihanProduk.setId(txtKode.getText());
                     pilihanProduk.setNama(txtNama.getText());
-                    pilihanProduk.setHargaBeli(new BigDecimal(txtHargaBeli.getValue().toString()));
+                    pilihanProduk.setHargaBeli(TextComponentUtils.parseNumberToBigDecimal(txtHargaBeli.getText()));
+                    pilihanProduk.setHargaJual(TextComponentUtils.parseNumberToBigDecimal(txtHargaJual.getText()));
+                    pilihanProduk.setStok(Integer.parseInt(txtStok.getText()));
 
                     //simpan ke database dengan Menggunakan Method Simpan di Object Service
                     FrameUtama.getMasterService().simpan(pilihanProduk);
 
                     //Kembali Kondisi Awal
-                    kondisiAwal();
+                    clearForm();
+                    enableForm(false);
+                    masterToolbarPanel1.kondisiAwal();
                     //tampil massage BOx
                     suksesSave();
                     //refresh table Produk
@@ -141,12 +161,79 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
         });
     }
 
+    private void clearForm(){
+        txtHargaBeli.setText("");
+        txtHargaJual.setText("");
+        txtKode.setText("");
+        txtNama.setText("");
+        txtStok.setText("");
+    }
+
+    private void enableForm(boolean status){
+        txtHargaBeli.setEnabled(status);
+        txtHargaJual.setEnabled(status);
+        txtKode.setEnabled(status);
+        txtNama.setEnabled(status);
+        txtStok.setEnabled(status);
+    }
+
     private void isiTableDaftarProduk() {
         daftarProduk = FrameUtama.getMasterService().semuaProduk();
         tblProduk.setModel(new ProdukTableModel(daftarProduk));
 
     }
+    private class ProdukTableModel extends AbstractTableModel {
 
+        private List<Produk> daftarProduk;
+
+        public ProdukTableModel(List<Produk> daftarProduk) {
+            this.daftarProduk = daftarProduk;
+        }
+
+        public int getRowCount() {
+            return daftarProduk.size();
+        }
+
+        public int getColumnCount() {
+            return 5;
+        }
+
+        @Override
+        public String getColumnName(int col) {
+            switch(col){
+                case 0 : return "Kode barang";
+                case 1 : return "Nama Barang";
+                case 2 : return "Harga Beli";
+                case 3 : return "Harga Jual";
+                case 4 : return "Stok";
+                default : return "";
+            }
+
+        }
+
+        public Object getValueAt(int row, int col) {
+            Produk p = daftarProduk.get(row);
+            switch(col){
+                case 0 : return p.getId();
+                case 1 : return p.getNama();
+                case 2 : return p.getHargaBeli();
+                case 3 : return p.getHargaJual();
+                case 4 : return p.getStok();
+                default : return "";
+            }
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch(columnIndex){
+                case 2 : return BigDecimal.class;
+                case 3 : return BigDecimal.class;
+                case 4 : return Integer.class;
+                default : return String.class;
+            }
+        }
+
+    }
     private void suksesSave() {
         JOptionPane.showMessageDialog(this, "Data Telah Tersimpan");
     }
@@ -181,44 +268,6 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
         return true;
     }
 
-    private void kondisiAwal() {
-        txtKode.setEnabled(false);
-        txtNama.setEnabled(false);
-        txtHargaBeli.setEnabled(false);
-
-        tblProduk.setEnabled(true);
-        buttonPanelMaster1.kondisiAwal();
-
-    }
-
-    public void kondisiTambah() {
-        //hilangkan Pilihan Produk
-        pilihanProduk = null;
-        //hilangkan Pilihan di table
-        tblProduk.clearSelection();
-
-        txtKode.setText("");
-        txtNama.setText("");
-        txtHargaBeli.setText("");
-
-        txtKode.requestFocus();
-        txtKode.setEnabled(true);
-        txtNama.setEnabled(true);
-        txtHargaBeli.setEnabled(true);
-
-        tblProduk.setEnabled(false);
-    }
-
-    public void kondisiEdit() {
-        txtKode.requestFocus();
-        txtKode.setEnabled(true);
-        txtNama.setEnabled(true);
-        txtHargaBeli.setEnabled(true);
-
-        tblProduk.setEnabled(false);
-
-    }
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -243,7 +292,7 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
         tblProduk = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
-        buttonPanelMaster1 = new com.artivisi.pos.ui.toolbar.ButtonPanelMaster();
+        masterToolbarPanel1 = new com.artivisi.pos.ui.toolbar.MasterToolbarPanel();
 
         setClosable(true);
         setTitle("Master Produk");
@@ -253,12 +302,6 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
         jLabel3.setText("Kode Produk");
 
         jLabel4.setText("Nama Produk");
-
-        txtNama.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNamaActionPerformed(evt);
-            }
-        });
 
         jLabel5.setText("Harga Beli");
 
@@ -288,7 +331,7 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
                         .addComponent(txtHargaBeli, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtHargaJual, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -322,15 +365,10 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "Kode", "Nama"
+                "Kode", "Nama", "Harga Beli", "Harga Jual", "Stok"
             }
         ));
         tblProduk.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tblProduk.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblProdukMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tblProduk);
 
         jLabel1.setText("Search Character");
@@ -347,43 +385,33 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(buttonPanelMaster1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(buttonPanelMaster1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_txtNamaActionPerformed
-
-    private void tblProdukMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProdukMouseClicked
-//        System.out.println("di Klik table nya");
-    }//GEN-LAST:event_tblProdukMouseClicked
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.artivisi.pos.ui.toolbar.ButtonPanelMaster buttonPanelMaster1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -392,6 +420,7 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private com.artivisi.pos.ui.toolbar.MasterToolbarPanel masterToolbarPanel1;
     private javax.swing.JTable tblProduk;
     private javax.swing.JFormattedTextField txtHargaBeli;
     private javax.swing.JFormattedTextField txtHargaJual;

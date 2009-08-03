@@ -1,8 +1,8 @@
--- MySQL dump 10.11
+-- MySQL dump 10.13
 --
 -- Host: localhost    Database: posdb
 -- ------------------------------------------------------
--- Server version	5.0.67
+-- Server version	5.1.22-rc-community
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,120 +16,120 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `MST_CABANG`
+-- Table structure for table `mst_cabang`
 --
 
-DROP TABLE IF EXISTS `MST_CABANG`;
+DROP TABLE IF EXISTS `mst_cabang`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `MST_CABANG` (
+CREATE TABLE `mst_cabang` (
   `ID_CABANG` varchar(3) NOT NULL,
   `NAME` varchar(50) NOT NULL,
-  PRIMARY KEY  (`ID_CABANG`)
+  PRIMARY KEY (`ID_CABANG`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `MST_PRODUK`
+-- Table structure for table `mst_produk`
 --
 
-DROP TABLE IF EXISTS `MST_PRODUK`;
+DROP TABLE IF EXISTS `mst_produk`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `MST_PRODUK` (
+CREATE TABLE `mst_produk` (
   `ID_PRODUK` varchar(30) NOT NULL,
-  `HARGA_BELI` decimal(19,2) default NULL,
-  `HARGA_JUAL` decimal(19,2) default NULL,
-  `NAMA` varchar(90) default NULL,
-  `STOK` int(11) default NULL,
-  PRIMARY KEY  (`ID_PRODUK`)
+  `HARGA_BELI` decimal(19,2) DEFAULT NULL,
+  `HARGA_JUAL` decimal(19,2) DEFAULT NULL,
+  `NAMA` varchar(90) DEFAULT NULL,
+  `STOK` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID_PRODUK`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `MST_RUNNING_NUMBER`
+-- Table structure for table `mst_running_number`
 --
 
-DROP TABLE IF EXISTS `MST_RUNNING_NUMBER`;
+DROP TABLE IF EXISTS `mst_running_number`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `MST_RUNNING_NUMBER` (
+CREATE TABLE `mst_running_number` (
   `ID` varchar(255) NOT NULL,
-  `NUMBER` int(11) default NULL,
-  PRIMARY KEY  (`ID`)
+  `NUMBER` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `MST_SYSTEM_PROPERTY`
+-- Table structure for table `mst_system_property`
 --
 
-DROP TABLE IF EXISTS `MST_SYSTEM_PROPERTY`;
+DROP TABLE IF EXISTS `mst_system_property`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `MST_SYSTEM_PROPERTY` (
+CREATE TABLE `mst_system_property` (
   `ID` varchar(255) NOT NULL,
-  `VAL` varchar(255) default NULL,
-  PRIMARY KEY  (`ID`)
+  `VAL` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `SEC_MENU`
+-- Table structure for table `sec_menu`
 --
 
-DROP TABLE IF EXISTS `SEC_MENU`;
+DROP TABLE IF EXISTS `sec_menu`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `SEC_MENU` (
+CREATE TABLE `sec_menu` (
   `ID_MENU` varchar(50) NOT NULL,
   `MENU_LEVEL` int(11) NOT NULL,
-  `PANEL_CLASS` varchar(70) default NULL,
+  `PANEL_CLASS` varchar(70) DEFAULT NULL,
   `URUTAN` int(11) NOT NULL,
-  `ID_PARENT` varchar(50) default NULL,
-  PRIMARY KEY  (`ID_MENU`),
+  `ID_PARENT` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ID_MENU`),
   KEY `FK67C2FCAD37D2A8C2` (`ID_PARENT`),
   CONSTRAINT `FK67C2FCAD37D2A8C2` FOREIGN KEY (`ID_PARENT`) REFERENCES `sec_menu` (`ID_MENU`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `SEC_PENGGUNA`
+-- Table structure for table `sec_pengguna`
 --
 
-DROP TABLE IF EXISTS `SEC_PENGGUNA`;
+DROP TABLE IF EXISTS `sec_pengguna`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `SEC_PENGGUNA` (
+CREATE TABLE `sec_pengguna` (
   `ID_PENGGUNA` varchar(255) NOT NULL,
-  `NAMA_LENGKAP` varchar(100) default NULL,
+  `NAMA_LENGKAP` varchar(100) DEFAULT NULL,
   `KATA_SANDI` varchar(100) NOT NULL,
-  PRIMARY KEY  (`ID_PENGGUNA`)
+  PRIMARY KEY (`ID_PENGGUNA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `SEC_PERAN`
+-- Table structure for table `sec_peran`
 --
 
-DROP TABLE IF EXISTS `SEC_PERAN`;
+DROP TABLE IF EXISTS `sec_peran`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `SEC_PERAN` (
+CREATE TABLE `sec_peran` (
   `ID_PERAN` varchar(20) NOT NULL,
-  `DESKRIPSI` varchar(255) default NULL,
-  PRIMARY KEY  (`ID_PERAN`)
+  `DESKRIPSI` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID_PERAN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `SEC_PERAN_MENU`
+-- Table structure for table `sec_peran_menu`
 --
 
-DROP TABLE IF EXISTS `SEC_PERAN_MENU`;
+DROP TABLE IF EXISTS `sec_peran_menu`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `SEC_PERAN_MENU` (
+CREATE TABLE `sec_peran_menu` (
   `ID_PERAN` varchar(20) NOT NULL,
   `ID_MENU` varchar(50) NOT NULL,
   KEY `FK55093362D0314E77` (`ID_MENU`),
@@ -140,13 +140,13 @@ CREATE TABLE `SEC_PERAN_MENU` (
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `SEC_PERAN_PENGGUNA`
+-- Table structure for table `sec_peran_pengguna`
 --
 
-DROP TABLE IF EXISTS `SEC_PERAN_PENGGUNA`;
+DROP TABLE IF EXISTS `sec_peran_pengguna`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `SEC_PERAN_PENGGUNA` (
+CREATE TABLE `sec_peran_pengguna` (
   `ID_PERAN` varchar(20) NOT NULL,
   `ID_PENGGUNA` varchar(255) NOT NULL,
   KEY `FKB39C7F12364D277B` (`ID_PERAN`),
@@ -157,35 +157,36 @@ CREATE TABLE `SEC_PERAN_PENGGUNA` (
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `TR_PEMBELIAN`
+-- Table structure for table `tr_pembelian`
 --
 
-DROP TABLE IF EXISTS `TR_PEMBELIAN`;
+DROP TABLE IF EXISTS `tr_pembelian`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `TR_PEMBELIAN` (
-  `ID_PEMBELIAN` varchar(15) NOT NULL,
+CREATE TABLE `tr_pembelian` (
+  `ID_PEMBELIAN` varchar(16) NOT NULL,
   `TANGGAL` date NOT NULL,
   `TOTAL` decimal(19,2) NOT NULL,
-  PRIMARY KEY  (`ID_PEMBELIAN`)
+  `VERSION` int(11) NOT NULL,
+  PRIMARY KEY (`ID_PEMBELIAN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `TR_PEMBELIAN_DETAIL`
+-- Table structure for table `tr_pembelian_detail`
 --
 
-DROP TABLE IF EXISTS `TR_PEMBELIAN_DETAIL`;
+DROP TABLE IF EXISTS `tr_pembelian_detail`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `TR_PEMBELIAN_DETAIL` (
-  `ID_PEMBELIAN_DETAIL` varchar(16) NOT NULL,
+CREATE TABLE `tr_pembelian_detail` (
+  `ID_PEMBELIAN_DETAIL` varchar(19) NOT NULL,
   `HARGA` decimal(19,2) NOT NULL,
   `KUANTITAS` int(11) NOT NULL,
-  `SUB_TOTAL` decimal(19,2) default NULL,
-  `ID_PEMBELIAN` varchar(15) NOT NULL,
+  `SUB_TOTAL` decimal(19,2) DEFAULT NULL,
+  `ID_PEMBELIAN` varchar(16) NOT NULL,
   `ID_PRODUK` varchar(30) NOT NULL,
-  PRIMARY KEY  (`ID_PEMBELIAN_DETAIL`),
+  PRIMARY KEY (`ID_PEMBELIAN_DETAIL`),
   KEY `FKDA02F94CB7658619` (`ID_PRODUK`),
   KEY `FKDA02F94C1F4CC02F` (`ID_PEMBELIAN`),
   CONSTRAINT `FKDA02F94C1F4CC02F` FOREIGN KEY (`ID_PEMBELIAN`) REFERENCES `tr_pembelian` (`ID_PEMBELIAN`),
@@ -194,35 +195,36 @@ CREATE TABLE `TR_PEMBELIAN_DETAIL` (
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `T_PENJUALAN`
+-- Table structure for table `tr_penjualan`
 --
 
-DROP TABLE IF EXISTS `T_PENJUALAN`;
+DROP TABLE IF EXISTS `tr_penjualan`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `T_PENJUALAN` (
+CREATE TABLE `tr_penjualan` (
   `ID_PENJUALAN` varchar(16) NOT NULL,
-  `TANGGAL` date default NULL,
-  `TOTAL` decimal(19,2) default NULL,
-  PRIMARY KEY  (`ID_PENJUALAN`)
+  `TANGGAL` date DEFAULT NULL,
+  `TOTAL` decimal(19,2) DEFAULT NULL,
+  `VERSION` int(11) NOT NULL,
+  PRIMARY KEY (`ID_PENJUALAN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
--- Table structure for table `T_PENJUALAN_DETAIL`
+-- Table structure for table `tr_penjualan_detail`
 --
 
-DROP TABLE IF EXISTS `T_PENJUALAN_DETAIL`;
+DROP TABLE IF EXISTS `tr_penjualan_detail`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `T_PENJUALAN_DETAIL` (
-  `ID_PENJUALAN_DETAIL` varchar(255) NOT NULL,
+CREATE TABLE `tr_penjualan_detail` (
+  `ID_PENJUALAN_DETAIL` varchar(19) NOT NULL,
   `HARGA` decimal(19,2) NOT NULL,
   `KUANTITAS` int(11) NOT NULL,
-  `SUB_TOTAL` decimal(19,2) default NULL,
+  `SUB_TOTAL` decimal(19,2) DEFAULT NULL,
   `ID_PENJUALAN` varchar(16) NOT NULL,
   `ID_PRODUK` varchar(30) NOT NULL,
-  PRIMARY KEY  (`ID_PENJUALAN_DETAIL`),
+  PRIMARY KEY (`ID_PENJUALAN_DETAIL`),
   KEY `FK2F57A2DFA61FC71D` (`ID_PENJUALAN`),
   KEY `FK2F57A2DFB7658619` (`ID_PRODUK`),
   CONSTRAINT `FK2F57A2DFB7658619` FOREIGN KEY (`ID_PRODUK`) REFERENCES `mst_produk` (`ID_PRODUK`),
@@ -239,4 +241,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-05-25  9:19:08
+-- Dump completed on 2009-08-03  7:07:13

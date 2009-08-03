@@ -19,11 +19,12 @@ import com.artivisi.pos.service.SekuritiService;
 import com.artivisi.pos.service.TransaksiService;
 import com.artivisi.pos.ui.dialog.sekuriti.LoginDialog;
 import com.artivisi.pos.ui.master.MasterProdukPanel;
+import com.artivisi.pos.util.UrutanComparator;
+import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +37,7 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.UIManager;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -188,10 +190,11 @@ public class FrameUtama extends javax.swing.JFrame {
         if(parents==null){
             throw new IllegalStateException("Menu level 0 tidak ada!");
         }
-        List<Menu> childs = null;
+        Set<Menu> childs = null;
         Integer maximumLevel = FrameUtama.getSekuritiService().maximumMenuLevel();
         for(int i=1;i<=maximumLevel;i++){
-            childs = menuMap.get(i);
+            childs = new TreeSet<Menu>(new UrutanComparator());
+            childs.addAll(menuMap.get(i));
             if(childs!=null){
                 for(Menu m : childs){
                     if(parents.indexOf(m.getParent())>=0){
@@ -221,7 +224,7 @@ public class FrameUtama extends javax.swing.JFrame {
                     }
                 }
             }
-            parents = childs;
+            parents = new ArrayList<Menu>(childs);
         }
         menuBar.setVisible(true);
         menuBar.updateUI();
@@ -229,25 +232,33 @@ public class FrameUtama extends javax.swing.JFrame {
 
     private Map<String,JInternalFrame> internalFrameMap = new HashMap<String, JInternalFrame>();
 
+    public void removeInternalFrame(JInternalFrame c){
+        c.dispose();
+        internalFrameMap.remove(c.getClass().getName());
+        destktopPane.remove(c);
+    }
+
     private ActionListener createActionListener(final Menu menu){
         return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     //cek apakah sudah ada
-                    JInternalFrame internalFrame = internalFrameMap.get(menu.getId());
+                    JInternalFrame internalFrame = internalFrameMap.get(menu.getPanelClass());
                     if (internalFrame == null) {
-                        Object o = Class.forName(menu.getPanelClass()).newInstance();
+                        final Object o = Class.forName(menu.getPanelClass()).newInstance();
                         if (o instanceof JInternalFrame) {
-                            internalFrame = (JInternalFrame) o;
-                            internalFrame.addInternalFrameListener(new InternalFrameAdapter() {
+                            final JInternalFrame frame = (JInternalFrame) o;
+                            frame.addInternalFrameListener(new InternalFrameAdapter() {
 
                                 @Override
                                 public void internalFrameClosing(InternalFrameEvent e) {
-                                    internalFrameMap.remove(menu.getId());
+                                    internalFrameMap.remove(frame.getClass().getName());
+                                    destktopPane.remove(frame);
                                 }
                             });
-                            destktopPane.add(internalFrame);
-                            internalFrameMap.put(menu.getId(), internalFrame);
+                            destktopPane.add(frame);
+                            internalFrameMap.put(frame.getClass().getName(), frame);
+                            internalFrame = frame;
                         }
                     } else {
                         internalFrame.toFront();
@@ -268,18 +279,11 @@ public class FrameUtama extends javax.swing.JFrame {
         };
     }
 
-    private static class UrutanComparator implements Comparator<Menu>{
-
-        public int compare(Menu o1, Menu o2) {
-            return o1.getUrutan().compareTo(o2.getUrutan());
-        }
-        
-    }
     
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
 
         AbstractApplicationContext ctx =
             new ClassPathXmlApplicationContext
@@ -291,11 +295,14 @@ public class FrameUtama extends javax.swing.JFrame {
         sekuritiService = (SekuritiService) ctx.getBean("sekuritiService");
         reportService = (ReportService) ctx.getBean("reportService");
 
+        //nimbus
+        UIManager.setLookAndFeel(NimbusLookAndFeel.class.getName());
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 FrameUtama fu = new FrameUtama();
-                fu.setVisible(true);
                 fu.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                fu.setVisible(true);
                 fu.initApplication();
             }
         });

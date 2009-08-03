@@ -1,27 +1,24 @@
+package com.artivisi.pos.util;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.artivisi.pos.util;
 
 import com.artivisi.pos.ui.frame.FrameUtama;
+import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.NumberFormatter;
 import org.springframework.util.StringUtils;
 
 /** TextComponentUtils ini adalah utility yang bertugas untuk mengatur segala
@@ -33,6 +30,16 @@ import org.springframework.util.StringUtils;
 public class TextComponentUtils {
 
     private static final String BAD_CHARS = "`~!@#$%^&*()_+=\\|\"':;?/>.<, ";
+
+    public static void scrollToRect(JTable table,int nextSelectedRow){
+        Rectangle currentVisible = table.getVisibleRect();
+        Rectangle scrollToRect = table.getCellRect(nextSelectedRow, 0, true);
+        if(scrollToRect.getY() > currentVisible.getY() + currentVisible.getHeight()){
+            scrollToRect.setLocation(0,
+                    (int)(scrollToRect.getY() + currentVisible.getHeight() - scrollToRect.getHeight()));
+        }
+        table.scrollRectToVisible(scrollToRect);
+    }
 
     /** TextComponentUtils.setMaximumLength()
      */
@@ -66,33 +73,9 @@ public class TextComponentUtils {
         });
     }
 
-    public static void setCurrency(JFormattedTextField textField){
-        new Formatter(textField);
-    }
-
-    private static class Formatter  implements KeyListener{
-
-        private JFormattedTextField textField;
-
-        public Formatter(JFormattedTextField textField) {
-            this.textField = textField;
-            this.textField.setFormatterFactory(new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#,##0"))));
-        }
-
-        public void keyTyped(KeyEvent e) {
-        }
-
-        public void keyPressed(KeyEvent e) {
-        }
-
-        public void keyReleased(KeyEvent e) {
-            try {
-                textField.commitEdit();
-            } catch (ParseException ex) {
-                Logger.getLogger(TextComponentUtils.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
+    public static JTextField setCurrency(JTextField textField){
+        textField.addKeyListener(new IntegerMasking());
+        return textField;
     }
 
     public static BigDecimal parseNumberToBigDecimal(String text){
@@ -142,7 +125,7 @@ public class TextComponentUtils {
             keyEvent.consume();
         }
     }
-    
+
     /** Method ini akan mengambil text angka saja */
     public static String getValueFromTextNumber(final JTextField text) {
         final char txt[] = text.getText().toCharArray();
@@ -150,12 +133,13 @@ public class TextComponentUtils {
         String tmp = "";
         for (int i=0; i<txt.length; i++) {
             tmp = String.valueOf(txt[i]);
-            
-            if (!tmp.equals(".") && !tmp.equals(",")) {
+
+            if (tmp.equals(".") || tmp.equals(",")) {
+            } else {
                 sb.append(tmp);
             }
         }
-        
+
         return sb.toString();
     }
 

@@ -50,6 +50,7 @@ public class LoginDialog extends javax.swing.JDialog {
         btnKeluar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Login");
 
         jLabel1.setText("Nama Pengguna");
 

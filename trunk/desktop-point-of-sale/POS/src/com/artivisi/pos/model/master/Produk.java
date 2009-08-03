@@ -31,8 +31,8 @@ public class Produk implements Serializable {
     @Column(name="HARGA_BELI")
     private BigDecimal hargaBeli = BigDecimal.ZERO;
 
-    @Column(name="STOK")
-    private Integer stok;
+    @Column(name="STOK",nullable=false)
+    private Integer stok = 0;
 
     public String getId() {
         return id;

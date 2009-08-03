@@ -10,6 +10,7 @@ import com.artivisi.pos.model.sekuriti.Menu;
 import com.artivisi.pos.model.sekuriti.Pengguna;
 import com.artivisi.pos.model.sekuriti.Peran;
 import com.artivisi.pos.dao.sekuriti.MenuDao;
+import com.artivisi.pos.dao.sekuriti.PeranDao;
 import com.artivisi.pos.service.SekuritiService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class SekuritiServiceImpl implements SekuritiService{
 
     @Autowired private PenggunaDao penggunaDao;
     @Autowired private MenuDao menuDao;
+    @Autowired private PeranDao peranDao;
 
     @Transactional
     public void hapus(Peran p) {
@@ -34,15 +36,15 @@ public class SekuritiServiceImpl implements SekuritiService{
 
     @Transactional(isolation=Isolation.SERIALIZABLE)
     public void simpan(Peran p) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        peranDao.simpan(p);
     }
 
     public List<Peran> semuaPeran() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return peranDao.semua();
     }
 
-    public Peran PeranBerdasarId(String id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Peran peranBerdasarId(String id) {
+        return peranDao.berdasarId(id);
     }
 
     @Transactional
@@ -64,13 +66,20 @@ public class SekuritiServiceImpl implements SekuritiService{
     }
 
     @Transactional
-    public void hapus(Menu p) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void hapus(Menu m) {
+        menuDao.hapus(m);
+    }
+
+    @Transactional
+    public void hapus(List<Menu> menus) {
+        for(Menu menu : menus){
+            menuDao.hapus(menu);
+        }
     }
 
     @Transactional(isolation=Isolation.SERIALIZABLE)
     public void simpan(Menu p) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        menuDao.simpan(p);
     }
 
     public List<Menu> semuaMenu() {
@@ -78,11 +87,18 @@ public class SekuritiServiceImpl implements SekuritiService{
     }
 
     public Menu menuBerdasarId(String id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return menuDao.berdasarId(id);
     }
 
     public Integer maximumMenuLevel() {
         return menuDao.maximumMenuLevel();
+    }
+
+    @Transactional(isolation=Isolation.SERIALIZABLE)
+    public void simpan(List<Menu> menus) {
+        for(Menu menu : menus){
+            menuDao.simpan(menu);
+        }
     }
 
 }

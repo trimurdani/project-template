@@ -19,13 +19,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 import org.hibernate.annotations.Cascade;
 
 /**
  *
  * @author endy
  */
-@Entity @Table(name="T_PENJUALAN")
+@Entity @Table(name="TR_PENJUALAN")
 public class Penjualan extends BaseEntity implements Serializable {
 
     @Id
@@ -43,13 +44,36 @@ public class Penjualan extends BaseEntity implements Serializable {
     @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private List<PenjualanDetail> details = new ArrayList<PenjualanDetail>();
 
+    @Version
+    private Integer version;
 
+    public void addDetail(PenjualanDetail detail){
+        if(details==null){
+            details = new ArrayList<PenjualanDetail>();
+        }
+        details.add(detail);
+        detail.setPenjualan(this);
+    }
+
+    public void removeDetail(PenjualanDetail detail){
+        if(details==null){
+            details = new ArrayList<PenjualanDetail>();
+        }
+        details.remove(detail);
+        detail.setPenjualan(null);
+    }
+    
     public List<PenjualanDetail> getDetails() {
         return details;
     }
 
     public void setDetails(List<PenjualanDetail> details) {
         this.details = details;
+        if(details !=null && !details.isEmpty()){
+            for(PenjualanDetail detail : details){
+                detail.setPenjualan(this);
+            }
+        }
     }
 
     public Date getTanggal() {
@@ -74,6 +98,14 @@ public class Penjualan extends BaseEntity implements Serializable {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
 }

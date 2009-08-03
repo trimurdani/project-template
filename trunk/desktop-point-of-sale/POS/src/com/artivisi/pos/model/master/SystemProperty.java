@@ -19,6 +19,10 @@ import javax.persistence.Table;
 @Table(name="MST_SYSTEM_PROPERTY")
 public class SystemProperty implements Serializable{
 
+    public static final String TANGGAL_TRANSAKSI = "tanggal_transaksi";
+    public static final String TANGGAL_FORMAT = "tanggal_format";
+    public static final String CABANG = "cabang";
+
     @Id
     @Column(name="ID")
     private String id;

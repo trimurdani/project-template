@@ -1,24 +1,20 @@
-<!DOCTYPE hibernate-configuration PUBLIC
-	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-	<session-factory>
-
-        <property name="show_sql">true</property>
-
-        <!-- daftar class yang dimapping -->
-        <mapping class="com.artivisi.pos.model.master.Produk" />
-        <mapping class="com.artivisi.pos.model.master.Cabang" />
-        <mapping class="com.artivisi.pos.model.master.RunningNumber" />
-        <mapping class="com.artivisi.pos.model.master.SystemProperty" />
-        <mapping class="com.artivisi.pos.model.sekuriti.Menu" />
-        <mapping class="com.artivisi.pos.model.sekuriti.Pengguna" />
-        <mapping class="com.artivisi.pos.model.sekuriti.Peran" />
-        <mapping class="com.artivisi.pos.model.transaksi.Penjualan" />
-        <mapping class="com.artivisi.pos.model.transaksi.PenjualanDetail" />
-        <mapping class="com.artivisi.pos.model.transaksi.Pembelian" />
-        <mapping class="com.artivisi.pos.model.transaksi.PembelianDetail" />
-        
-	</session-factory>
+  <session-factory>
+    <!-- daftar class yang dimapping -->
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+    
+    <mapping class="com.artivisi.pos.model.master.Produk"/>
+    <mapping class="com.artivisi.pos.model.master.Cabang"/>
+    <mapping class="com.artivisi.pos.model.master.RunningNumber"/>
+    <mapping class="com.artivisi.pos.model.master.SystemProperty"/>
+    <mapping class="com.artivisi.pos.model.sekuriti.Menu"/>
+    <mapping class="com.artivisi.pos.model.sekuriti.Pengguna"/>
+    <mapping class="com.artivisi.pos.model.sekuriti.Peran"/>
+    <mapping class="com.artivisi.pos.model.transaksi.Penjualan"/>
+    <mapping class="com.artivisi.pos.model.transaksi.PenjualanDetail"/>
+    <mapping class="com.artivisi.pos.model.transaksi.Pembelian"/>
+    <mapping class="com.artivisi.pos.model.transaksi.PembelianDetail"/>
+  </session-factory>
 </hibernate-configuration>
