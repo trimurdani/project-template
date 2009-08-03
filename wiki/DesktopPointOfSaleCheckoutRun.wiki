@@ -43,7 +43,7 @@ Setelah ketiga project diatas berhasil dibuka, sekarang siapkan database konfigu
     * atau dari mysql console client :
        * Login dengan mengetik perintah 
            $ mysql -u root -p 
-       *** Membuat database baru : 
+       * Membuat database baru : 
            mysql > create database posdb;
    * Membuat user baru dengan grant database posdb
      ketikkan perintah ini dari console setalah login ke mysql
