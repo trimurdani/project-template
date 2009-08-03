@@ -24,7 +24,9 @@ Kalau ingin menggunakan NetBeans langsung sebagai Subversion client, maka kita h
   * Mengambil source code dari repository
 Setelah berhasil menginstall Subversion client kita bisa menggunakanya untuk men-checkout repository dari googlecode. 
 Jika instalasinya berasal dari download (windows) atau apt-get (ubuntu), maka kita bisa menggunakan command line untuk men-checkout repositoru, caranya ketikkan perintah di bawah ini dari command line : 
+
 svn checkout http://project-template.googlecode.com/svn/trunk/desktop-point-of-sale desktop-point-of-sale    
+
 Jika instalasi subversion client dengan menggunakan netbeans plugin, maka proses checkout tidak bisa dari command line. 
   * Pilih menu : Team > Subversion > Checkout
   * kemudian isikan url : http://project-template.googlecode.com/svn/trunk/desktop-point-of-sale
@@ -47,7 +49,7 @@ Setelah ketiga project diatas berhasil dibuka, sekarang siapkan database konfigu
            mysql > create database posdb;
    * Membuat user baru dengan grant database posdb
      ketikkan perintah ini dari console setalah login ke mysql
-     mysql > grant all on posdb.\* to pos@localhost identified by 'pos';
+     mysql > grant all on posdb.** to pos@localhost identified by 'pos';
    * Memasukkan data sample dan schema ke dalam database posdb.
      Setelah selesai membuat database dan user baru, kita akan memasukkan schema dan sample data dari posdb. Ketikkan perintah berikut ini dari console :
      
