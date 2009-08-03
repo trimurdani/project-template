@@ -14,11 +14,11 @@ Langkah-langkah yang harus dalakukan :
     atau kalau ingin lebih lengkap penjelasan tentang Subversion bisa pesan buku subversion dari artivisi.com
 
 Kalau ingin menggunakan NetBeans langsung sebagai Subversion client, maka kita harus menginstall subversion client. Ada 2 cara :
-     ** Download subversion client dan menginstall secara terpisah.
-        *** Download subversion client dari http://www.collab.net/downloads/subversion/ untuk windows
-        *** Ubuntu : sudo apt-get install subversion
-     ** Install subversion client sebagai NetBeans plugin
-        *** Akses menu Team > Subversion > Checkout
+     * Download subversion client dan menginstall secara terpisah.
+        * Download subversion client dari http://www.collab.net/downloads/subversion/ untuk windows
+        * Ubuntu : sudo apt-get install subversion
+     * Install subversion client sebagai NetBeans plugin
+        * Akses menu Team > Subversion > Checkout
         Jika ada dialog untuk menginstall subversion client, pilih radio button untuk menginstall, kemudian tinggal ikuti wizardnya, gampang!.
  
   * Mengambil source code dari repository
@@ -38,21 +38,23 @@ Setelah ketiga project diatas berhasil dibuka, sekarang siapkan database konfigu
 
   * Install Mysql 5.1, bisa didownload dari mysql.com atau : sudo apt-get install mysql-server untuk ubuntu.
   * Buat database baru dengan nama posdb
-    ** bisa dilakukan dengan mysql GUI tools 
-    ** Atau dari NetBeans dengan mebuka tab Service, kemudian pilih node Mysql, klik kanan dan pilih menu Create Database
-    ** atau dari mysql console client :
-       *** Login dengan mengetik perintah 
+    * bisa dilakukan dengan mysql GUI tools 
+    * Atau dari NetBeans dengan mebuka tab Service, kemudian pilih node Mysql, klik kanan dan pilih menu Create Database
+    * atau dari mysql console client :
+       * Login dengan mengetik perintah 
            $ mysql -u root -p 
        *** Membuat database baru : 
            mysql > create database posdb;
    * Membuat user baru dengan grant database posdb
      ketikkan perintah ini dari console setalah login ke mysql
-     mysql > grant all on posdb.* to pos@localhost identified by 'pos';
+     mysql > grant all on posdb.'* to pos@localhost identified by 'pos';
    * Memasukkan data sample dan schema ke dalam database posdb.
      Setelah selesai membuat database dan user baru, kita akan memasukkan schema dan sample data dari posdb. Ketikkan perintah berikut ini dari console :
-     $ cd /home/ifnu/NetBeansProject/desktop-point-of-sale
-     $ mysql -u root -p posdb < POS/sql/posdb-schema.sql 
-     $ mysql -u root -p posdb < POS/sql/posdb-data.sql 
+     
+$ cd /home/ifnu/NetBeansProject/desktop-point-of-sale
+$ mysql -u root -p posdb < POS/sql/posdb-schema.sql 
+$ mysql -u root -p posdb < POS/sql/posdb-data.sql 
+   
    * Setelah semua siap, tinggal klik kanan dari project POS, kemudian pilih menu Run
 
 Selamat mencoba
