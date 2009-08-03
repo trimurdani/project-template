@@ -1,5 +1,4 @@
 #labels Phase-Support
-
 = Introduction =
 Halaman ini berisi bagaimana caranya mendapatkan source code desktop-point-of-sale kemudian membukanya di netbeans, menyiapkan databasenya dan menjalankan aplikasi dari netbeans.
 
@@ -51,14 +50,16 @@ Setelah ketiga project diatas berhasil dibuka, sekarang siapkan database konfigu
    * Membuat user baru dengan grant database posdb
      ketikkan perintah ini dari console setalah login ke mysql
 
-     {{{mysql > grant all on posdb.`*` to pos@localhost identified by 'pos';}}}
+     {{{mysql > grant all on posdb.`* to pos@localhost identified by 'pos';}}}
 
    * Memasukkan data sample dan schema ke dalam database posdb.
      Setelah selesai membuat database dan user baru, kita akan memasukkan schema dan sample data dari posdb. Ketikkan perintah berikut ini dari console :
      
-{{{$ cd /home/ifnu/NetBeansProject/desktop-point-of-sale
+{{{
+$ cd /home/ifnu/NetBeansProject/desktop-point-of-sale
 $ mysql -u root -p posdb < POS/sql/posdb-schema.sql 
-$ mysql -u root -p posdb < POS/sql/posdb-data.sql}}}
+$ mysql -u root -p posdb < POS/sql/posdb-data.sql
+}}}
    
    * Setelah semua siap, tinggal klik kanan dari project POS, kemudian pilih menu Run
 
