@@ -47,7 +47,7 @@ Setelah ketiga project diatas berhasil dibuka, sekarang siapkan database konfigu
            mysql > create database posdb;
    * Membuat user baru dengan grant database posdb
      ketikkan perintah ini dari console setalah login ke mysql
-     mysql > grant all on posdb.'* to pos@localhost identified by 'pos';
+     mysql > grant all on posdb.\* to pos@localhost identified by 'pos';
    * Memasukkan data sample dan schema ke dalam database posdb.
      Setelah selesai membuat database dan user baru, kita akan memasukkan schema dan sample data dari posdb. Ketikkan perintah berikut ini dari console :
      
