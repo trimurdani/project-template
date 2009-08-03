@@ -1,5 +1,5 @@
 #summary One-sentence summary of this page.
-#labels Featured,Phase-Support
+#labels ,Phase-Support
 
 = Introduction =
 Halaman ini berisi bagaimana caranya mendapatkan source code desktop-point-of-sale kemudian membukanya di netbeans, menyiapkan databasenya dan menjalankan aplikasi dari netbeans.
@@ -25,7 +25,7 @@ Kalau ingin menggunakan NetBeans langsung sebagai Subversion client, maka kita h
 Setelah berhasil menginstall Subversion client kita bisa menggunakanya untuk men-checkout repository dari googlecode. 
 Jika instalasinya berasal dari download (windows) atau apt-get (ubuntu), maka kita bisa menggunakan command line untuk men-checkout repositoru, caranya ketikkan perintah di bawah ini dari command line : 
 
-svn checkout http://project-template.googlecode.com/svn/trunk/desktop-point-of-sale desktop-point-of-sale    
+{{{svn checkout http://project-template.googlecode.com/svn/trunk/desktop-point-of-sale desktop-point-of-sale}}}
 
 Jika instalasi subversion client dengan menggunakan netbeans plugin, maka proses checkout tidak bisa dari command line. 
   * Pilih menu : Team > Subversion > Checkout
@@ -44,18 +44,18 @@ Setelah ketiga project diatas berhasil dibuka, sekarang siapkan database konfigu
     * Atau dari NetBeans dengan mebuka tab Service, kemudian pilih node Mysql, klik kanan dan pilih menu Create Database
     * atau dari mysql console client :
        * Login dengan mengetik perintah 
-           $ mysql -u root -p 
+           {{{$ mysql -u root -p }}}
        * Membuat database baru : 
-           mysql > create database posdb;
+           {{{mysql > create database posdb;}}}
    * Membuat user baru dengan grant database posdb
      ketikkan perintah ini dari console setalah login ke mysql
-     mysql > grant all on posdb.** to pos@localhost identified by 'pos';
+     {{{mysql > grant all on posdb.`*` to pos@localhost identified by 'pos';}}}
    * Memasukkan data sample dan schema ke dalam database posdb.
      Setelah selesai membuat database dan user baru, kita akan memasukkan schema dan sample data dari posdb. Ketikkan perintah berikut ini dari console :
      
-$ cd /home/ifnu/NetBeansProject/desktop-point-of-sale
+{{{$ cd /home/ifnu/NetBeansProject/desktop-point-of-sale
 $ mysql -u root -p posdb < POS/sql/posdb-schema.sql 
-$ mysql -u root -p posdb < POS/sql/posdb-data.sql 
+$ mysql -u root -p posdb < POS/sql/posdb-data.sql}}}
    
    * Setelah semua siap, tinggal klik kanan dari project POS, kemudian pilih menu Run
 
