@@ -53,8 +53,13 @@ public class SekuritiServiceImpl implements SekuritiService{
     }
 
     @Transactional(isolation=Isolation.SERIALIZABLE)
-    public void simpan(Pengguna p) {
-        penggunaDao.simpan(p);
+    public boolean simpan(Pengguna p) {
+        try{
+            penggunaDao.simpan(p);
+            return true;
+        } catch(Throwable th){
+            return false;
+        }
     }
 
     public List<Pengguna> semuaPengguna() {

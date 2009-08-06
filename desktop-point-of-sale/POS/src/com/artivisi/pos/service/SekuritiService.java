@@ -22,7 +22,7 @@ public interface SekuritiService {
     public Peran peranBerdasarId(String id);
 
     public void hapus(Pengguna p);
-    public void simpan(Pengguna p);
+    public boolean simpan(Pengguna p);
     public List<Pengguna> semuaPengguna();
     public Pengguna penggunaBerdasarId(String id);
 

@@ -18,9 +18,11 @@ import com.artivisi.pos.service.ReportService;
 import com.artivisi.pos.service.SekuritiService;
 import com.artivisi.pos.service.TransaksiService;
 import com.artivisi.pos.ui.dialog.sekuriti.LoginDialog;
+import com.artivisi.pos.ui.dialog.sekuriti.UbahKataSandiDialog;
 import com.artivisi.pos.ui.master.MasterProdukPanel;
 import com.artivisi.pos.util.UrutanComparator;
 import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
@@ -73,21 +75,31 @@ public class FrameUtama extends javax.swing.JFrame {
 
         destktopPane = new javax.swing.JDesktopPane();
         menuBar = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        mnuFile = new javax.swing.JMenu();
         mnuLogin = new javax.swing.JMenuItem();
         mnuUbahPassword = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jMenu1.setText("File");
+        mnuFile.setText("File");
 
         mnuLogin.setText("Login");
-        jMenu1.add(mnuLogin);
+        mnuLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuLoginActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mnuLogin);
 
         mnuUbahPassword.setText("Ubah Password");
-        jMenu1.add(mnuUbahPassword);
+        mnuUbahPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuUbahPasswordActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mnuUbahPassword);
 
-        menuBar.add(jMenu1);
+        menuBar.add(mnuFile);
 
         setJMenuBar(menuBar);
 
@@ -108,6 +120,34 @@ public class FrameUtama extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void mnuLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLoginActionPerformed
+        pengguna = null;
+        //tutup semua internal frame
+        for(JInternalFrame frame : internalFrameMap.values()){
+            frame.dispose();
+        }
+        internalFrameMap.clear();
+        //bersihkan menu kecuali menu file
+        for(Component component : menuBar.getComponents()){
+            if(!component.equals(mnuFile)
+                    && !component.equals(mnuLogin)
+                    && !component.equals(mnuUbahPassword)){
+                    menuBar.remove(component);
+            }
+        }
+        menuBar.setVisible(false);
+        Pengguna p = new LoginDialog().showDialog();
+        if(p!=null){
+            pengguna = p;
+            mnuLogin.setText("Logout");
+            constructMenu();
+        }
+    }//GEN-LAST:event_mnuLoginActionPerformed
+
+    private void mnuUbahPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUbahPasswordActionPerformed
+        new UbahKataSandiDialog().showDialog();
+    }//GEN-LAST:event_mnuUbahPasswordActionPerformed
     private MasterProdukPanel masterProduk;
 
     //menginstantkan ke Toko Service
@@ -148,6 +188,7 @@ public class FrameUtama extends javax.swing.JFrame {
         if(p!=null){
             pengguna = p;
             //construct menu
+            mnuLogin.setText("Logout");
             constructMenu();
         }
     }
@@ -310,8 +351,8 @@ public class FrameUtama extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane destktopPane;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu mnuFile;
     private javax.swing.JMenuItem mnuLogin;
     private javax.swing.JMenuItem mnuUbahPassword;
     // End of variables declaration//GEN-END:variables
