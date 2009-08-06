@@ -21,6 +21,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -57,21 +58,7 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
         tblProduk.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent arg0) {
-                //kalau tidak ada row yang di pilih maka akan menghasilkan -1
-                if (tblProduk.getSelectedRow() >= 0) {
-                    //ambil row yang di Pilihan
-                    int row = tblProduk.getSelectedRow();
-
-                    pilihanProduk = daftarProduk.get(row);
-
-                    txtKode.setText(pilihanProduk.getId());
-                    txtNama.setText(pilihanProduk.getNama());
-                    txtHargaBeli.setText(TextComponentUtils.formatNumber(pilihanProduk.getHargaBeli()));
-                    txtHargaJual.setText(TextComponentUtils.formatNumber(pilihanProduk.getHargaJual()));
-                    txtStok.setText(pilihanProduk.getStok().toString());
-
-                    masterToolbarPanel1.kondisiTabelTerpilih();
-                }
+                refreshBarisTableProduk();
             }
         });
 
@@ -152,13 +139,36 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
                     clearForm();
                     enableForm(false);
                     masterToolbarPanel1.kondisiAwal();
-                    //tampil massage BOx
-                    suksesSave();
                     //refresh table Produk
                     isiTableDaftarProduk();
                 }
             }
         });
+    }
+
+    private void refreshBarisTableProduk(){
+        //kalau tidak ada row yang di pilih maka akan menghasilkan -1
+        if (tblProduk.getSelectedRow() >= 0) {
+            //ambil row yang di Pilihan
+            int row = tblProduk.getSelectedRow();
+
+            pilihanProduk = FrameUtama.getMasterService().produkBerdasarId(daftarProduk.get(row).getId());
+            daftarProduk.set(row, pilihanProduk);
+            tblProduk.tableChanged(new TableModelEvent(tblProduk.getModel(), row));
+
+            txtKode.setText(pilihanProduk.getId());
+            txtNama.setText(pilihanProduk.getNama());
+            txtHargaBeli.setText(TextComponentUtils.formatNumber(pilihanProduk.getHargaBeli()));
+            txtHargaJual.setText(TextComponentUtils.formatNumber(pilihanProduk.getHargaJual()));
+            txtStok.setText(pilihanProduk.getStok().toString());
+            enableForm(false);
+            masterToolbarPanel1.kondisiTabelTerpilih();
+        } else {
+            //dianggap batal
+            enableForm(false);
+            clearForm();
+            masterToolbarPanel1.kondisiAwal();
+        }
     }
 
     private void clearForm(){
@@ -167,6 +177,7 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
         txtKode.setText("");
         txtNama.setText("");
         txtStok.setText("");
+        tblProduk.getSelectionModel().clearSelection();
     }
 
     private void enableForm(boolean status){
@@ -233,9 +244,6 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
             }
         }
 
-    }
-    private void suksesSave() {
-        JOptionPane.showMessageDialog(this, "Data Telah Tersimpan");
     }
 
     private void askDelete(){
@@ -369,6 +377,11 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
             }
         ));
         tblProduk.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblProduk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblProdukMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblProduk);
 
         jLabel1.setText("Search Character");
@@ -404,12 +417,16 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tblProdukMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProdukMouseClicked
+        refreshBarisTableProduk();
+    }//GEN-LAST:event_tblProdukMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

@@ -1,8 +1,8 @@
--- MySQL dump 10.13
+-- MySQL dump 10.11
 --
 -- Host: localhost    Database: posdb
 -- ------------------------------------------------------
--- Server version	5.1.22-rc-community
+-- Server version	5.0.67
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -21,6 +21,7 @@
 
 LOCK TABLES `mst_cabang` WRITE;
 /*!40000 ALTER TABLE `mst_cabang` DISABLE KEYS */;
+INSERT INTO `mst_cabang` (`ID_CABANG`, `NAME`) VALUES ('SYS','Cabang Default');
 /*!40000 ALTER TABLE `mst_cabang` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -30,6 +31,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `mst_produk` WRITE;
 /*!40000 ALTER TABLE `mst_produk` DISABLE KEYS */;
+INSERT INTO `mst_produk` (`ID_PRODUK`, `HARGA_BELI`, `HARGA_JUAL`, `NAMA`, `STOK`) VALUES ('ABC','10000.00','11000.00','KECAP ABC',19),('SOYJOY','5600.00','6200.00','SOYJOY SNACK',33);
 /*!40000 ALTER TABLE `mst_produk` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -39,6 +41,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `mst_running_number` WRITE;
 /*!40000 ALTER TABLE `mst_running_number` DISABLE KEYS */;
+INSERT INTO `mst_running_number` (`ID`, `NUMBER`) VALUES ('ID_BELI0908',3),('ID_JUAL0908',2);
 /*!40000 ALTER TABLE `mst_running_number` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -48,6 +51,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `mst_system_property` WRITE;
 /*!40000 ALTER TABLE `mst_system_property` DISABLE KEYS */;
+INSERT INTO `mst_system_property` (`ID`, `VAL`) VALUES ('cabang','SYS'),('tanggal_format','dd-MM-yyyy'),('tanggal_transaksi','06-08-2009');
 /*!40000 ALTER TABLE `mst_system_property` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -67,7 +71,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `sec_pengguna` WRITE;
 /*!40000 ALTER TABLE `sec_pengguna` DISABLE KEYS */;
-INSERT INTO `sec_pengguna` (`ID_PENGGUNA`, `NAMA_LENGKAP`, `KATA_SANDI`) VALUES ('ADMIN','SUPER USER','f6fdffe48c908deb0f4c3bd36c032e72');
+INSERT INTO `sec_pengguna` (`ID_PENGGUNA`, `NAMA_LENGKAP`, `KATA_SANDI`) VALUES ('ADMIN','SUPER USER','f6fdffe48c908deb0f4c3bd36c032e72'),('KASIR','KASIR','c7911af3adbd12a035b289556d96470a');
 /*!40000 ALTER TABLE `sec_pengguna` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -77,7 +81,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `sec_peran` WRITE;
 /*!40000 ALTER TABLE `sec_peran` DISABLE KEYS */;
-INSERT INTO `sec_peran` (`ID_PERAN`, `DESKRIPSI`) VALUES ('SUPER USER','USER YANG BISA MELIHAT SEMUA MENU');
+INSERT INTO `sec_peran` (`ID_PERAN`, `DESKRIPSI`) VALUES ('KASIR','KASIR HANYA BISA PENJUALAN'),('SUPER USER','USER YANG BISA MELIHAT SEMUA MENU');
 /*!40000 ALTER TABLE `sec_peran` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,7 +91,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `sec_peran_menu` WRITE;
 /*!40000 ALTER TABLE `sec_peran_menu` DISABLE KEYS */;
-INSERT INTO `sec_peran_menu` (`ID_PERAN`, `ID_MENU`) VALUES ('SUPER USER','Master'),('SUPER USER','Master Produk'),('SUPER USER','Master Running Number'),('SUPER USER','Master System Property'),('SUPER USER','Transaksi'),('SUPER USER','Pembelian'),('SUPER USER','Penjualan'),('SUPER USER','Laporan'),('SUPER USER','Sekuriti'),('SUPER USER','Pengguna'),('SUPER USER','Peran'),('SUPER USER','Menu'),('SUPER USER','Bantuan');
+INSERT INTO `sec_peran_menu` (`ID_PERAN`, `ID_MENU`) VALUES ('SUPER USER','Master'),('SUPER USER','Master Produk'),('SUPER USER','Master Running Number'),('SUPER USER','Master System Property'),('SUPER USER','Transaksi'),('SUPER USER','Pembelian'),('SUPER USER','Penjualan'),('SUPER USER','Laporan'),('SUPER USER','Sekuriti'),('SUPER USER','Pengguna'),('SUPER USER','Peran'),('SUPER USER','Menu'),('SUPER USER','Bantuan'),('KASIR','Transaksi'),('KASIR','Penjualan');
 /*!40000 ALTER TABLE `sec_peran_menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,7 +101,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `sec_peran_pengguna` WRITE;
 /*!40000 ALTER TABLE `sec_peran_pengguna` DISABLE KEYS */;
-INSERT INTO `sec_peran_pengguna` (`ID_PERAN`, `ID_PENGGUNA`) VALUES ('SUPER USER','ADMIN');
+INSERT INTO `sec_peran_pengguna` (`ID_PERAN`, `ID_PENGGUNA`) VALUES ('SUPER USER','ADMIN'),('KASIR','KASIR');
 /*!40000 ALTER TABLE `sec_peran_pengguna` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -107,6 +111,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `tr_pembelian` WRITE;
 /*!40000 ALTER TABLE `tr_pembelian` DISABLE KEYS */;
+INSERT INTO `tr_pembelian` (`ID_PEMBELIAN`, `TANGGAL`, `TOTAL`, `VERSION`) VALUES ('BLISYS090800001','2009-08-06','120000.00',0),('BLISYS090800002','2009-08-06','10000.00',0),('BLISYS090800003','2009-08-06','16800.00',0);
 /*!40000 ALTER TABLE `tr_pembelian` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,6 +121,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `tr_pembelian_detail` WRITE;
 /*!40000 ALTER TABLE `tr_pembelian_detail` DISABLE KEYS */;
+INSERT INTO `tr_pembelian_detail` (`ID_PEMBELIAN_DETAIL`, `HARGA`, `KUANTITAS`, `SUB_TOTAL`, `ID_PEMBELIAN`, `ID_PRODUK`) VALUES ('BLISYS0908000011','10000.00',12,'120000.00','BLISYS090800001','ABC'),('BLISYS0908000021','10000.00',1,'10000.00','BLISYS090800002','ABC'),('BLISYS0908000031','5600.00',3,'16800.00','BLISYS090800003','SOYJOY');
 /*!40000 ALTER TABLE `tr_pembelian_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -125,6 +131,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `tr_penjualan` WRITE;
 /*!40000 ALTER TABLE `tr_penjualan` DISABLE KEYS */;
+INSERT INTO `tr_penjualan` (`ID_PENJUALAN`, `TANGGAL`, `TOTAL`, `VERSION`) VALUES ('JLASYS090800001','2009-08-06','33000.00',0),('JLASYS090800002','2009-08-06','33000.00',0);
 /*!40000 ALTER TABLE `tr_penjualan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,6 +141,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `tr_penjualan_detail` WRITE;
 /*!40000 ALTER TABLE `tr_penjualan_detail` DISABLE KEYS */;
+INSERT INTO `tr_penjualan_detail` (`ID_PENJUALAN_DETAIL`, `HARGA`, `KUANTITAS`, `SUB_TOTAL`, `ID_PENJUALAN`, `ID_PRODUK`) VALUES ('JLASYS0908000011','11000.00',3,'33000.00','JLASYS090800001','ABC'),('JLASYS0908000021','11000.00',3,'33000.00','JLASYS090800002','ABC');
 /*!40000 ALTER TABLE `tr_penjualan_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -146,4 +154,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-08-03  7:07:32
+-- Dump completed on 2009-08-06 18:48:21

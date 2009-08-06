@@ -30,7 +30,7 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" alignment="1" pref="702" max="32767" attributes="2"/>
+                          <Component id="jScrollPane1" alignment="1" pref="755" max="32767" attributes="2"/>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="btnTambahDetail" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -46,8 +46,8 @@
                               <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="txtId" min="-2" pref="92" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
+                                      <Component id="txtId" min="-2" pref="176" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="jdcTanggal" min="-2" max="-2" attributes="0"/>
@@ -58,7 +58,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <Component id="transaksiToolbarPanel1" alignment="0" min="-2" pref="545" max="-2" attributes="0"/>
+                  <Component id="transaksiToolbarPanel1" alignment="0" pref="761" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>

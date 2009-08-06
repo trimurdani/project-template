@@ -40,7 +40,7 @@ public class TransaksiServiceImpl implements TransaksiService{
 
     @Transactional
     public void simpan(Penjualan penjualan) {
-        if(penjualan.getId() ==null){
+        if(penjualan.getId() ==null){//insert penjualan
             penjualan.setId(runningNumberDao.ambilBerikutnyaDanSimpan(TransaksiRunningNumberEnum.PENJUALAN));
             int i=1;
             for(PenjualanDetail detail : penjualan.getDetails()){
@@ -107,13 +107,12 @@ public class TransaksiServiceImpl implements TransaksiService{
 
     @Transactional
     public void simpan(Pembelian pembelian) {
-        pembelian.setId(runningNumberDao.ambilBerikutnyaDanSimpan(TransaksiRunningNumberEnum.PEMBELIAN));
-        int i = 1;
-        for(PembelianDetail detail : pembelian.getDetails()){
-            detail.setId(pembelian.getId() + i++);
-        }
-        //update stok dan harga beli
-        if(pembelian.getId() ==null){
+        if(pembelian.getId() == null){ //insert pembelian
+            pembelian.setId(runningNumberDao.ambilBerikutnyaDanSimpan(TransaksiRunningNumberEnum.PEMBELIAN));
+            int i = 1;
+            for(PembelianDetail detail : pembelian.getDetails()){
+                detail.setId(pembelian.getId() + i++);
+            }
             for(PembelianDetail d : pembelian.getDetails()){
                 Produk p = produkDao.cariBerdasarId(d.getProduk().getId());
                 p.setStok(p.getStok() + d.getKuantitas());
@@ -121,7 +120,7 @@ public class TransaksiServiceImpl implements TransaksiService{
                 produkDao.simpan(p);
             }
             pembelianDao.simpan(pembelian);
-        } else {
+        } else { //update stok dan harga beli
             //update pembelian, perlu dicek satu persatu detailnya untuk update stok
             Pembelian pembelianDb =  pembelianDao.cariBerdasarId(pembelian.getId());
                 List<PembelianDetail> pembelianDetails = pembelianDb.getDetails();

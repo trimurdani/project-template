@@ -18,6 +18,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -32,10 +33,11 @@ public class PeranPenggunaDialog extends javax.swing.JDialog {
     public PeranPenggunaDialog() {
         super(FrameUtama.getInstance(), true);
         initComponents();
-
-        penggunas = FrameUtama.getSekuritiService().semuaPengguna();
+        setLocationRelativeTo(null);
 
         tblPengguna.setAutoCreateColumnsFromModel(false);
+        penggunas = FrameUtama.getSekuritiService().semuaPengguna();
+        tblPengguna.setModel(new PenggunaTableModel(penggunas));
 
         tblPengguna.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
@@ -169,7 +171,32 @@ public class PeranPenggunaDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnBatalActionPerformed
 
+    private class PenggunaTableModel extends AbstractTableModel{
 
+        private List<Pengguna> listPenggunas;
+
+        public PenggunaTableModel(List<Pengguna> listPenggunas) {
+            this.listPenggunas = listPenggunas;
+        }
+
+        public int getRowCount() {
+            return listPenggunas.size();
+        }
+
+        public int getColumnCount() {
+            return 2;
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Pengguna p = penggunas.get(rowIndex);
+            switch(columnIndex){
+                case 0 : return p.getId();
+                case 1 : return p.getNamaLengkap();
+                default: return "";
+            }
+        }
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
     private javax.swing.JButton btnOk;

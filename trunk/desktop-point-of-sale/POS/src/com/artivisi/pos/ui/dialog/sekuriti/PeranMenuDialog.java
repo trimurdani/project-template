@@ -36,20 +36,21 @@ import javax.swing.event.ListSelectionListener;
  */
 public class PeranMenuDialog extends javax.swing.JDialog {
 
-    private Menu menu;
+    private List<Menu> menuAndItsCilds = new ArrayList<Menu>();
 
     /** Creates new form PeranMenuDialog */
     public PeranMenuDialog() {
         super(FrameUtama.getInstance(), true);
         initComponents();
-        lstMenu.getSelectionModel().addListSelectionListener(new SelectionListener());
+        setLocationRelativeTo(null);
+        
         lstMenu.setCellRenderer(new MenuListRenderer());
     }
 
-    public Menu showDialog(){
+    public List<Menu> showDialog(){
         constructMenu();
         setVisible(true);
-        return menu;
+        return menuAndItsCilds;
     }
 
     private List<Menu> orderedMenu = new ArrayList<Menu>();
@@ -169,17 +170,6 @@ public class PeranMenuDialog extends javax.swing.JDialog {
 
     }
 
-    private class SelectionListener implements ListSelectionListener{
-
-        public void valueChanged(ListSelectionEvent e) {
-            if(e.getSource().equals(lstMenu.getSelectionModel())){
-                if(lstMenu.getSelectedIndex()>=0){
-                    Menu selectedMenu = orderedMenu.get(lstMenu.getSelectedIndex());
-                    menu = FrameUtama.getSekuritiService().menuBerdasarId(selectedMenu.getId());
-                }
-            }
-        }
-    }
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -243,7 +233,20 @@ public class PeranMenuDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
-        if(menu!=null){
+        if(lstMenu.getSelectedIndex()>=0){
+            menuAndItsCilds.clear();
+            Menu selectedMenu = orderedMenu.get(lstMenu.getSelectedIndex());
+            int menuIndex = orderedMenu.indexOf(selectedMenu);
+            menuAndItsCilds.add(selectedMenu);
+            //cari childsnya
+            for(int i=menuIndex+1;i<orderedMenu.size();i++){
+                Menu currMenu = orderedMenu.get(i);
+                if(currMenu.getMenuLevel() > selectedMenu.getMenuLevel()){
+                    menuAndItsCilds.add(currMenu);
+                } else {
+                    break;
+                }
+            }
             dispose();
         } else {
             JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Pilih salah satu menu diatas",
@@ -252,8 +255,7 @@ public class PeranMenuDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnOKActionPerformed
 
     private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
-        // TODO add your handling code here:
-        menu = null;
+        menuAndItsCilds = null;
         dispose();
     }//GEN-LAST:event_btnBatalActionPerformed
 

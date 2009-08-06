@@ -11,7 +11,11 @@
 
 package com.artivisi.pos.ui.dialog.sekuriti;
 
+import com.artivisi.pos.model.sekuriti.Pengguna;
 import com.artivisi.pos.ui.frame.FrameUtama;
+import com.twmacinta.util.MD5;
+import java.util.Arrays;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,6 +27,9 @@ public class GantiKataSandiDialog extends javax.swing.JDialog {
     public GantiKataSandiDialog() {
         super(FrameUtama.getInstance(), true);
         initComponents();
+        
+        txtPengguna.setText(FrameUtama.getPengguna().getId());
+
     }
 
     /** This method is called from within the constructor to
@@ -38,8 +45,8 @@ public class GantiKataSandiDialog extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         txtKataSandi = new javax.swing.JPasswordField();
         txtPengguna = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnOk = new javax.swing.JButton();
+        btnBatal = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtKataSandi1 = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
@@ -53,9 +60,21 @@ public class GantiKataSandiDialog extends javax.swing.JDialog {
 
         txtKataSandi.setEchoChar(' ');
 
-        jButton1.setText("OK");
+        txtPengguna.setEnabled(false);
 
-        jButton2.setText("Batal");
+        btnOk.setText("OK");
+        btnOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOkActionPerformed(evt);
+            }
+        });
+
+        btnBatal.setText("Batal");
+        btnBatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatalActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Kata Sandi Baru");
 
@@ -83,15 +102,15 @@ public class GantiKataSandiDialog extends javax.swing.JDialog {
                         .addGap(18, 18, 18)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtPengguna, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtKataSandi, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
-                    .addComponent(txtKataSandi1, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
-                    .addComponent(txtKataSandi2, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))
+                    .addComponent(txtKataSandi, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                    .addComponent(txtKataSandi1, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
+                    .addComponent(txtKataSandi2, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE))
                 .addGap(10, 10, 10))
             .addGroup(layout.createSequentialGroup()
                 .addGap(163, 163, 163)
-                .addComponent(jButton1)
+                .addComponent(btnOk)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(btnBatal)
                 .addContainerGap(91, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -117,8 +136,8 @@ public class GantiKataSandiDialog extends javax.swing.JDialog {
                         .addComponent(txtKataSandi2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)))
+                            .addComponent(btnOk)
+                            .addComponent(btnBatal)))
                     .addComponent(jLabel4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -126,11 +145,43 @@ public class GantiKataSandiDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-   
+    private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
+        if(validateForm()){
+            Pengguna pengguna = FrameUtama.getPengguna();
+            String kataSandiLama = pengguna.getKataSandi();
+            pengguna.setKataSandi(new String(txtKataSandi1.getPassword()));
+            boolean hasil = FrameUtama.getSekuritiService().simpan(pengguna);
+            if(!hasil){
+                pengguna.setKataSandi(kataSandiLama);
+                JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Ganti password gagal! hubungi administrator anda!"
+                        ,"Error",JOptionPane.ERROR_MESSAGE);
+            }
+            dispose();
+        }
+    }//GEN-LAST:event_btnOkActionPerformed
+
+    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnBatalActionPerformed
+
+    private boolean validateForm(){
+        String kataSandi = new MD5(new String(txtKataSandi.getPassword())).asHex();
+        if(!FrameUtama.getPengguna().getKataSandi().equals(kataSandi)){
+            JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Kata sandi lama salah!"
+                    ,"Error",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if(!Arrays.equals(txtKataSandi1.getPassword(), txtKataSandi2.getPassword())){
+            JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Kata sandi baru tidak sama!"
+                    ,"Error",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnBatal;
+    private javax.swing.JButton btnOk;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

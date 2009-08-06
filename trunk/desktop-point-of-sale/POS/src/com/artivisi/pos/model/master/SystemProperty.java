@@ -24,10 +24,10 @@ public class SystemProperty implements Serializable{
     public static final String CABANG = "cabang";
 
     @Id
-    @Column(name="ID")
+    @Column(name="ID",length=255)
     private String id;
 
-    @Column(name="VAL")
+    @Column(name="VAL",length=255)
     private String val;
 
     public String getId() {

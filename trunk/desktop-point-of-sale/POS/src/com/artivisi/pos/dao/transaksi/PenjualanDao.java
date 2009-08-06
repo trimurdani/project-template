@@ -10,8 +10,6 @@ import com.artivisi.pos.model.transaksi.Penjualan;
 import com.artivisi.pos.model.transaksi.PenjualanDetail;
 import java.util.List;
 import org.hibernate.Hibernate;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 
@@ -33,4 +31,11 @@ public class PenjualanDao extends BaseDaoHibernate<Penjualan> {
         }
         return penjualan;
     }
+
+    @Override
+    public List<Penjualan> semua() {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Penjualan p order by p.id desc").list();
+    }
+
 }

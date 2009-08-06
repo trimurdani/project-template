@@ -49,7 +49,7 @@ public class MasterToolbarPanel extends javax.swing.JPanel {
         btnEdit.setEnabled(true);
         btnSimpan.setEnabled(false);
         btnHapus.setEnabled(true);
-        btnBatal.setEnabled(false);
+        btnBatal.setEnabled(true);
     }
 
     public JButton getBtnBatal() {
