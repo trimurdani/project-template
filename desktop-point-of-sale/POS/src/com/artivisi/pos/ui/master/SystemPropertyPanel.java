@@ -34,10 +34,9 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
         initComponents();
 
         initListener();
-        kondisiAwal();
-        buttonPanelMaster1.getBtnTambah().setEnabled(false);
-        isiTableDaftarSystemProperty();
+        masterToolbarPanel1.getBtnTambah().setEnabled(false);
         tblSystemProperty.setAutoCreateColumnsFromModel(false);
+        isiTableDaftarSystemProperty();
     }
 
     private void initListener() {
@@ -54,41 +53,43 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
 
                     txtKey.setText(pilihanSystemProperty.getId());
                     txtValue.setText(pilihanSystemProperty.getVal());
-
-                    buttonPanelMaster1.getBtnEdit().setEnabled(true);
+                    enableForm(false);
+                    masterToolbarPanel1.kondisiTabelTerpilih();
                 }
             }
         });
 
         
         //button edit di Klik
-        buttonPanelMaster1.getBtnEdit().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnEdit().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                kondisiEdit();
-                buttonPanelMaster1.kondisiTambah();
+                enableForm(true);
+                masterToolbarPanel1.kondisiTambah();
             }
         });
 
         // Ketika Button Tambah di Klick
-        buttonPanelMaster1.getBtnTambah().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnTambah().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                kondisiTambah();
-                buttonPanelMaster1.kondisiTambah();
+                enableForm(true);
+                masterToolbarPanel1.kondisiTambah();
             }
         });
 
         // Ketika Tombol Batal di Klik
-        buttonPanelMaster1.getBtnBatal().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnBatal().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                kondisiAwal();
+                clearForm();
+                enableForm(false);
+                masterToolbarPanel1.kondisiAwal();
             }
         });
 
         // Ketika Tombol Keluar di Klik
-        buttonPanelMaster1.getBtnKeluar().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnKeluar().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
                 FrameUtama.getInstance().removeInternalFrame(SystemPropertyPanel.this);
@@ -96,7 +97,7 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
         });
 
         // Ketika tombol Simpan di Klik
-        buttonPanelMaster1.getBtnSimpan().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnSimpan().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
 
@@ -115,7 +116,9 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
                     FrameUtama.getMasterService().simpan(pilihanSystemProperty);
 
                     //Kembali Kondisi Awal
-                    kondisiAwal();
+                    enableForm(false);
+                    clearForm();
+                    masterToolbarPanel1.kondisiAwal();
                     //refresh table SystemProperty
                     isiTableDaftarSystemProperty();
                 }
@@ -130,57 +133,33 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
     }
 
     private boolean validasi() {
-        // Periksa Kalau Kode Kosong tampilkan Message Box
+        // Periksa Kalau Key Kosong tampilkan Message Box
         if (txtKey.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Kode Harus di isi", "Field Harus di isi", JOptionPane.ERROR_MESSAGE);
+                    "Key Harus di isi", "Field Harus di isi", JOptionPane.ERROR_MESSAGE);
             txtKey.requestFocus();
             return false;
         }
-        // Periksa Kalau Nama Kosong tampilkan Message Box
+        // Periksa Kalau Nilai Kosong tampilkan Message Box
         if (txtValue.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Nama Harus di isi", "Field Harus di isi", JOptionPane.ERROR_MESSAGE);
+                    "Nilai Harus di isi", "Field Harus di isi", JOptionPane.ERROR_MESSAGE);
             txtValue.requestFocus();
             return false;
         }
-        // Periksa Kalau HArga Kosong tampilkan Message Box
-
         return true;
     }
 
-    private void kondisiAwal() {
-        txtKey.setEnabled(false);
-        txtValue.setEnabled(false);
-
-        tblSystemProperty.setEnabled(true);
-        buttonPanelMaster1.kondisiAwal();
-
+    private void enableForm(boolean status) {
+        txtKey.setEnabled(status);
+        txtValue.setEnabled(status);
     }
 
-    public void kondisiTambah() {
-        //hilangkan Pilihan SystemProperty
-        pilihanSystemProperty = null;
-        //hilangkan Pilihan di table
-        tblSystemProperty.clearSelection();
-
+    public void clearForm() {
         txtKey.setText("");
         txtValue.setText("");
-
-        txtKey.requestFocus();
-        txtKey.setEnabled(true);
-        txtValue.setEnabled(true);
-
-        tblSystemProperty.setEnabled(false);
-    }
-
-    public void kondisiEdit() {
-        txtKey.requestFocus();
-        txtKey.setEnabled(true);
-        txtValue.setEnabled(true);
-
-        tblSystemProperty.setEnabled(false);
-
+        pilihanSystemProperty = null;
+        tblSystemProperty.getSelectionModel().clearSelection();
     }
 
     /** This method is called from within the constructor to
@@ -201,7 +180,7 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
         tblSystemProperty = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
-        buttonPanelMaster1 = new com.artivisi.pos.ui.toolbar.MasterToolbarPanel();
+        masterToolbarPanel1 = new com.artivisi.pos.ui.toolbar.MasterToolbarPanel();
 
         setClosable(true);
         setTitle("Master Produk");
@@ -211,12 +190,6 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
         jLabel3.setText("Key");
 
         jLabel4.setText("Value");
-
-        txtValue.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtValueActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -256,11 +229,6 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
             }
         ));
         tblSystemProperty.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tblSystemProperty.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblSystemPropertyMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tblSystemProperty);
 
         jLabel1.setText("Search Character");
@@ -281,13 +249,13 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(buttonPanelMaster1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(buttonPanelMaster1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -296,21 +264,13 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
                             .addComponent(jLabel1)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 423, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtValueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValueActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_txtValueActionPerformed
-
-    private void tblSystemPropertyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSystemPropertyMouseClicked
-//        System.out.println("di Klik table nya");
-}//GEN-LAST:event_tblSystemPropertyMouseClicked
 
     private class SystemPropertyTableModel extends AbstractTableModel{
         private List<SystemProperty> daftarSystemProperty;
@@ -339,7 +299,7 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
 
         public Object getValueAt(int row, int col) {
             SystemProperty p = daftarSystemProperty.get(row);
-            switch(row){
+            switch(col){
                 case 0 : return p.getId();
                 case 1 : return p.getVal();
                 default : return "";
@@ -354,12 +314,12 @@ public class SystemPropertyPanel extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.artivisi.pos.ui.toolbar.MasterToolbarPanel buttonPanelMaster1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private com.artivisi.pos.ui.toolbar.MasterToolbarPanel masterToolbarPanel1;
     private javax.swing.JTable tblSystemProperty;
     private javax.swing.JTextField txtKey;
     private javax.swing.JTextField txtSearch;

@@ -209,7 +209,7 @@ public class ProdukTableModel extends AbstractTableModel {
 
     public Object getValueAt(int row, int col) {
         Produk p = daftarProduk.get(row);
-        switch(row){
+        switch(col){
             case 0 : return p.getId();
             case 1 : return p.getNama();
             case 2 : return p.getHargaBeli();

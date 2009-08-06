@@ -34,8 +34,8 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
         initComponents();
 
         initListener();
-        kondisiAwal();
-        buttonPanelMaster1.getBtnTambah().setEnabled(false);
+        masterToolbarPanel1.getBtnTambah().setEnabled(false);
+        tblRunningNumber.setAutoCreateColumnsFromModel(false);
         isiTableDaftarRunningNumber();
     }
 
@@ -45,7 +45,7 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
 
             public void valueChanged(ListSelectionEvent arg0) {
                 //kalau tidak ada row yang di pilih maka akan menghasilkan -1
-                if (tblRunningNumber.getSelectedRow() > -1) {
+                if (tblRunningNumber.getSelectedRow() >= 0) {
                     //ambil row yang di Pilihan
                     int row = tblRunningNumber.getSelectedRow();
 
@@ -53,41 +53,46 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
 
                     txtId.setText(pilihanRunningNumber.getId());
                     txtNomer.setText(pilihanRunningNumber.getNumber().toString());
-
-                    buttonPanelMaster1.getBtnEdit().setEnabled(true);
-                    buttonPanelMaster1.getBtnHapus().setEnabled(true);
+                    enableForm(false);
+                    masterToolbarPanel1.kondisiTabelTerpilih();
+                } else {
+                    clearForm();
+                    enableForm(false);
+                    masterToolbarPanel1.kondisiAwal();
                 }
             }
         });
 
         //button edit di Klik
-        buttonPanelMaster1.getBtnEdit().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnEdit().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                kondisiEdit();
-                buttonPanelMaster1.kondisiTambah();
+                enableForm(true);
+                masterToolbarPanel1.kondisiTambah();
             }
         });
 
         // Ketika Button Tambah di Klick
-        buttonPanelMaster1.getBtnTambah().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnTambah().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                kondisiTambah();
-                buttonPanelMaster1.kondisiTambah();
+                enableForm(true);
+                masterToolbarPanel1.kondisiTambah();
             }
         });
 
         // Ketika Tombol Batal di Klik
-        buttonPanelMaster1.getBtnBatal().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnBatal().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
-                kondisiAwal();
+                clearForm();
+                enableForm(false);
+                masterToolbarPanel1.kondisiAwal();
             }
         });
 
         // Ketika Tombol Keluar di Klik
-        buttonPanelMaster1.getBtnKeluar().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnKeluar().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
                 FrameUtama.getInstance().removeInternalFrame(RunningNumberPanel.this);
@@ -95,7 +100,7 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
         });
 
         // Ketika tombol Simpan di Klik
-        buttonPanelMaster1.getBtnSimpan().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnSimpan().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent arg0) {
 
@@ -112,11 +117,10 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
 
                     //simpan ke database dengan Menggunakan Method Simpan di Object Service
                     FrameUtama.getMasterService().simpan(pilihanRunningNumber);
-
                     //Kembali Kondisi Awal
-                    kondisiAwal();
-                    //tampil massage BOx
-                    suksesSave();
+                    clearForm();
+                    enableForm(false);
+                    masterToolbarPanel1.kondisiAwal();
                     //refresh table RunningNumber
                     isiTableDaftarRunningNumber();
                 }
@@ -128,14 +132,6 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
         daftarRunningNumber = FrameUtama.getMasterService().semuaRunningNumber();
         tblRunningNumber.setModel(new RunningNumberTableModel(daftarRunningNumber));
 
-    }
-
-    private void suksesSave() {
-        JOptionPane.showMessageDialog(this, "Data Telah Tersimpan");
-    }
-
-    private void askDelete(){
-        JOptionPane.showConfirmDialog(this, "Yakin ???");
     }
 
     private boolean validasi() {
@@ -157,38 +153,16 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
         return true;
     }
 
-    private void kondisiAwal() {
-        txtId.setEnabled(false);
-        txtNomer.setEnabled(false);
-
-        tblRunningNumber.setEnabled(true);
-        buttonPanelMaster1.kondisiAwal();
-
+    private void enableForm(boolean status){
+        txtId.setEnabled(status);
+        txtNomer.setEnabled(status);
     }
 
-    public void kondisiTambah() {
-        //hilangkan Pilihan RunningNumber
+    private void clearForm(){
         pilihanRunningNumber = null;
-        //hilangkan Pilihan di table
-        tblRunningNumber.clearSelection();
-
         txtId.setText("");
         txtNomer.setText("");
-
-        txtId.requestFocus();
-        txtId.setEnabled(true);
-        txtNomer.setEnabled(true);
-
-        tblRunningNumber.setEnabled(false);
-    }
-
-    public void kondisiEdit() {
-        txtNomer.requestFocus();
-        txtId.setEnabled(false);
-        txtNomer.setEnabled(true);
-
-        tblRunningNumber.setEnabled(false);
-
+        tblRunningNumber.getSelectionModel().clearSelection();
     }
 
     /** This method is called from within the constructor to
@@ -209,7 +183,7 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
         tblRunningNumber = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
-        buttonPanelMaster1 = new com.artivisi.pos.ui.toolbar.MasterToolbarPanel();
+        masterToolbarPanel1 = new com.artivisi.pos.ui.toolbar.MasterToolbarPanel();
 
         setClosable(true);
         setTitle("Master Produk");
@@ -219,12 +193,6 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
         jLabel3.setText("Id");
 
         jLabel4.setText("Nomer Terakhir");
-
-        txtNomer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNomerActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -264,11 +232,6 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
             }
         ));
         tblRunningNumber.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tblRunningNumber.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblRunningNumberMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tblRunningNumber);
 
         jLabel1.setText("Search Character");
@@ -289,13 +252,13 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(buttonPanelMaster1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(buttonPanelMaster1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -304,21 +267,13 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
                             .addComponent(jLabel1)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtNomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomerActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_txtNomerActionPerformed
-
-    private void tblRunningNumberMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRunningNumberMouseClicked
-//        System.out.println("di Klik table nya");
-}//GEN-LAST:event_tblRunningNumberMouseClicked
 
     private class RunningNumberTableModel extends AbstractTableModel{
         private List<RunningNumber> daftarRunningNumber;
@@ -342,12 +297,11 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
                 case 1 : return "Nomer Terakhir";
                 default : return "";
             }
-
         }
 
         public Object getValueAt(int row, int col) {
             RunningNumber p = daftarRunningNumber.get(row);
-            switch(row){
+            switch(col){
                 case 0 : return p.getId();
                 case 1 : return p.getNumber();
                 default : return "";
@@ -364,12 +318,12 @@ public class RunningNumberPanel extends javax.swing.JInternalFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.artivisi.pos.ui.toolbar.MasterToolbarPanel buttonPanelMaster1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private com.artivisi.pos.ui.toolbar.MasterToolbarPanel masterToolbarPanel1;
     private javax.swing.JTable tblRunningNumber;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNomer;

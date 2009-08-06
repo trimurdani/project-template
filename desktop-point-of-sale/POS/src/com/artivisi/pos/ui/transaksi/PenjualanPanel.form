@@ -22,7 +22,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane1" alignment="0" pref="856" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="910" max="32767" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="6" pref="6" max="6" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -30,16 +30,14 @@
                           <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="txtId" min="-2" pref="72" max="-2" attributes="1"/>
-                              <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
-                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jdcTanggal" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="txtTotal" min="-2" pref="162" max="-2" attributes="1"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txtTotal" alignment="1" pref="162" max="32767" attributes="1"/>
+                          <Component id="txtId" alignment="1" max="32767" attributes="1"/>
                       </Group>
+                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                      <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jdcTanggal" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="496" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">

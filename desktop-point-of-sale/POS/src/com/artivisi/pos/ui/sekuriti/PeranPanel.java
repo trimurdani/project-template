@@ -202,20 +202,19 @@ public class PeranPanel extends javax.swing.JInternalFrame {
                     penggunas = peran.getPenggunas();
                     menus = peran.getMenus();
                     loadModelToForm();
+                    enableForm(false);
                     masterToolbarPanel1.kondisiTabelTerpilih();
                 }
             } else if(e.getSource().equals(tblPengguna.getSelectionModel())){
                 if(tblPengguna.getSelectedRow()>=0){
-                    Pengguna selectedPengguna = penggunas.get(tblPengguna.getSelectedRow());
-                    pengguna = FrameUtama.getSekuritiService().penggunaBerdasarId(selectedPengguna.getId());
+                    pengguna = penggunas.get(tblPengguna.getSelectedRow());
                     btnHapusPengguna.setEnabled(true);
                 } else {
                     btnHapusPengguna.setEnabled(false);
                 }
             } else if(e.getSource().equals(lstMenu.getSelectionModel())){
                 if(lstMenu.getSelectedIndex()>=0){
-                    Menu selectedMenu = orderedMenu.get(lstMenu.getSelectedIndex());
-                    menu = FrameUtama.getSekuritiService().menuBerdasarId(selectedMenu.getId());
+                    menu = orderedMenu.get(lstMenu.getSelectedIndex());
                     btnHapusMenu.setEnabled(true);
                 } else {
                     btnHapusMenu.setEnabled(false);
@@ -277,6 +276,11 @@ public class PeranPanel extends javax.swing.JInternalFrame {
     private void constructMenu(){
         if(orderedMenu!=null) orderedMenu.clear();
         else orderedMenu = new ArrayList<Menu>();
+        if(menus == null || menus.isEmpty()) {
+            lstMenu.setModel(new MenuListModel(orderedMenu));
+            return;
+        }
+        Integer maximumLevel = 0;
         Map<Integer,List<Menu>> menuMap = new HashMap<Integer, List<Menu>>();
         for(Menu m : menus){
             List<Menu> menuList = null;
@@ -286,10 +290,18 @@ public class PeranPanel extends javax.swing.JInternalFrame {
             } else {
                 menuList = menuMap.get(m.getMenuLevel());
             }
+            //maximum level
+            if(m.getMenuLevel()>maximumLevel){
+                maximumLevel = m.getMenuLevel();
+            }
             menuList.add(m);
         }
+        //kalau parentnya saja ga ada ya berarti kosong toh?
+        if(menuMap.get(0) == null || menuMap.get(0).isEmpty()) {
+            lstMenu.setModel(new MenuListModel(orderedMenu));
+            return;
+        }
         //construct child and parent
-        Integer maximumLevel = FrameUtama.getSekuritiService().maximumMenuLevel();
         List<Menu> parents = menuMap.get(0);
         
         //
@@ -309,10 +321,6 @@ public class PeranPanel extends javax.swing.JInternalFrame {
         }
         Stack<Set<Menu>> stack = new Stack<Set<Menu>>();
         Set<Menu> parentsOrdered = new TreeSet<Menu>(new UrutanComparator());
-        if(menuMap.get(0) == null) {
-            lstMenu.setModel(new MenuListModel(orderedMenu));
-            return;
-        }
         parentsOrdered.addAll(menuMap.get(0));
         stack.push(parentsOrdered);
 
@@ -617,9 +625,9 @@ public class PeranPanel extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTambahMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahMenuActionPerformed
-        Menu currMenu = new PeranMenuDialog().showDialog();
-        if(currMenu!=null){
-            menus.add(currMenu);
+        List<Menu> addedMenus = new PeranMenuDialog().showDialog();
+        if(addedMenus!=null){
+            menus.addAll(addedMenus);
             constructMenu();
         }
     }//GEN-LAST:event_btnTambahMenuActionPerformed
@@ -641,17 +649,33 @@ public class PeranPanel extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnHapusPenggunaActionPerformed
 
     private void btnHapusMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusMenuActionPerformed
-        if(menu!=null){
-            menus.remove(menu);
-            menu = orderedMenu.get(orderedMenu.indexOf(menu));
-            if(menu!=null && menu.getParent()!=null && menu.getParent().getChilds()!=null){
-                menu.getParent().getChilds().remove(menu);
-            }
-            if(menu!=null){
+        List<Menu> deletedMenus = new ArrayList<Menu>();
+         if(menu!=null){
+            if(menu.getChilds()!=null && !menu.getChilds().isEmpty()){
+                //iterasi dari ordered menu, cari terus ke bawah hingga habis atau hingga ketemu sibling dari menu
+                int menuIndex = orderedMenu.indexOf(menu);
+                deletedMenus.add(menu);
+                for(int i=menuIndex+1;i<orderedMenu.size();i++){
+                    Menu currMenu = orderedMenu.get(i);
+                    if(currMenu.getMenuLevel() > menu.getMenuLevel()){
+                        currMenu.setParent(null);
+                        if(currMenu.getChilds()!=null) currMenu.getChilds().clear();
+                        deletedMenus.add(currMenu);
+                    } else {
+                        break;
+                    }
+                }
+                menus.removeAll(deletedMenus);
+                menu = null;
+                constructMenu();
+            } else {
+                if(menu.getParent()!=null) menu.getParent().getChilds().remove(menu);
                 menu.setParent(null);
+                if(menu.getChilds()!=null) menu.getChilds().clear();
+                menus.remove(menu);
+                menu = null;
+                constructMenu();
             }
-            menu = null;
-            constructMenu();
         }
     }//GEN-LAST:event_btnHapusMenuActionPerformed
 

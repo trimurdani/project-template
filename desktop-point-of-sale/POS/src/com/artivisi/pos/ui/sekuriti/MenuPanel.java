@@ -20,7 +20,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -91,45 +90,24 @@ public class MenuPanel extends javax.swing.JInternalFrame {
                 //cek apakah punya child
                 if(menu!=null){
                     if(menu.getChilds()!=null && !menu.getChilds().isEmpty()){
-                        int ret = JOptionPane.showConfirmDialog(FrameUtama.getInstance(), "Menu ini ada childnya, apakah anda yakin akan menghapus?");
-                        Stack stacks = new Stack();
-                        stacks.addAll(menu.getChilds());
+                        //iterasi dari ordered menu, cari terus ke bawah hingga habis atau hingga ketemu sibling dari menu
+                        int menuIndex = orderedMenu.indexOf(menu);
                         deletedMenus.add(menu);
-                        if(ret==JOptionPane.YES_OPTION){
-                            //kumpulkan yang akan didelete 
-                            while(true){
-                                if(stacks.isEmpty()) break;
-                                Object o = stacks.pop();
-                                if(o instanceof Menu){
-                                    Menu m = (Menu) o;
-                                    if(m.getChilds()!=null && !m.getChilds().isEmpty()){
-                                        Stack newStack = new Stack();
-                                        newStack.addAll(m.getChilds());
-                                        stacks.push(newStack);
-                                    }
-                                    deletedMenus.add(m);
-                                } else if(o instanceof Stack){
-                                    for(Object oo : (Stack)o){
-                                        if(oo instanceof Menu){
-                                            Menu mm = (Menu) oo;
-                                            if(mm.getChilds()!=null && !mm.getChilds().isEmpty()){
-                                                Stack newStack = new Stack();
-                                                newStack.addAll(mm.getChilds());
-                                                stacks.push(newStack);
-                                            }
-                                            deletedMenus.add(mm);
-                                        }
-                                    }
-                                }
+                        for(int i=menuIndex+1;i<orderedMenu.size();i++){
+                            Menu currMenu = orderedMenu.get(i);
+                            if(currMenu.getMenuLevel() > menu.getMenuLevel()){
+                                deletedMenus.add(currMenu);
+                            } else {
+                                break;
                             }
-                            try {
-                                FrameUtama.getSekuritiService().hapus(deletedMenus);
-                                constructMenu();
-                                masterToolbarPanel1.kondisiAwal();
-                            } catch (Throwable th){
-                                JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Data menu tidak bisa dihapus, masih digunakan!"
-                                        ,"Error",JOptionPane.ERROR_MESSAGE);
-                            }
+                        }
+                        try {
+                            FrameUtama.getSekuritiService().hapus(deletedMenus);
+                            constructMenu();
+                            masterToolbarPanel1.kondisiAwal();
+                        } catch (Throwable th){
+                            JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Data menu tidak bisa dihapus, masih digunakan!"
+                                    ,"Error",JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
                         try{
@@ -216,19 +194,20 @@ public class MenuPanel extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnKiri)
-                                .addGap(57, 57, 57)
+                                .addGap(28, 28, 28)
                                 .addComponent(btnKanan))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(45, 45, 45)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(btnNaik, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnTurun, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(btnTurun, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(29, 29, 29)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

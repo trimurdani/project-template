@@ -17,16 +17,21 @@ import com.artivisi.pos.util.TextComponentUtils;
 import com.twmacinta.util.MD5;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author ifnu
  */
 public class PenggunaPanel extends javax.swing.JInternalFrame {
+
+    private List<Pengguna> penggunas;
+    private Pengguna pengguna;
 
     /** Creates new form UserPanel */
     public PenggunaPanel() {
@@ -38,6 +43,12 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
         TextComponentUtils.setAutoUpperCaseAndLimitText(100, txtNama);
 
         tblPengguna.setAutoCreateColumnsFromModel(false);
+        isiTablePengguna();
+    }
+
+    private void isiTablePengguna(){
+        penggunas = FrameUtama.getSekuritiService().semuaPengguna();
+        tblPengguna.setModel(new PenggunaTableModel(penggunas));
     }
 
     private void initListener(){
@@ -48,12 +59,14 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
                 if(tblPengguna.getSelectedRow()>=0){
                     pengguna = penggunas.get(tblPengguna.getSelectedRow());
                     loadModelToForm();
+                    enableForm(false);
+                    masterToolbarPanel1.kondisiTabelTerpilih();
                 }
             }
         });
 
         //ketika tombol delete di Klik
-        buttonPanelMaster1.getBtnHapus().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnHapus().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent evt) {
                 try{
@@ -69,32 +82,35 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
 
 
         //button edit di Klik
-        buttonPanelMaster1.getBtnEdit().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnEdit().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent evt) {
+                enableForm(true);
+                masterToolbarPanel1.kondisiTambah();
             }
         });
 
         // Ketika Button Tambah di Klick
-        buttonPanelMaster1.getBtnTambah().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnTambah().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent evt) {
+                enableForm(true);
+                masterToolbarPanel1.kondisiTambah();
             }
         });
 
         // Ketika Tombol Batal di Klik
-        buttonPanelMaster1.getBtnBatal().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnBatal().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent evt) {
-                buttonPanelMaster1.kondisiAwal();
-                pengguna = null;
-                tblPengguna.getSelectionModel().clearSelection();
-                
+                masterToolbarPanel1.kondisiAwal();
+                clearForm();
+                enableForm(false);
             }
         });
 
         // Ketika Tombol Keluar di Klik
-        buttonPanelMaster1.getBtnKeluar().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnKeluar().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent evt) {
                 FrameUtama.getInstance().removeInternalFrame(PenggunaPanel.this);
@@ -102,7 +118,7 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
         });
 
         // Ketika tombol Simpan di Klik
-        buttonPanelMaster1.getBtnSimpan().addActionListener(new ActionListener() {
+        masterToolbarPanel1.getBtnSimpan().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent evt) {
                 if(validateForm()){
@@ -110,7 +126,9 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
                     loadFormToModel();
                     FrameUtama.getSekuritiService().simpan(pengguna);
                     clearForm();
-                    buttonPanelMaster1.kondisiAwal();
+                    enableForm(false);
+                    masterToolbarPanel1.kondisiAwal();
+                    isiTablePengguna();
                 }
             }
         });
@@ -125,7 +143,7 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonPanelMaster1 = new com.artivisi.pos.ui.toolbar.MasterToolbarPanel();
+        masterToolbarPanel1 = new com.artivisi.pos.ui.toolbar.MasterToolbarPanel();
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -135,7 +153,7 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
         txtNama = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
-        txtPassword = new javax.swing.JPasswordField();
+        txtKataSandi = new javax.swing.JPasswordField();
 
         setTitle("Pengguna");
 
@@ -156,7 +174,13 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
 
         jLabel4.setText("Password");
 
+        txtNama.setEnabled(false);
+
         jLabel5.setText("Nama");
+
+        txtId.setEnabled(false);
+
+        txtKataSandi.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -165,7 +189,7 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonPanelMaster1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -182,14 +206,14 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtKataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(71, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(buttonPanelMaster1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -207,35 +231,33 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtKataSandi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private Pengguna pengguna;
-    private List<Pengguna> penggunas;
-
     private void loadModelToForm(){
         txtId.setText(pengguna.getId());
         txtNama.setText(pengguna.getNamaLengkap());
-        txtPassword.setText(pengguna.getKataSandi());
+        txtKataSandi.setText(pengguna.getKataSandi());
     }
 
     private void loadFormToModel(){
         pengguna.setId(txtId.getText());
         pengguna.setNamaLengkap(txtNama.getText());
-        if(pengguna.getKataSandi()!=null &&
-                !new String(txtPassword.getPassword()).equals(pengguna.getKataSandi())){
-            pengguna.setKataSandi(new MD5(new String(txtPassword.getPassword())).asHex());
+        String kataSandi = new MD5(new String(txtKataSandi.getPassword())).asHex();
+        if(pengguna!=null && !kataSandi.equals(pengguna.getKataSandi())){
+            pengguna.setKataSandi(kataSandi);
         }
     }
 
     private boolean validateForm(){
         if(txtId.getText().length()>0 &&
                 txtNama.getText().length()>0 &&
-                txtPassword.getPassword()!=null && txtPassword.getPassword().length>0){
+                txtKataSandi.getPassword()!=null &&
+                txtKataSandi.getPassword().length>0){
             return true;
         } else {
             JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Isi semua field!","Error",JOptionPane.ERROR_MESSAGE);
@@ -246,23 +268,56 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
     private void clearForm(){
         txtId.setText("");
         txtNama.setText("");
-        txtPassword.setText("");
+        txtKataSandi.setText("");
         tblPengguna.getSelectionModel().clearSelection();
         pengguna = null;
     }
 
+    private void enableForm(boolean status){
+        txtId.setEnabled(status);
+        txtNama.setEnabled(status);
+        txtKataSandi.setEnabled(status);
+    }
+
+    private class PenggunaTableModel extends AbstractTableModel{
+
+        private List<Pengguna> listPenggunas;
+
+        public PenggunaTableModel(List<Pengguna> listPenggunas) {
+            this.listPenggunas = listPenggunas;
+        }
+
+        public int getRowCount() {
+            return listPenggunas.size();
+        }
+
+        public int getColumnCount() {
+            return 2;
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Pengguna p = penggunas.get(rowIndex);
+            switch(columnIndex){
+                case 0 : return p.getId();
+                case 1 : return p.getNamaLengkap();
+                default: return "";
+            }
+        }
+        
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.artivisi.pos.ui.toolbar.MasterToolbarPanel buttonPanelMaster1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private com.artivisi.pos.ui.toolbar.MasterToolbarPanel masterToolbarPanel1;
     private javax.swing.JTable tblPengguna;
     private javax.swing.JTextField txtId;
+    private javax.swing.JPasswordField txtKataSandi;
     private javax.swing.JTextField txtNama;
-    private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 
