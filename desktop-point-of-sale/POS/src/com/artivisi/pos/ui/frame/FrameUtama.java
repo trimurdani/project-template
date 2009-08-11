@@ -10,22 +10,27 @@
  */
 package com.artivisi.pos.ui.frame;
 
+import com.artivisi.pos.model.master.Kassa;
 import com.artivisi.pos.model.sekuriti.Menu;
 import com.artivisi.pos.model.sekuriti.Pengguna;
 import com.artivisi.pos.model.sekuriti.Peran;
+import com.artivisi.pos.model.transaksi.SesiKassa;
 import com.artivisi.pos.service.MasterService;
 import com.artivisi.pos.service.ReportService;
 import com.artivisi.pos.service.SekuritiService;
 import com.artivisi.pos.service.TransaksiService;
+import com.artivisi.pos.ui.dialog.master.KassaDialog;
 import com.artivisi.pos.ui.dialog.sekuriti.LoginDialog;
 import com.artivisi.pos.ui.dialog.sekuriti.UbahKataSandiDialog;
-import com.artivisi.pos.ui.master.MasterProdukPanel;
+import com.artivisi.pos.ui.dialog.transaksi.SesiKassaDialog;
+import com.artivisi.pos.util.ApplicationUtils;
 import com.artivisi.pos.util.UrutanComparator;
 import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,6 +47,7 @@ import javax.swing.JMenuItem;
 import javax.swing.UIManager;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import org.openide.util.Exceptions;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -74,12 +80,23 @@ public class FrameUtama extends javax.swing.JFrame {
     private void initComponents() {
 
         destktopPane = new javax.swing.JDesktopPane();
+        lblKassa = new javax.swing.JLabel();
+        lblPengguna = new javax.swing.JLabel();
+        lblShift = new javax.swing.JLabel();
+        lblJam = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         mnuFile = new javax.swing.JMenu();
         mnuLogin = new javax.swing.JMenuItem();
         mnuUbahPassword = new javax.swing.JMenuItem();
+        mnuKassa = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        lblKassa.setText("Kassa :");
+
+        lblPengguna.setText("Pengguna :");
+
+        lblShift.setText("Shift :");
 
         mnuFile.setText("File");
 
@@ -99,6 +116,14 @@ public class FrameUtama extends javax.swing.JFrame {
         });
         mnuFile.add(mnuUbahPassword);
 
+        mnuKassa.setText("Setting Kassa");
+        mnuKassa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuKassaActionPerformed(evt);
+            }
+        });
+        mnuFile.add(mnuKassa);
+
         menuBar.add(mnuFile);
 
         setJMenuBar(menuBar);
@@ -107,22 +132,36 @@ public class FrameUtama extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(destktopPane, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE))
+            .addComponent(destktopPane)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lblKassa, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblPengguna, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblShift, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                .addComponent(lblJam, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 275, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(destktopPane, javax.swing.GroupLayout.Alignment.TRAILING))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(destktopPane)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblKassa)
+                    .addComponent(lblPengguna)
+                    .addComponent(lblShift)
+                    .addComponent(lblJam, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLoginActionPerformed
+        //set pengguna ke null
         pengguna = null;
+        //sesi kassa dan shift
+        sesiKassa = null;
         //tutup semua internal frame
         for(JInternalFrame frame : internalFrameMap.values()){
             frame.dispose();
@@ -137,18 +176,17 @@ public class FrameUtama extends javax.swing.JFrame {
             }
         }
         menuBar.setVisible(false);
-        Pengguna p = new LoginDialog().showDialog();
-        if(p!=null){
-            pengguna = p;
-            mnuLogin.setText("Logout");
-            constructMenu();
-        }
+        loginProcess();
     }//GEN-LAST:event_mnuLoginActionPerformed
 
     private void mnuUbahPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUbahPasswordActionPerformed
         new UbahKataSandiDialog().showDialog();
     }//GEN-LAST:event_mnuUbahPasswordActionPerformed
-    private MasterProdukPanel masterProduk;
+
+    private void mnuKassaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuKassaActionPerformed
+        kassa = new KassaDialog().showDialog();
+    }//GEN-LAST:event_mnuKassaActionPerformed
+//    private MasterProdukPanel masterProduk;
 
     //menginstantkan ke Toko Service
     private static TransaksiService transaksiService;
@@ -158,13 +196,11 @@ public class FrameUtama extends javax.swing.JFrame {
 
     //Pengguna yang berhasil login
     private static Pengguna pengguna;
+    private static Kassa kassa;
+    private static SesiKassa sesiKassa;
 
     public static TransaksiService getTransaksiService(){
         return transaksiService;
-    }
-
-    public MasterProdukPanel getMasterProduk() {
-        return masterProduk;
     }
 
     public static MasterService getMasterService() {
@@ -183,10 +219,37 @@ public class FrameUtama extends javax.swing.JFrame {
         return pengguna;
     }
 
-    private void initApplication(){
+    public static Kassa getKassa() {
+        return kassa;
+    }
+
+    public static SesiKassa getSesiKassa() {
+        return sesiKassa;
+    }
+
+    private void loginProcess(){
         Pengguna p = new LoginDialog().showDialog();
         if(p!=null){
             pengguna = p;
+            lblPengguna.setText("Pengguna : " + pengguna.getNamaLengkap());
+            //cek apakah usernya kasir atau tidak
+            //dihardcode perannya KASIR
+            for(Peran peran : pengguna.getPerans()){
+                if(peran.getId().equalsIgnoreCase("KASIR")){
+                    //cek kassa
+                    boolean ret = ApplicationUtils.cekKassaSetting();
+                    if(!ret){
+                        kassa = new KassaDialog().showDialog();
+                    } else {
+                        kassa = ApplicationUtils.kassaSetting();
+                    }
+                    lblKassa.setText("Kassa : " + kassa.getId());
+                    //Minta input modal
+                    sesiKassa = new SesiKassaDialog().showDialog();
+                    lblShift.setText("Shift : " + sesiKassa.getShift().getId());
+                    break;
+                }
+            }
             //construct menu
             mnuLogin.setText("Logout");
             constructMenu();
@@ -344,15 +407,39 @@ public class FrameUtama extends javax.swing.JFrame {
                 FrameUtama fu = new FrameUtama();
                 fu.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 fu.setVisible(true);
-                fu.initApplication();
+                fu.jam();
+                fu.loginProcess();
+                //jam di status
             }
         });
     }
 
+    private void jam(){
+        Thread t = new Thread(new Runnable() {
+
+            public void run() {
+                while(true){
+                    lblJam.setText(new SimpleDateFormat("EEE, MMM dd yyyy HH:mm:ss").format(FrameUtama.getMasterService().tanggalServer()));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+            }
+        });
+        t.start();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane destktopPane;
+    private javax.swing.JLabel lblJam;
+    private javax.swing.JLabel lblKassa;
+    private javax.swing.JLabel lblPengguna;
+    private javax.swing.JLabel lblShift;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu mnuFile;
+    private javax.swing.JMenuItem mnuKassa;
     private javax.swing.JMenuItem mnuLogin;
     private javax.swing.JMenuItem mnuUbahPassword;
     // End of variables declaration//GEN-END:variables

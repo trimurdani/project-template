@@ -123,6 +123,15 @@ public class MenuPanel extends javax.swing.JInternalFrame {
             }
         });
 
+        masterToolbarPanel1.getBtnBatal().addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                lstMenu.clearSelection();
+                menu = null;
+                masterToolbarPanel1.kondisiAwal();
+            }
+        });
+
         masterToolbarPanel1.getBtnKeluar().addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -130,6 +139,7 @@ public class MenuPanel extends javax.swing.JInternalFrame {
             }
         });
     }
+
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -340,15 +350,15 @@ public class MenuPanel extends javax.swing.JInternalFrame {
                 while(true){
                     childs = stack.pop();
                     if(childs!=null && !childs.isEmpty()){
-                        Menu menu = childs.iterator().next();
-                        menu.setMenuLevel(menu.getMenuLevel()-1);
-                        childs.remove(menu);
+                        Menu childMenu = childs.iterator().next();
+                        childMenu.setMenuLevel(childMenu.getMenuLevel()-1);
+                        childs.remove(childMenu);
                         if(!childs.isEmpty()){
                             stack.push(childs);
                         }
-                        if(menu.getChilds()!=null && !menu.getChilds().isEmpty()){
+                        if(childMenu.getChilds()!=null && !childMenu.getChilds().isEmpty()){
                             Set<Menu> grandChilds = new TreeSet<Menu>();
-                            grandChilds.addAll(menu.getChilds());
+                            grandChilds.addAll(childMenu.getChilds());
                             stack.push(grandChilds);
                         }
                     } 

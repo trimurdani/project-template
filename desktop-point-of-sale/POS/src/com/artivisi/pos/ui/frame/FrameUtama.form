@@ -25,6 +25,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuUbahPasswordActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuKassa">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Setting Kassa"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuKassaActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
       </SubComponents>
@@ -52,17 +60,29 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="400" max="32767" attributes="0"/>
-          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Component id="destktopPane" alignment="0" pref="400" max="32767" attributes="0"/>
+          <Component id="destktopPane" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="lblKassa" min="-2" pref="147" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lblPengguna" min="-2" pref="195" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="lblShift" min="-2" pref="115" max="-2" attributes="0"/>
+              <EmptySpace pref="100" max="32767" attributes="0"/>
+              <Component id="lblJam" min="-2" pref="231" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <EmptySpace min="0" pref="275" max="32767" attributes="0"/>
-          <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
-              <Component id="destktopPane" alignment="1" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="destktopPane" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblKassa" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblPengguna" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblShift" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblJam" alignment="3" min="-2" pref="16" max="-2" attributes="0"/>
+              </Group>
           </Group>
       </Group>
     </DimensionLayout>
@@ -72,5 +92,22 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JLayeredPaneSupportLayout"/>
     </Container>
+    <Component class="javax.swing.JLabel" name="lblKassa">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Kassa :"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblPengguna">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Pengguna :"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblShift">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Shift :"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblJam">
+    </Component>
   </SubComponents>
 </Form>

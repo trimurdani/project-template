@@ -7,8 +7,11 @@
 package com.artivisi.pos.service;
 
 import com.artivisi.pos.model.master.Cabang;
+import com.artivisi.pos.model.master.KartuPembayaran;
+import com.artivisi.pos.model.master.Kassa;
 import com.artivisi.pos.model.master.Produk;
 import com.artivisi.pos.model.master.RunningNumber;
+import com.artivisi.pos.model.master.Shift;
 import com.artivisi.pos.model.master.SystemProperty;
 import com.artivisi.pos.model.master.constant.MasterRunningNumberEnum;
 import com.artivisi.pos.model.master.constant.TransaksiRunningNumberEnum;
@@ -30,6 +33,22 @@ public interface MasterService {
     public List<Cabang> semuaCabang();
     public Cabang cabangBerdasarId(String id);
 
+    public void hapus(Kassa k);
+    public Boolean simpan(Kassa k);
+    public List<Kassa> semuaKassa();
+    public Kassa kassaBerdasarId(String id);
+
+    public void hapus(Shift s);
+    public void simpan(Shift s);
+    public List<Shift> semuaShift();
+    public Shift shiftBerdasarId(String id);
+    public Shift shiftSekarang();
+
+    public void hapus(KartuPembayaran k);
+    public void simpan(KartuPembayaran k);
+    public List<KartuPembayaran> semuaKartuPembayaran();
+    public KartuPembayaran kartuPembayaranBerdasarId(String id);
+
     public void simpan(RunningNumber p);
     public List<RunningNumber> semuaRunningNumber();
     public String ambilBerikutnya(MasterRunningNumberEnum id, String idCabang);
@@ -41,4 +60,5 @@ public interface MasterService {
     public List<SystemProperty> semuaSystemProperty();
     public SystemProperty systemPropertyBerdasarId(String id);
 
+    public Date tanggalServer();
 }
