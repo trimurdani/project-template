@@ -15,6 +15,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -43,6 +45,14 @@ public class Penjualan extends BaseEntity implements Serializable {
     @OneToMany(mappedBy="penjualan", cascade=CascadeType.ALL)
     @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
     private List<PenjualanDetail> details = new ArrayList<PenjualanDetail>();
+
+    @ManyToOne
+    @JoinColumn(name="ID_SESI", referencedColumnName="ID_SESI")
+    private SesiKassa sesiKassa;
+
+    @OneToMany(cascade=CascadeType.ALL,mappedBy="penjualan")
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    private List<Pembayaran> pembayarans = new ArrayList<Pembayaran>();
 
     @Version
     private Integer version;
@@ -74,6 +84,27 @@ public class Penjualan extends BaseEntity implements Serializable {
                 detail.setPenjualan(this);
             }
         }
+    }
+
+    public List<Pembayaran> getPembayarans() {
+        return pembayarans;
+    }
+
+    public void setPembayarans(List<Pembayaran> pembayarans) {
+        this.pembayarans = pembayarans;
+        if(pembayarans!=null && !pembayarans.isEmpty()){
+            for(Pembayaran p : pembayarans){
+                p.setPenjualan(this);
+            }
+        }
+    }
+
+    public SesiKassa getSesiKassa() {
+        return sesiKassa;
+    }
+
+    public void setSesiKassa(SesiKassa sesiKassa) {
+        this.sesiKassa = sesiKassa;
     }
 
     public Date getTanggal() {

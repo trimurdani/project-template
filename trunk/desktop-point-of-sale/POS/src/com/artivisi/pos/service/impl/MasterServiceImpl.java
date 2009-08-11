@@ -6,12 +6,18 @@
 package com.artivisi.pos.service.impl;
 
 import com.artivisi.pos.dao.master.CabangDao;
+import com.artivisi.pos.dao.master.KartuPembayaranDao;
+import com.artivisi.pos.dao.master.KassaDao;
 import com.artivisi.pos.dao.master.ProdukDao;
 import com.artivisi.pos.dao.master.RunningNumberDao;
+import com.artivisi.pos.dao.master.ShiftDao;
 import com.artivisi.pos.dao.master.SystemPropertyDao;
 import com.artivisi.pos.model.master.Cabang;
+import com.artivisi.pos.model.master.KartuPembayaran;
+import com.artivisi.pos.model.master.Kassa;
 import com.artivisi.pos.model.master.Produk;
 import com.artivisi.pos.model.master.RunningNumber;
+import com.artivisi.pos.model.master.Shift;
 import com.artivisi.pos.model.master.SystemProperty;
 import com.artivisi.pos.model.master.constant.MasterRunningNumberEnum;
 import com.artivisi.pos.model.master.constant.TransaksiRunningNumberEnum;
@@ -32,6 +38,9 @@ public class MasterServiceImpl implements MasterService{
 
     @Autowired private ProdukDao produkDao;
     @Autowired private CabangDao cabangDao;
+    @Autowired private KassaDao kassaDao;
+    @Autowired private ShiftDao shiftDao;
+    @Autowired private KartuPembayaranDao kartuPembayaranDao;
     @Autowired private RunningNumberDao runningNumberDao;
     @Autowired private SystemPropertyDao systemPropertyDao;
 
@@ -69,6 +78,70 @@ public class MasterServiceImpl implements MasterService{
 
     public Cabang cabangBerdasarId(String id) {
         return cabangDao.cariBerdasarId(id);
+    }
+
+    @Transactional
+    public void hapus(Kassa k){
+        kassaDao.hapus(k);
+    }
+
+    @Transactional
+    public Boolean simpan(Kassa k){
+        try{
+            kassaDao.simpan(k);
+            return Boolean.TRUE;
+        } catch(Throwable t){
+            return Boolean.FALSE;
+        }
+    }
+
+    public List<Kassa> semuaKassa(){
+        return kassaDao.semua();
+    }
+
+    public Kassa kassaBerdasarId(String id){
+        return kassaDao.cariBerdasarId(id);
+    }
+
+    @Transactional
+    public void hapus(Shift s){
+        shiftDao.hapus(s);
+    }
+
+    @Transactional
+    public void simpan(Shift s){
+        shiftDao.simpan(s);
+    }
+
+    public List<Shift> semuaShift(){
+        return shiftDao.semua();
+    }
+
+    public Shift shiftBerdasarId(String id){
+        return shiftDao.cariBerdasarId(id);
+    }
+
+    public Shift shiftSekarang(){
+        return shiftDao.shiftSekarang();
+    }
+
+
+    @Transactional
+    public void hapus(KartuPembayaran k){
+        kartuPembayaranDao.hapus(k);
+    }
+
+    @Transactional
+    public void simpan(KartuPembayaran k){
+        kartuPembayaranDao.simpan(k);
+    }
+
+    public List<KartuPembayaran> semuaKartuPembayaran(){
+        return kartuPembayaranDao.semua();
+    }
+
+    public KartuPembayaran kartuPembayaranBerdasarId(String id){
+        return kartuPembayaranDao.cariBerdasarId(id);
     }
 
     @Transactional
@@ -115,4 +188,8 @@ public class MasterServiceImpl implements MasterService{
         return systemPropertyDao.tanggalKerja();
     }
 
+    public Date tanggalServer(){
+        //TODO harusnya diambil dari 
+        return new Date();
+    }
 }

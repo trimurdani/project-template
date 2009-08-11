@@ -6,18 +6,18 @@
 package com.artivisi.pos.dao.master;
 
 import com.artivisi.pos.dao.BaseDaoHibernate;
-import com.artivisi.pos.model.master.Produk;
+import com.artivisi.pos.model.master.Kassa;
 import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author endy
+ * @author ifnu
  */
 @Repository
-public class ProdukDao extends BaseDaoHibernate<Produk>{
+public class KassaDao extends BaseDaoHibernate<Kassa> {
 
-    public Produk cariBerdasarId(String id){
-        return (Produk) sessionFactory.getCurrentSession().get(Produk.class, id);
+    public Kassa cariBerdasarId(String id){
+        return (Kassa) sessionFactory.getCurrentSession().get(Kassa.class, id);
     }
 
 }
