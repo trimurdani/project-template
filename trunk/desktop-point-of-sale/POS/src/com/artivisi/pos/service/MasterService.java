@@ -10,6 +10,7 @@ import com.artivisi.pos.model.master.Cabang;
 import com.artivisi.pos.model.master.KartuPembayaran;
 import com.artivisi.pos.model.master.Kassa;
 import com.artivisi.pos.model.master.Produk;
+import com.artivisi.pos.model.master.PulsaElektrik;
 import com.artivisi.pos.model.master.RunningNumber;
 import com.artivisi.pos.model.master.Shift;
 import com.artivisi.pos.model.master.SystemProperty;
@@ -26,7 +27,13 @@ public interface MasterService {
     public void hapus(Produk p);
     public void simpan(Produk p);
     public List<Produk> semuaProduk();
+    public List<Produk> semuaProdukNonPulsaElektrik();
     public Produk produkBerdasarId(String id);
+
+    public void hapus(PulsaElektrik p);
+    public void simpan(PulsaElektrik p);
+    public List<PulsaElektrik> semuaPulsaElektrik();
+    public PulsaElektrik pulsaElektrikBerdasarId(String id);
 
     public void hapus(Cabang p);
     public void simpan(Cabang p);

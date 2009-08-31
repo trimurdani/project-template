@@ -47,7 +47,7 @@ public class ShiftPanel extends javax.swing.JInternalFrame {
         tblShift.setAutoCreateColumnsFromModel(false);
         tblShift.setDefaultRenderer(Date.class, new ShiftTableModelRenderer());
 
-        TextComponentUtils.setAutoUpperCaseAndLimitText(10,txtKode);
+        TextComponentUtils.setAutoUpperCaseText(10,txtKode);
         TextComponentUtils.setAutoUpperCaseText(txtSearch);
     }
 

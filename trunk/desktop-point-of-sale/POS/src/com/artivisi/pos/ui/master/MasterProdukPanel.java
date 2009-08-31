@@ -45,12 +45,19 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
         tblProduk.setAutoCreateColumnsFromModel(false);
         tblProduk.setDefaultRenderer(BigDecimal.class, new BigDecimalRenderer());
 
-        TextComponentUtils.setAutoUpperCaseText(txtKode);
-        TextComponentUtils.setAutoUpperCaseText(txtNama);
+        TextComponentUtils.setAutoUpperCaseText(30,txtKode);
+        TextComponentUtils.setAutoUpperCaseText(90,txtNama);
         TextComponentUtils.setAutoUpperCaseText(txtSearch);
+        TextComponentUtils.setAutoUpperCaseText(90,txtSatuan);
+        TextComponentUtils.setNumericTextOnly(txtTotalPembelian);
         TextComponentUtils.setNumericTextOnly(txtStok);
         TextComponentUtils.setCurrency(txtHargaBeli);
         TextComponentUtils.setCurrency(txtHargaJual);
+        TextComponentUtils.setAutoUpperCaseText(90,txtSatuan1);
+        TextComponentUtils.setNumericTextOnly(txtTotalPembelian1);
+        TextComponentUtils.setNumericTextOnly(txtStok1);
+        TextComponentUtils.setCurrency(txtHargaBeli1);
+        TextComponentUtils.setCurrency(txtHargaJual1);
     }
 
     private void initListener() {
@@ -130,7 +137,15 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
                     pilihanProduk.setNama(txtNama.getText());
                     pilihanProduk.setHargaBeli(TextComponentUtils.parseNumberToBigDecimal(txtHargaBeli.getText()));
                     pilihanProduk.setHargaJual(TextComponentUtils.parseNumberToBigDecimal(txtHargaJual.getText()));
-                    pilihanProduk.setStok(Integer.parseInt(txtStok.getText()));
+                    pilihanProduk.setStok(Integer.valueOf(txtStok.getText()));
+                    pilihanProduk.setSatuan(txtSatuan.getText());
+                    pilihanProduk.setTotalPembelian(Long.valueOf(txtTotalPembelian.getText()));
+
+                    pilihanProduk.setHargaBeli1(TextComponentUtils.parseNumberToBigDecimal(txtHargaBeli1.getText()));
+                    pilihanProduk.setHargaJual1(TextComponentUtils.parseNumberToBigDecimal(txtHargaJual1.getText()));
+                    pilihanProduk.setStok1(Integer.valueOf(txtStok1.getText()));
+                    pilihanProduk.setSatuan1(txtSatuan1.getText());
+                    pilihanProduk.setTotalPembelian1(Long.valueOf(txtTotalPembelian1.getText()));
 
                     //simpan ke database dengan Menggunakan Method Simpan di Object Service
                     FrameUtama.getMasterService().simpan(pilihanProduk);
@@ -158,9 +173,19 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
 
             txtKode.setText(pilihanProduk.getId());
             txtNama.setText(pilihanProduk.getNama());
+
             txtHargaBeli.setText(TextComponentUtils.formatNumber(pilihanProduk.getHargaBeli()));
             txtHargaJual.setText(TextComponentUtils.formatNumber(pilihanProduk.getHargaJual()));
             txtStok.setText(pilihanProduk.getStok().toString());
+            txtSatuan.setText(pilihanProduk.getSatuan());
+            txtTotalPembelian.setText(pilihanProduk.getTotalPembelian().toString());
+
+            txtHargaBeli1.setText(TextComponentUtils.formatNumber(pilihanProduk.getHargaBeli1()));
+            txtHargaJual1.setText(TextComponentUtils.formatNumber(pilihanProduk.getHargaJual1()));
+            txtStok1.setText(pilihanProduk.getStok1().toString());
+            txtSatuan1.setText(pilihanProduk.getSatuan1());
+            txtTotalPembelian1.setText(pilihanProduk.getTotalPembelian1().toString());
+
             enableForm(false);
             masterToolbarPanel1.kondisiTabelTerpilih();
         } else {
@@ -172,20 +197,35 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
     }
 
     private void clearForm(){
-        txtHargaBeli.setText("");
-        txtHargaJual.setText("");
         txtKode.setText("");
         txtNama.setText("");
+        txtHargaBeli.setText("");
+        txtHargaJual.setText("");
         txtStok.setText("");
+        txtSatuan.setText("");
+        txtTotalPembelian.setText("");
+        txtHargaBeli1.setText("");
+        txtHargaJual1.setText("");
+        txtStok1.setText("");
+        txtSatuan1.setText("");
+        txtTotalPembelian1.setText("");
         tblProduk.getSelectionModel().clearSelection();
     }
 
     private void enableForm(boolean status){
-        txtHargaBeli.setEnabled(status);
-        txtHargaJual.setEnabled(status);
         txtKode.setEnabled(status);
         txtNama.setEnabled(status);
+
+        txtHargaBeli.setEnabled(status);
+        txtHargaJual.setEnabled(status);
         txtStok.setEnabled(status);
+        txtSatuan.setEnabled(status);
+        txtTotalPembelian.setEnabled(status);
+        txtHargaBeli1.setEnabled(status);
+        txtHargaJual1.setEnabled(status);
+        txtStok1.setEnabled(status);
+        txtSatuan1.setEnabled(status);
+        txtTotalPembelian1.setEnabled(status);
     }
 
     private void isiTableDaftarProduk() {
@@ -193,6 +233,7 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
         tblProduk.setModel(new ProdukTableModel(daftarProduk));
 
     }
+
     private class ProdukTableModel extends AbstractTableModel {
 
         private List<Produk> daftarProduk;
@@ -296,6 +337,21 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
         txtHargaJual = new javax.swing.JFormattedTextField();
         jLabel7 = new javax.swing.JLabel();
         txtStok = new javax.swing.JTextField();
+        txtHargaBeli1 = new javax.swing.JFormattedTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txtStok1 = new javax.swing.JTextField();
+        txtHargaJual1 = new javax.swing.JFormattedTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtSatuan = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        txtTotalPembelian = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        txtSatuan1 = new javax.swing.JTextField();
+        txtTotalPembelian1 = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProduk = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -319,6 +375,22 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Harga Jual");
 
+        jLabel8.setText("Harga Beli");
+
+        jLabel9.setText("Harga Jual");
+
+        jLabel10.setText("Stok");
+
+        txtHargaJual1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0"))));
+
+        jLabel11.setText("Satuan");
+
+        jLabel12.setText("Total Pembelian");
+
+        jLabel13.setText("Satuan");
+
+        jLabel14.setText("Total Pembelian");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -329,17 +401,30 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel3)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel6))
-                .addGap(31, 31, 31)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel11)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtKode, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(txtHargaBeli, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtHargaJual, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTotalPembelian1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSatuan1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtStok1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtHargaJual1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtHargaBeli1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSatuan, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtHargaJual, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtHargaBeli, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtKode, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(46, Short.MAX_VALUE))
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -360,10 +445,40 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
                     .addComponent(txtHargaJual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(253, 253, 253))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSatuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addGap(1, 1, 1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTotalPembelian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
+                .addGap(5, 5, 5)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtHargaBeli1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtHargaJual1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtStok1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSatuan1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addGap(1, 1, 1)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTotalPembelian1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
+                .addGap(25, 25, 25))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtHargaBeli, txtKode, txtNama});
@@ -393,16 +508,16 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtSearch))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -410,14 +525,14 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(masterToolbarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -430,20 +545,35 @@ public class MasterProdukPanel extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private com.artivisi.pos.ui.toolbar.MasterToolbarPanel masterToolbarPanel1;
     private javax.swing.JTable tblProduk;
     private javax.swing.JFormattedTextField txtHargaBeli;
+    private javax.swing.JFormattedTextField txtHargaBeli1;
     private javax.swing.JFormattedTextField txtHargaJual;
+    private javax.swing.JFormattedTextField txtHargaJual1;
     private javax.swing.JTextField txtKode;
     private javax.swing.JTextField txtNama;
+    private javax.swing.JTextField txtSatuan;
+    private javax.swing.JTextField txtSatuan1;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtStok;
+    private javax.swing.JTextField txtStok1;
+    private javax.swing.JTextField txtTotalPembelian;
+    private javax.swing.JTextField txtTotalPembelian1;
     // End of variables declaration//GEN-END:variables
 }
