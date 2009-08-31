@@ -43,9 +43,9 @@ public class KassaDialog extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
 
-        TextComponentUtils.setAutoUpperCaseAndLimitText(10, txtIdKassa);
-        TextComponentUtils.setAutoUpperCaseAndLimitText(25, txtNamaKassa);
-        TextComponentUtils.setAutoUpperCaseAndLimitText(255, txtDeskripsiKassa);
+        TextComponentUtils.setAutoUpperCaseText(10, txtIdKassa);
+        TextComponentUtils.setAutoUpperCaseText(25, txtNamaKassa);
+        TextComponentUtils.setAutoUpperCaseText(255, txtDeskripsiKassa);
 
         initValidation();
     }

@@ -9,6 +9,7 @@ import com.artivisi.pos.dao.master.CabangDao;
 import com.artivisi.pos.dao.master.KartuPembayaranDao;
 import com.artivisi.pos.dao.master.KassaDao;
 import com.artivisi.pos.dao.master.ProdukDao;
+import com.artivisi.pos.dao.master.PulsaElektrikDao;
 import com.artivisi.pos.dao.master.RunningNumberDao;
 import com.artivisi.pos.dao.master.ShiftDao;
 import com.artivisi.pos.dao.master.SystemPropertyDao;
@@ -16,6 +17,7 @@ import com.artivisi.pos.model.master.Cabang;
 import com.artivisi.pos.model.master.KartuPembayaran;
 import com.artivisi.pos.model.master.Kassa;
 import com.artivisi.pos.model.master.Produk;
+import com.artivisi.pos.model.master.PulsaElektrik;
 import com.artivisi.pos.model.master.RunningNumber;
 import com.artivisi.pos.model.master.Shift;
 import com.artivisi.pos.model.master.SystemProperty;
@@ -37,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MasterServiceImpl implements MasterService{
 
     @Autowired private ProdukDao produkDao;
+    @Autowired private PulsaElektrikDao pulsaElektrikDao;
     @Autowired private CabangDao cabangDao;
     @Autowired private KassaDao kassaDao;
     @Autowired private ShiftDao shiftDao;
@@ -58,9 +61,32 @@ public class MasterServiceImpl implements MasterService{
         return produkDao.semua();
     }
 
+    public List<Produk> semuaProdukNonPulsaElektrik() {
+        return produkDao.semuaNonPulsaElektrik();
+    }
+
     public Produk produkBerdasarId(String id) {
         return produkDao.cariBerdasarId(id);
     }
+
+    @Transactional
+    public void hapus(PulsaElektrik p){
+        pulsaElektrikDao.hapus(p);
+    }
+
+    @Transactional
+    public void simpan(PulsaElektrik p){
+        pulsaElektrikDao.simpan(p);
+    }
+
+    public List<PulsaElektrik> semuaPulsaElektrik(){
+        return pulsaElektrikDao.semua();
+    }
+    
+    public PulsaElektrik pulsaElektrikBerdasarId(String id){
+        return pulsaElektrikDao.cariBerdasarId(id);
+    }
+
 
     @Transactional
     public void hapus(Cabang p) {

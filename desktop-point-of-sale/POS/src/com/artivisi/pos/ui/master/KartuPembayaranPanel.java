@@ -45,10 +45,10 @@ public class KartuPembayaranPanel extends javax.swing.JInternalFrame {
         tblKartuPembayaran.setAutoCreateColumnsFromModel(false);
         tblKartuPembayaran.setDefaultRenderer(BigDecimal.class, new BigDecimalRenderer());
 
-        TextComponentUtils.setAutoUpperCaseAndLimitText(10,txtId);
-        TextComponentUtils.setAutoUpperCaseAndLimitText(35,txtNama);
+        TextComponentUtils.setAutoUpperCaseText(10,txtId);
+        TextComponentUtils.setAutoUpperCaseText(35,txtNama);
         TextComponentUtils.setAutoUpperCaseText(txtSearch);
-        TextComponentUtils.setAutoUpperCaseAndLimitText(50,txtBank);
+        TextComponentUtils.setAutoUpperCaseText(50,txtBank);
     }
 
     private void initListener() {

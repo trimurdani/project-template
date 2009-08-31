@@ -45,8 +45,8 @@ public class KassaPanel extends javax.swing.JInternalFrame {
         tblKassa.setAutoCreateColumnsFromModel(false);
         tblKassa.setDefaultRenderer(BigDecimal.class, new BigDecimalRenderer());
 
-        TextComponentUtils.setAutoUpperCaseAndLimitText(10,txtKode);
-        TextComponentUtils.setAutoUpperCaseAndLimitText(25,txtNama);
+        TextComponentUtils.setAutoUpperCaseText(10,txtKode);
+        TextComponentUtils.setAutoUpperCaseText(25,txtNama);
         TextComponentUtils.setAutoUpperCaseText(txtSearch);
     }
 

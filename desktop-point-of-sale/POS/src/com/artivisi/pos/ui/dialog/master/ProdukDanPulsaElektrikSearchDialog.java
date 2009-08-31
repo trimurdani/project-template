@@ -12,9 +12,14 @@
 package com.artivisi.pos.ui.dialog.master;
 
 import com.artivisi.pos.model.master.Produk;
+import com.artivisi.pos.model.master.PulsaElektrik;
 import com.artivisi.pos.ui.frame.FrameUtama;
 import com.artivisi.pos.util.TextComponentUtils;
+import java.awt.event.KeyEvent;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -23,14 +28,14 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author ifnu
  */
-public class ProdukSearchDialog extends javax.swing.JDialog {
+public class ProdukDanPulsaElektrikSearchDialog extends javax.swing.JDialog {
 
-    private List<Produk> produks;
-    private Produk selectedProduk;
+    private List datas;
+    private Object selectedProduk;
     private boolean isOk = false;
 
     /** Creates new form ProdukSearchDialog */
-    public ProdukSearchDialog() {
+    public ProdukDanPulsaElektrikSearchDialog() {
         super(FrameUtama.getInstance(), true);
         initComponents();
         setLocationRelativeTo(null);
@@ -38,31 +43,73 @@ public class ProdukSearchDialog extends javax.swing.JDialog {
         tblProduk.setAutoCreateColumnsFromModel(false);
     }
 
-    public Produk showDialog(){
-        produks = FrameUtama.getMasterService().semuaProduk();
+    public Object showDialog(){
+        List<Produk> produks = FrameUtama.getMasterService().semuaProdukNonPulsaElektrik();
+        List<PulsaElektrik> pulsaElektriks = FrameUtama.getMasterService().semuaPulsaElektrik();
+        TreeSet produkDanPulsaElektriks = new TreeSet(new ProdukDanPulsaElektrik());
+        produks.addAll(produks);
+        produkDanPulsaElektriks.addAll(pulsaElektriks);
+        datas = Arrays.asList(produkDanPulsaElektriks.toArray());
         tblProduk.setModel(new ProdukTableModel());
         setVisible(true);
         if(isOk == false) selectedProduk = null;
         return selectedProduk;
     }
 
+    private class ProdukDanPulsaElektrik implements Comparator{
+
+        public int compare(Object o1, Object o2) {
+            if(o1 instanceof Produk && o2 instanceof Produk){
+                return ((Produk)o1).getId().compareTo(((Produk)o2).getId());
+            } else if(o1 instanceof Produk && o2 instanceof PulsaElektrik){
+                return ((Produk)o1).getId().compareTo(((PulsaElektrik)o2).getId());
+            } else if(o1 instanceof PulsaElektrik && o2 instanceof PulsaElektrik){
+                return ((PulsaElektrik)o1).getId().compareTo(((PulsaElektrik)o2).getId());
+            } else if(o1 instanceof PulsaElektrik && o2 instanceof Produk){
+                return ((PulsaElektrik)o1).getId().compareTo(((Produk)o2).getId());
+            }
+            return 0;
+        }
+        
+    }
+
     private class ProdukTableModel extends AbstractTableModel{
 
         public int getRowCount() {
-            return produks.size();
+            return datas.size();
         }
 
         public int getColumnCount() {
-            return 3;
+            return 8;
         }
 
         public Object getValueAt(int rowIndex, int columnIndex) {
-            Produk p = produks.get(rowIndex);
-            switch(columnIndex){
-                case 0 : return p.getNama();
-                case 1 : return p.getId();
-                case 2 : return p.getStok();
-                default: return "";
+            Object o = datas.get(rowIndex);
+            if(o instanceof Produk){
+                Produk p = (Produk) o;
+                switch(columnIndex){
+                    case 0 : return p.getNama();
+                    case 1 : return p.getId();
+                    case 2 : return p.getSatuan();
+                    case 3 : return p.getHargaJual();
+                    case 4 : return p.getStok();
+                    case 5 : return p.getSatuan1();
+                    case 6 : return p.getHargaJual1();
+                    case 7 : return p.getStok1();
+                    default: return "";
+                }
+            } else if (o instanceof PulsaElektrik){
+                PulsaElektrik p = (PulsaElektrik) o;
+                switch(columnIndex){
+                    case 0 : return p.getNama();
+                    case 1 : return p.getId();
+                    case 2 : return p.getProduk().getSatuan();
+                    case 3 : return p.getHargaJual();
+                    case 4 : return p.getProduk().getStok();
+                    default: return "";
+                }
+            } else {
+                return "";
             }
         }
 
@@ -100,7 +147,7 @@ public class ProdukSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Nama", "Kode Produk", "Stok"
+                "Nama", "Kode Produk", "Satuan", "Harga Jual", "Stok", "Satuan1", "Harga Jual1", "Stok1"
             }
         ));
         jScrollPane1.setViewportView(tblProduk);
@@ -124,31 +171,29 @@ public class ProdukSearchDialog extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(275, Short.MAX_VALUE)
-                .addComponent(btnOK)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnBatal)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnOK)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBatal))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtCari, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)))
+                        .addComponent(txtCari, javax.swing.GroupLayout.DEFAULT_SIZE, 677, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnOK)
                     .addComponent(btnBatal))
@@ -159,6 +204,10 @@ public class ProdukSearchDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCariKeyReleased
+        if(evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+            selectedProduk = null;
+            dispose();
+        }
         for(int i=0;i<tblProduk.getRowCount();i++){
             String current = tblProduk.getValueAt(i, 0).toString();
             if(current.toLowerCase().indexOf(txtCari.getText().toLowerCase())>=0){
@@ -168,6 +217,7 @@ public class ProdukSearchDialog extends javax.swing.JDialog {
                 break;
             }
         }
+
 }//GEN-LAST:event_txtCariKeyReleased
 
     private void btnOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOKActionPerformed
@@ -183,7 +233,7 @@ public class ProdukSearchDialog extends javax.swing.JDialog {
         public void valueChanged(ListSelectionEvent e) {
             if(tblProduk.getSelectedRow()>=0){
                 int indexModel = tblProduk.convertRowIndexToModel(tblProduk.getSelectedRow());
-                selectedProduk = produks.get(indexModel);
+                selectedProduk = datas.get(indexModel);
             }
         }
     }

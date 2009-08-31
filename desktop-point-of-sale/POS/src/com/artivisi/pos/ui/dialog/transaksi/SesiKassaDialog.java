@@ -133,6 +133,7 @@ public class SesiKassaDialog extends javax.swing.JDialog {
         jdcTanggal.setEnabled(false);
 
         btnOk.setText("OK");
+        btnOk.setEnabled(false);
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOkActionPerformed(evt);

@@ -6,6 +6,7 @@
 package com.artivisi.pos.model.transaksi;
 
 import com.artivisi.pos.model.master.Produk;
+import com.artivisi.pos.model.master.PulsaElektrik;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -34,10 +35,20 @@ public class PenjualanDetail implements Serializable {
     private Produk produk;
 
     @Column(name="KUANTITAS",nullable=false)
-    private Integer kuantitas = 1;
+    private Integer kuantitas = 0;
 
     @Column(name="HARGA",nullable=false)
     private BigDecimal harga = BigDecimal.ZERO;
+
+    @Column(name="KUANTITAS1",nullable=false)
+    private Integer kuantitas1 = 0;
+
+    @Column(name="HARGA1",nullable=false)
+    private BigDecimal harga1 = BigDecimal.ZERO;
+
+    @ManyToOne
+    @JoinColumn(name="ID_PULSA",referencedColumnName="ID_PULSA")
+    private PulsaElektrik pulsaElektrik;
 
     @Column(name="SUB_TOTAL")
     private BigDecimal subTotal = BigDecimal.ZERO;
@@ -88,6 +99,30 @@ public class PenjualanDetail implements Serializable {
 
     public void setSubTotal(BigDecimal subTotal) {
         this.subTotal = subTotal;
+    }
+
+    public BigDecimal getHarga1() {
+        return harga1;
+    }
+
+    public void setHarga1(BigDecimal harga1) {
+        this.harga1 = harga1;
+    }
+
+    public Integer getKuantitas1() {
+        return kuantitas1;
+    }
+
+    public void setKuantitas1(Integer kuantitas1) {
+        this.kuantitas1 = kuantitas1;
+    }
+
+    public PulsaElektrik getPulsaElektrik() {
+        return pulsaElektrik;
+    }
+
+    public void setPulsaElektrik(PulsaElektrik pulsaElektrik) {
+        this.pulsaElektrik = pulsaElektrik;
     }
 
    

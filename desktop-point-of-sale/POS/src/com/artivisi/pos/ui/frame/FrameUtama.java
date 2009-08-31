@@ -23,6 +23,7 @@ import com.artivisi.pos.ui.dialog.master.KassaDialog;
 import com.artivisi.pos.ui.dialog.sekuriti.LoginDialog;
 import com.artivisi.pos.ui.dialog.sekuriti.UbahKataSandiDialog;
 import com.artivisi.pos.ui.dialog.transaksi.SesiKassaDialog;
+import com.artivisi.pos.ui.transaksi.PenjualanPanelNew;
 import com.artivisi.pos.util.ApplicationUtils;
 import com.artivisi.pos.util.UrutanComparator;
 import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
@@ -247,12 +248,35 @@ public class FrameUtama extends javax.swing.JFrame {
                     //Minta input modal
                     sesiKassa = new SesiKassaDialog().showDialog();
                     lblShift.setText("Shift : " + sesiKassa.getShift().getId());
+
+                    //tampilkan penjualan
+                    final JInternalFrame frame = new PenjualanPanelNew();
+                    frame.addInternalFrameListener(new InternalFrameAdapter() {
+
+                        @Override
+                        public void internalFrameClosing(InternalFrameEvent e) {
+                            internalFrameMap.remove(frame.getClass().getName());
+                            destktopPane.remove(frame);
+                        }
+                    });
+                    destktopPane.add(frame);
+                    internalFrameMap.put(frame.getClass().getName(), frame);
+                    frame.setVisible(true);
+                    try {
+                        frame.setSelected(true);
+                    } catch (PropertyVetoException ex) {
+                        Exceptions.printStackTrace(ex);
+                    }
+                    frame.setSize(destktopPane.getSize());
                     break;
                 }
             }
             //construct menu
             mnuLogin.setText("Logout");
             constructMenu();
+
+
+   
         }
     }
 

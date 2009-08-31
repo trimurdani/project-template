@@ -54,7 +54,7 @@ public class TextComponentUtils {
         });
     }
 
-    public static void setAutoUpperCaseAndLimitText(final int maxChar,
+    public static void setAutoUpperCaseText(final int maxChar,
             final javax.swing.JTextField textField) {
         setMaximumLength(maxChar, textField);
         setAutoUpperCaseText(textField);

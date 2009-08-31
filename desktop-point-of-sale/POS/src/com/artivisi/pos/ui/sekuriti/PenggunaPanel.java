@@ -39,8 +39,8 @@ public class PenggunaPanel extends javax.swing.JInternalFrame {
 
         initListener();
 
-        TextComponentUtils.setAutoUpperCaseAndLimitText(30, txtId);
-        TextComponentUtils.setAutoUpperCaseAndLimitText(100, txtNama);
+        TextComponentUtils.setAutoUpperCaseText(30, txtId);
+        TextComponentUtils.setAutoUpperCaseText(100, txtNama);
 
         tblPengguna.setAutoCreateColumnsFromModel(false);
         isiTablePengguna();
