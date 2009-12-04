@@ -1,5 +1,5 @@
-#Link tutorial java bahasa indonesia
+#summary Link tutorial java bahasa indonesia
 
-[http://ifnubima.googlepages.com/swing-excerpt.pdf]Swing Tutorial
-[http://ifnubima.googlepages.com/JDBC.pdf]JDBC Tutorial
-[http://ifnubima.googlepages.com/TortoiseSVNBookLayout.pdf]TortoiseSVN Tutorial
+* [http://ifnubima.googlepages.com/swing-excerpt.pdf]Swing Tutorial
+* [http://ifnubima.googlepages.com/JDBC.pdf]JDBC Tutorial
+* [http://ifnubima.googlepages.com/TortoiseSVNBookLayout.pdf]TortoiseSVN Tutorial
