@@ -11,6 +11,7 @@ import com.artivisi.pos.dao.master.SystemPropertyDao;
 import com.artivisi.pos.dao.transaksi.PembayaranDao;
 import com.artivisi.pos.dao.transaksi.PembelianDao;
 import com.artivisi.pos.dao.transaksi.PenjualanDao;
+import com.artivisi.pos.dao.transaksi.SaldoStokDao;
 import com.artivisi.pos.dao.transaksi.SesiKassaDao;
 import com.artivisi.pos.model.master.Produk;
 import com.artivisi.pos.model.master.constant.TransaksiRunningNumberEnum;
@@ -19,10 +20,10 @@ import com.artivisi.pos.model.transaksi.Pembelian;
 import com.artivisi.pos.model.transaksi.PembelianDetail;
 import com.artivisi.pos.model.transaksi.Penjualan;
 import com.artivisi.pos.model.transaksi.PenjualanDetail;
+import com.artivisi.pos.model.transaksi.SaldoStok;
 import com.artivisi.pos.model.transaksi.SesiKassa;
 import com.artivisi.pos.model.transaksi.constant.JenisPembayaran;
 import com.artivisi.pos.service.TransaksiService;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,26 +35,16 @@ import org.springframework.transaction.annotation.Transactional;
  * @author endy
  */
 @Service("transaksiService")
-@Transactional(readOnly=false)
+@Transactional(readOnly=true)
 public class TransaksiServiceImpl implements TransaksiService{
     @Autowired private PenjualanDao penjualanDao;
     @Autowired private PembelianDao pembelianDao;
+    @Autowired private SaldoStokDao saldoStokDao;
     @Autowired private RunningNumberDao runningNumberDao;
     @Autowired private ProdukDao produkDao;
     @Autowired private SesiKassaDao sesiKassaDao;
     @Autowired private PembayaranDao pembayaranDao;
     @Autowired private SystemPropertyDao systemPropertyDao;
-
-    @Transactional
-    public void hapus(Penjualan p) {
-        p = penjualanDao.cariBerdasarId(p.getId());
-        for(PenjualanDetail d : p.getDetails()){
-            Produk produk = produkDao.cariBerdasarId(d.getProduk().getId());
-            produk.setStok(produk.getStok() + d.getKuantitas());
-            produkDao.simpan(produk);
-        }
-        penjualanDao.hapus(p);
-    }
 
     @Transactional(isolation=Isolation.SERIALIZABLE)
     public void simpan(Penjualan penjualan) {
@@ -70,39 +61,20 @@ public class TransaksiServiceImpl implements TransaksiService{
             for(Pembayaran p : penjualan.getPembayarans()){
                 p.setId(runningNumberDao.ambilBerikutnyaDanSimpan(TransaksiRunningNumberEnum.PEMBAYARAN));
             }
+            updateSaldoStok(penjualan);
             penjualanDao.simpan(penjualan);
-        } else {
-            //update :
-            List<PenjualanDetail> penjualanDetails =
-                    penjualanDao.cariBerdasarId(penjualan.getId()).getDetails();
-            //mengecek semua penjualan detail dari form
-            for(PenjualanDetail p : penjualan.getDetails()){
-                Produk produk = produkDao.cariBerdasarId(p.getProduk().getId());
-                if(penjualanDetails.contains(p)){ //kalau di database ada penjualan detail ini!
-                    //mendapapatkan penjualan detail yang sama dari database
-                    PenjualanDetail detailDb = penjualanDetails.get(penjualanDetails.indexOf(p));
-                    //stok sekarang + penjualan detail lama - penjualan detail baru
-                    produk.setStok(produk.getStok() + detailDb.getKuantitas() - p.getKuantitas());
-                    produkDao.simpan(produk);
-                } else { //penjualan detail baru atau tambahan
-                    produk.setStok(produk.getStok() - p.getKuantitas());
-                    produkDao.simpan(produk);
-                }
-            }
-            //mengecek penjualan dari database dicari penjualan yang dihapus
-            for(PenjualanDetail p : penjualanDetails){
-                //dicari yang ada didatabase tapi tidak ada di form
-                //artinya penjualan detail ini dihapus
-                if(!penjualan.getDetails().contains(p)) {
-                    Produk produk = produkDao.cariBerdasarId(p.getProduk().getId());
-                    //tambah stoknya
-                    produk.setStok(produk.getStok() + p.getKuantitas());
-                    produkDao.simpan(produk);
-                }
-            }
-            penjualanDao.merge(penjualan);
+        }
+        //penjualan juga tidak bisa diupdate, bisanya diretur
+    }
+
+    private void updateSaldoStok(Penjualan penjualan){
+        for(PenjualanDetail d : penjualan.getDetails()){
+            SaldoStok saldoStok = saldoStokDao.cari(d.getProduk());
+            saldoStok.setBeli(saldoStok.getJual() + d.getKuantitas());
+            saldoStokDao.simpan(saldoStok);
         }
     }
+
 
     public Penjualan cariPenjualan(String id) {
         return penjualanDao.cariBerdasarId(id);
@@ -110,21 +82,6 @@ public class TransaksiServiceImpl implements TransaksiService{
 
     public List<Penjualan> semuaPenjualan() {
         return penjualanDao.semua();
-    }
-
-    @Transactional
-    public void hapus(Pembelian pembelian) {
-        pembelian = pembelianDao.cariBerdasarId(pembelian.getId());
-        for(PembelianDetail d : pembelian.getDetails()){
-            Produk p = produkDao.cariBerdasarId(d.getProduk().getId());
-            p.setStok(p.getStok() - d.getKuantitas());
-            PembelianDetail pembelianTerakhir = pembelianDao.pembelianTerakhir(d.getProduk(),pembelian);
-            if(pembelianTerakhir!=null){
-                p.setHargaBeli(pembelianTerakhir.getHarga());
-            }
-            produkDao.simpan(p);
-        }
-        pembelianDao.hapus(pembelian);
     }
 
     @Transactional(isolation=Isolation.SERIALIZABLE)
@@ -138,48 +95,20 @@ public class TransaksiServiceImpl implements TransaksiService{
             for(PembelianDetail d : pembelian.getDetails()){
                 Produk p = produkDao.cariBerdasarId(d.getProduk().getId());
                 p.setStok(p.getStok() + d.getKuantitas());
-                p.setHargaBeli(d.getHarga());
+                p.setHargaPokok(d.getHarga());
                 produkDao.simpan(p);
             }
+            updateSaldoStok(pembelian);
             pembelianDao.simpan(pembelian);
-        } else { //update stok dan harga beli
-            //update pembelian, perlu dicek satu persatu detailnya untuk update stok
-            Pembelian pembelianDb =  pembelianDao.cariBerdasarId(pembelian.getId());
-                List<PembelianDetail> pembelianDetails = pembelianDb.getDetails();
-                //mengecek semua pembelian detail dari form
-                for(PembelianDetail p : pembelian.getDetails()){
-                    Produk produk = produkDao.cariBerdasarId(p.getProduk().getId());
-                    if(pembelianDetails.contains(p)){ //kalau di database ada pembelian detail ini!
-                        //mendapapatkan pembelian detail yang sama dari database
-                        PembelianDetail detailDb = pembelianDetails.get(pembelianDetails.indexOf(p));
-                        //stok sekarang - pembelian detail lama + pembelian detail baru
-                        produk.setStok(produk.getStok() - detailDb.getKuantitas() + p.getKuantitas());
-                        //harga beli diupdate ke pembelian terbaru
-                        produk.setHargaBeli(p.getHarga());
-                        produkDao.simpan(produk);
-                    } else { //pembelian detail baru atau tambahan
-                        produk.setStok(produk.getStok() + p.getKuantitas());
-                        produk.setHargaBeli(p.getHarga());
-                        produkDao.simpan(produk);
-                    }
-                }
-                //mengecek pembelian dari database dicari pembelian yang dihapus
-                for(PembelianDetail p : pembelianDetails){
-                    //dicari yang ada didatabase tapi tidak ada di form
-                    //artinya pembelian detail ini dihapus
-                    if(!pembelian.getDetails().contains(p)) {
-                        Produk produk = produkDao.cariBerdasarId(p.getProduk().getId());
-                        //cari pembelian terakhir dari database
-                        PembelianDetail pembelianTerakhir = pembelianDao.pembelianTerakhir(produk,pembelian);
-                        if(pembelianTerakhir!=null){
-                            produk.setHargaBeli(pembelianTerakhir.getHarga());
-                        }
-                        //kurangi stoknya
-                        produk.setStok(produk.getStok() - p.getKuantitas());
-                        produkDao.simpan(produk);
-                    }
-                }
-            pembelianDao.merge(pembelian);
+        }
+        //pembelian ga bisa diupdate, bisanya lewat retur
+    }
+
+    private void updateSaldoStok(Pembelian pembelian){
+        for(PembelianDetail d : pembelian.getDetails()){
+            SaldoStok saldoStok = saldoStokDao.cari(d.getProduk());
+            saldoStok.setBeli(saldoStok.getBeli() + d.getKuantitas());
+            saldoStokDao.simpan(saldoStok);
         }
     }
 

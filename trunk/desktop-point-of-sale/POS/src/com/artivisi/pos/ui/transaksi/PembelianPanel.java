@@ -105,7 +105,7 @@ public class PembelianPanel extends javax.swing.JInternalFrame {
         transaksiToolbarPanel1.getBtnHapus().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(pembelian!=null){
-                    FrameUtama.getTransaksiService().hapus(pembelian);
+//                    FrameUtama.getTransaksiService().hapus(pembelian);
                     pembelian = null;
                     selectedPembelianDetail = null;
                     pembelianDetails.clear();

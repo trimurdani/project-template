@@ -96,22 +96,22 @@ public class PenjualanPanel extends javax.swing.JInternalFrame {
                 }
             }
         });
-        transaksiToolbarPanel1.getBtnHapus().addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(penjualan!=null){
-                    FrameUtama.getTransaksiService().hapus(penjualan);
-                    penjualan = null;
-                    selectedPenjualanDetail = null;
-                    penjualanDetails.clear();
-                    tblPenjualanDetail.setModel(new PenjualanDetailTableModel());
-                    clearForm();
-                    enableForm(false);
-                } else {
-                    JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Pilih penjualan lewat tombol cari!",
-                            "Warning",JOptionPane.WARNING_MESSAGE);
-                }
-            }
-        });
+//        transaksiToolbarPanel1.getBtnHapus().addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                if(penjualan!=null){
+//                    FrameUtama.getTransaksiService().hapus(penjualan);
+//                    penjualan = null;
+//                    selectedPenjualanDetail = null;
+//                    penjualanDetails.clear();
+//                    tblPenjualanDetail.setModel(new PenjualanDetailTableModel());
+//                    clearForm();
+//                    enableForm(false);
+//                } else {
+//                    JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Pilih penjualan lewat tombol cari!",
+//                            "Warning",JOptionPane.WARNING_MESSAGE);
+//                }
+//            }
+//        });
         transaksiToolbarPanel1.getBtnKeluar().addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 FrameUtama.getInstance().removeInternalFrame(PenjualanPanel.this);

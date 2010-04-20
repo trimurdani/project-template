@@ -226,7 +226,7 @@ public class PembelianAddDialog extends javax.swing.JDialog {
         if(p!=null){
             selectedProduk = p;
             txtProduk.setText(selectedProduk.getNama());
-            txtHargaBeli.setText(TextComponentUtils.formatNumber(selectedProduk.getHargaBeli()));
+            txtHargaBeli.setText(TextComponentUtils.formatNumber(selectedProduk.getHargaPokok()));
         }
     }//GEN-LAST:event_btnLookupActionPerformed
 

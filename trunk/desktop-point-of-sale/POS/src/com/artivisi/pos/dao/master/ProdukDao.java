@@ -8,6 +8,7 @@ package com.artivisi.pos.dao.master;
 import com.artivisi.pos.dao.BaseDaoHibernate;
 import com.artivisi.pos.model.master.Produk;
 import java.util.List;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,7 +19,11 @@ import org.springframework.stereotype.Repository;
 public class ProdukDao extends BaseDaoHibernate<Produk>{
 
     public Produk cariBerdasarId(String id){
-        return (Produk) sessionFactory.getCurrentSession().get(Produk.class, id);
+        Produk p = (Produk) sessionFactory.getCurrentSession().get(Produk.class, id);
+        if(p!=null){
+            Hibernate.initialize(p.getProdukSatuans());
+        }
+        return p;
     }
 
     public List<Produk> semuaNonPulsaElektrik() {

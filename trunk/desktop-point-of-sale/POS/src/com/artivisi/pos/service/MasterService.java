@@ -12,6 +12,7 @@ import com.artivisi.pos.model.master.Kassa;
 import com.artivisi.pos.model.master.Produk;
 import com.artivisi.pos.model.master.PulsaElektrik;
 import com.artivisi.pos.model.master.RunningNumber;
+import com.artivisi.pos.model.master.Satuan;
 import com.artivisi.pos.model.master.Shift;
 import com.artivisi.pos.model.master.SystemProperty;
 import com.artivisi.pos.model.master.constant.MasterRunningNumberEnum;
@@ -26,6 +27,7 @@ import java.util.List;
 public interface MasterService {
     public void hapus(Produk p);
     public void simpan(Produk p);
+    public void simpan(Produk p,Long saldoAwal);
     public List<Produk> semuaProduk();
     public List<Produk> semuaProdukNonPulsaElektrik();
     public Produk produkBerdasarId(String id);
@@ -39,6 +41,11 @@ public interface MasterService {
     public void simpan(Cabang p);
     public List<Cabang> semuaCabang();
     public Cabang cabangBerdasarId(String id);
+
+    public void hapus(Satuan s);
+    public void simpan(Satuan s);
+    public List<Satuan> semuaSatuan();
+    public Satuan satuanBerdasarId(String id);
 
     public void hapus(Kassa k);
     public Boolean simpan(Kassa k);
