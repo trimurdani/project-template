@@ -48,7 +48,6 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
     /** Creates new form PenjualanPanel */
     public PenjualanPanelNew() {
         initComponents();
-        initListeners();
 
         tblPenjualanDetail.setAutoCreateColumnsFromModel(false);
         tblPenjualanDetail.getSelectionModel().addListSelectionListener(new PenjualanDetailSelectionListener());
@@ -58,94 +57,12 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
 
     }
 
-    private void initListeners(){
-//        transaksiToolbarPanel1.getBtnTambah().addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                enableForm(true);
-//                txtId.setText(FrameUtama.getMasterService().ambilBerikutnya(TransaksiRunningNumberEnum.PENJUALAN));
-//                jdcTanggal.setDate(FrameUtama.getMasterService().tanggalKerja());
-//            }
-//        });
-//        transaksiToolbarPanel1.getBtnSimpan().addActionListener(new ActionListener() {
-//
-//            public void actionPerformed(ActionEvent e) {
-//                if(validateForm()){
-//                    if(penjualan == null) penjualan = new Penjualan();
-//                    loadFormToDomain();
-//                    FrameUtama.getTransaksiService().simpan(penjualan);
-//                    penjualan = null;
-//                    clearForm();
-//                    enableForm(false);
-//                }
-//            }
-//        });
-//        transaksiToolbarPanel1.getBtnBatal().addActionListener(new ActionListener() {
-//
-//            public void actionPerformed(ActionEvent e) {
-//                clearForm();
-//                enableForm(false);
-//                selectedPenjualanDetail = null;
-//                penjualan = null;
-//                penjualanDetails.clear();
-//                tblPenjualanDetail.setModel(new PenjualanDetailTableModel());
-//            }
-//        });
-//        transaksiToolbarPanel1.getBtnEdit().addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                if(penjualan!=null){
-//                    enableForm(true);
-//                } else {
-//                    JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Pilih penjualan lewat tombol cari!",
-//                            "Warning",JOptionPane.WARNING_MESSAGE);
-//                }
-//            }
-//        });
-//        transaksiToolbarPanel1.getBtnHapus().addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                if(penjualan!=null){
-//                    FrameUtama.getTransaksiService().hapus(penjualan);
-//                    penjualan = null;
-//                    selectedPenjualanDetail = null;
-//                    penjualanDetails.clear();
-//                    tblPenjualanDetail.setModel(new PenjualanDetailTableModel());
-//                    clearForm();
-//                    enableForm(false);
-//                } else {
-//                    JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Pilih penjualan lewat tombol cari!",
-//                            "Warning",JOptionPane.WARNING_MESSAGE);
-//                }
-//            }
-//        });
-//        transaksiToolbarPanel1.getBtnKeluar().addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                FrameUtama.getInstance().removeInternalFrame(PenjualanPanelNew.this);
-//            }
-//        });
-//        transaksiToolbarPanel1.getBtnCari().addActionListener(new ActionListener() {
-//
-//            public void actionPerformed(ActionEvent e) {
-//                Penjualan p = new PenjualanSearchDialog().showDialog();
-//                if(p!=null){
-//                    penjualan = FrameUtama.getTransaksiService().cariPenjualan(p.getId());
-//                    loadDomainToForm();
-//                    transaksiToolbarPanel1.getBtnBatal().setEnabled(true);
-//                    transaksiToolbarPanel1.getBtnCari().setEnabled(true);
-//                    transaksiToolbarPanel1.getBtnCetak().setEnabled(true);
-//                    transaksiToolbarPanel1.getBtnEdit().setEnabled(true);
-//                    transaksiToolbarPanel1.getBtnHapus().setEnabled(true);
-//                    transaksiToolbarPanel1.getBtnSimpan().setEnabled(false);
-//                    transaksiToolbarPanel1.getBtnTambah().setEnabled(false);
-//                }
-//            }
-//        });
-
-    }
- 
     private void loadFormToDomain(){
         penjualan.setTanggal(FrameUtama.getMasterService().tanggalKerja());
-        penjualan.setTotal(calculateTotal());
+        penjualan.setTotal(hitungTotal());
         penjualan.setDetails(penjualanDetails);
     }
+    
     private boolean validateForm(){
         if(penjualanDetails==null || penjualanDetails.isEmpty()){
             JOptionPane.showMessageDialog(FrameUtama.getInstance(), "Tambahkan dahulu penjualan detail!",
@@ -155,14 +72,13 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
         return true;
     }
 
-
     private void clearForm(){
         penjualanDetails.clear();
         tblPenjualanDetail.setModel(new PenjualanDetailTableModel());
         lblTotal.setText("");
     }
 
-    private BigDecimal calculateTotal(){
+    private BigDecimal hitungTotal(){
         BigDecimal total = BigDecimal.ZERO;
         for(PenjualanDetail d : penjualanDetails){
             total = total.add(d.getSubTotal());
@@ -209,7 +125,7 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
             return penjualanDetails.size() + 1;
         }
         public int getColumnCount() {
-            return 7;
+            return 5;
         }
         public Object getValueAt(int rowIndex, int columnIndex) {
             if(rowIndex>= penjualanDetails.size()) return "";
@@ -229,9 +145,7 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
                     }
                 case 2 : return p.getKuantitas();
                 case 3 : return p.getHarga();
-                case 4 : return p.getKuantitas1();
-                case 5 : return p.getHarga1();
-                case 6 : return p.getSubTotal();
+                case 4 : return p.getSubTotal();
                 default: return "";
             }
         }
@@ -256,39 +170,23 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
             switch(columnIndex){
                 case 0 :
                     Produk p = FrameUtama.getMasterService().produkBerdasarId((String)aValue);
-                    System.out.println("hit database");
                     if(p!=null){
-                        d = new PenjualanDetail();
-                        d.setProduk(p);
-                        d.setHarga(p.getHargaJual());
-                        d.setKuantitas(1);
-                        d.setSubTotal(hitungSubTotal(d));
-                        d.setProduk(p);
-                        penjualanDetails.add(d);
-                        calculateTotal();
+                        d = buatPenjualanDetail(p);
+                        tambahkanPenjualanDetailKeTable(d);
+                        hitungTotal();
                     } else {
                         PulsaElektrik pulsa = FrameUtama.getMasterService().pulsaElektrikBerdasarId((String) aValue);
                         if(pulsa!=null){
-                            d = new PenjualanDetail();
-                            d.setProduk(pulsa.getProduk());
-                            d.setKuantitas(1);
-                            d.setHarga(pulsa.getHargaJual());
-                            d.setSubTotal(hitungSubTotal(d));
-                            d.setPulsaElektrik(pulsa);
-                            penjualanDetails.add(d);
-                            calculateTotal();
+                            d = buatPenjualanDetail(pulsa);
+                            tambahkanPenjualanDetailKeTable(d);
+                            hitungTotal();
                         }
                     }
                     break;
                 case 2:
                     d.setKuantitas(Integer.valueOf((String)aValue));
                     d.setSubTotal(hitungSubTotal(d));
-                    calculateTotal();
-                    break;
-                case 4:
-                    d.setKuantitas1(Integer.valueOf((String)aValue));
-                    d.setSubTotal(hitungSubTotal(d));
-                    calculateTotal();
+                    hitungTotal();
                     break;
             }
             fireTableDataChanged();
@@ -296,10 +194,9 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
 
         @Override
         public boolean isCellEditable(int rowIndex, int columnIndex) {
-//            if(columnIndex == 0 || columnIndex == 2 || columnIndex == 4) return true;
+            if(columnIndex == 0 || columnIndex == 2 || columnIndex == 4) return true;
             return false;
         }
-
 
     }
 
@@ -307,9 +204,6 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
             BigDecimal subTotal =BigDecimal.ZERO;
             if(d.getKuantitas()!=null && d.getHarga()!=null){
                 subTotal = new BigDecimal(d.getKuantitas()).multiply(d.getHarga());
-            }
-            if(d.getKuantitas1()!=null && d.getHarga1()!=null){
-                subTotal = subTotal.add(new BigDecimal(d.getKuantitas1()).multiply(d.getHarga1()));
             }
             return subTotal;
         }
@@ -327,20 +221,13 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
         tblPenjualanDetail = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtKode = new javax.swing.JTextField();
-        btnLookup = new javax.swing.JButton();
-        txtProduk = new javax.swing.JTextField();
-        txtQty = new javax.swing.JTextField();
-        txtHargaJual = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
 
         tblPenjualanDetail.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "PLU", "Produk", "Quantity", "Harga Jual", "Quantity1", "Harga Jual1", "Sub Total"
+                "PLU", "Produk", "Quantity", "Harga Jual", "Sub Total"
             }
         ));
         tblPenjualanDetail.setCellSelectionEnabled(true);
@@ -352,15 +239,19 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tblPenjualanDetail);
 
-        jLabel1.setText("Hapus:ESC Q1:F3 Q2:F4 BayarSimpan:F5 Cari:F6");
+        jLabel1.setText("Hapus:ESC Q1:F3 Q2:F4 Bayar&Simpan:F5 Cari:F6");
 
+        txtKode.setFont(new java.awt.Font("Lucida Grande", 0, 18));
         txtKode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtKodeActionPerformed(evt);
             }
         });
-
-        btnLookup.setText("...");
+        txtKode.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtKodeKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -369,29 +260,15 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 930, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 936, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtKode, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnLookup, javax.swing.GroupLayout.PREFERRED_SIZE, 38, Short.MAX_VALUE)
-                                .addGap(4, 4, 4)
-                                .addComponent(txtProduk, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtQty, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtHargaJual, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField5, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 924, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addComponent(txtKode, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(555, 555, 555)
+                                .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 930, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -399,21 +276,12 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtKode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnLookup)
-                        .addComponent(txtProduk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtQty, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtHargaJual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(txtKode, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addGap(47, 47, 47))
+                .addContainerGap())
         );
 
         pack();
@@ -427,8 +295,6 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
                 tblPenjualanDetail.getColumnModel().getSelectionModel().setSelectionInterval(2, 2);
                 tblPenjualanDetail.getSelectionModel()
                         .setSelectionInterval(tblPenjualanDetail.getSelectedRow()-1, tblPenjualanDetail.getSelectedRow()-1);
-                tblPenjualanDetail.setEditingColumn(2);
-                tblPenjualanDetail.setEditingRow(tblPenjualanDetail.getSelectedRow()-1);
             }
         } else if(evt.getKeyCode() == KeyEvent.VK_F4){
             if(tblPenjualanDetail.getSelectedRow() == penjualanDetails.size()
@@ -436,52 +302,11 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
                 tblPenjualanDetail.getColumnModel().getSelectionModel().setSelectionInterval(4, 4);
                 tblPenjualanDetail.getSelectionModel()
                         .setSelectionInterval(tblPenjualanDetail.getSelectedRow()-1, tblPenjualanDetail.getSelectedRow()-1);
-                tblPenjualanDetail.setEditingColumn(4);
-                tblPenjualanDetail.setEditingRow(tblPenjualanDetail.getSelectedRow()-1);
             }
         } else if(evt.getKeyCode() == KeyEvent.VK_F5){
-            BigDecimal pembayaran = new PembayaranDialog().showDialog();
-            if(pembayaran.compareTo(BigDecimal.ZERO)>0
-                    && pembayaran.compareTo(calculateTotal())>=0){
-                //TODO direct print here
-                //save transaksi
-                if(penjualan == null) penjualan = new Penjualan();
-                loadFormToDomain();
-                FrameUtama.getTransaksiService().simpan(penjualan);
-                penjualan = null;
-                clearForm();
-                tblPenjualanDetail.getColumnModel().getSelectionModel().setSelectionInterval(0, 0);
-                tblPenjualanDetail.getSelectionModel()
-                        .setSelectionInterval(0,0);
-
-            }
+            handleF5();
         } else if(evt.getKeyCode() == KeyEvent.VK_F6){
-            Object o = new ProdukDanPulsaElektrikSearchDialog().showDialog();
-            if(o!=null){
-                if(o instanceof Produk){
-                    Produk p = (Produk) o;
-                    PenjualanDetail d = new PenjualanDetail();
-                    d.setProduk(p);
-                    d.setHarga(p.getHargaJual());
-                    d.setKuantitas(1);
-                    d.setSubTotal(hitungSubTotal(d));
-                    d.setProduk(p);
-                    //TODO cari produk di dalam penjualan details, kalau ketemu, fokus ke quantity
-                    penjualanDetails.add(d);
-                    calculateTotal();
-                } else {
-                    PulsaElektrik p = (PulsaElektrik) o;
-                    PenjualanDetail d = new PenjualanDetail();
-                    d.setProduk(p.getProduk());
-                    d.setHarga(p.getHargaJual());
-                    d.setKuantitas(1);
-                    d.setSubTotal(hitungSubTotal(d));
-                    //TODO cari produk di dalam penjualan details, kalau ketemu, fokus ke quantity
-                    penjualanDetails.add(d);
-                    calculateTotal();
-                }
-                tblPenjualanDetail.setModel(new PenjualanDetailTableModel());
-            }
+            handleF6();
         } else if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
             if(tblPenjualanDetail.getSelectedRow() < penjualanDetails.size() - 1
                     && tblPenjualanDetail.getSelectedRow()>=0){
@@ -501,23 +326,106 @@ public class PenjualanPanelNew extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tblPenjualanDetailKeyReleased
 
     private void txtKodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKodeActionPerformed
-        // TODO add your handling code here:
+        String id = txtKode.getText();
+        if(id!=null && id.length()>0){
+            Produk p = FrameUtama.getMasterService().produkBerdasarId(id);
+            if(p!=null){
+                PenjualanDetail d = buatPenjualanDetail(p);
+                tambahkanPenjualanDetailKeTable(d);
+                tblPenjualanDetail.setModel(new PenjualanDetailTableModel());
+            }
+            txtKode.setText("");
+        }
     }//GEN-LAST:event_txtKodeActionPerformed
 
+    private void txtKodeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKodeKeyReleased
+        if(evt.getKeyCode() == KeyEvent.VK_F6){
+            handleF6();
+            hitungTotal();
+        } else if (evt.getKeyCode() == KeyEvent.VK_F5){
+            handleF5();
+        }
+    }//GEN-LAST:event_txtKodeKeyReleased
+
+    private void handleF5(){
+        BigDecimal pembayaran = new PembayaranDialog().showDialog(TextComponentUtils.parseNumberToBigDecimal(lblTotal.getText()));
+        if(pembayaran.compareTo(BigDecimal.ZERO)>0
+                && pembayaran.compareTo(hitungTotal())>=0){
+            //TODO direct print here
+            //save transaksi
+            if(penjualan == null) penjualan = new Penjualan();
+            loadFormToDomain();
+            FrameUtama.getTransaksiService().simpan(penjualan);
+            penjualan = null;
+            clearForm();
+            tblPenjualanDetail.getColumnModel().getSelectionModel().setSelectionInterval(0, 0);
+            tblPenjualanDetail.getSelectionModel()
+                    .setSelectionInterval(0,0);
+        }
+    }
+
+    private void handleF6(){
+        Object o = new ProdukDanPulsaElektrikSearchDialog().showDialog();
+        if(o!=null){
+            if(o instanceof Produk){
+                Produk p = (Produk) o;
+                PenjualanDetail d = buatPenjualanDetail(p);
+                tambahkanPenjualanDetailKeTable(d);
+                hitungTotal();
+            } else {
+                PulsaElektrik p = (PulsaElektrik) o;
+                PenjualanDetail d = buatPenjualanDetail(p);
+                tambahkanPenjualanDetailKeTable(d);
+                hitungTotal();
+            }
+            tblPenjualanDetail.setModel(new PenjualanDetailTableModel());
+        }
+    }
+
+    private PenjualanDetail buatPenjualanDetail(Produk p){
+        PenjualanDetail d = new PenjualanDetail();
+        d.setProduk(p);
+        d.setHarga(p.getHargaJual());
+        d.setKuantitas(1);
+        d.setSubTotal(hitungSubTotal(d));
+        d.setProduk(p);
+        return d;
+    }
+
+    private PenjualanDetail buatPenjualanDetail(PulsaElektrik p){
+        PenjualanDetail d = new PenjualanDetail();
+        d.setPulsaElektrik(p);
+        d.setHarga(p.getHargaJual());
+        d.setKuantitas(1);
+        d.setSubTotal(hitungSubTotal(d));
+        return d;
+    }
+
+    private void tambahkanPenjualanDetailKeTable(PenjualanDetail d){
+        for(PenjualanDetail detail : penjualanDetails){
+            if(detail.getProduk() !=null &&
+                    d.getProduk()!=null &&
+                    detail.getProduk().equals(d.getProduk())){
+                detail.setKuantitas(detail.getKuantitas() + d.getKuantitas());
+                detail.setSubTotal(hitungSubTotal(detail));
+                return;
+            } else if(detail.getPulsaElektrik()!=null &&
+                    d.getPulsaElektrik()!=null &&
+                    detail.getPulsaElektrik().equals(d.getPulsaElektrik())){
+                detail.setKuantitas(detail.getKuantitas() + d.getKuantitas());
+                detail.setSubTotal(hitungSubTotal(detail));
+                return;
+            }
+        }
+        penjualanDetails.add(d);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLookup;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblPenjualanDetail;
-    private javax.swing.JTextField txtHargaJual;
     private javax.swing.JTextField txtKode;
-    private javax.swing.JTextField txtProduk;
-    private javax.swing.JTextField txtQty;
     // End of variables declaration//GEN-END:variables
 
 }

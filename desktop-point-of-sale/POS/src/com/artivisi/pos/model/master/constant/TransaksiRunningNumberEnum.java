@@ -13,7 +13,8 @@ public enum TransaksiRunningNumberEnum {
     PEMBELIAN("ID_BELI", "BLI", 5),
     PENJUALAN("ID_JUAL", "JLA", 5),
     PEMBAYARAN("ID_PEMBAYARAN", "BYR", 5),
-    SESI_KASSA("ID_SESI", "SES", 5);
+    SESI_KASSA("ID_SESI", "SES", 5),
+    SALDO_STOK("ID_SALDO_STOK", "SAL", 5);
 
     private String id;
     private String prefix;

@@ -138,6 +138,20 @@ public class MenuPanel extends javax.swing.JInternalFrame {
                 FrameUtama.getInstance().removeInternalFrame(MenuPanel.this);
             }
         });
+
+        masterToolbarPanel1.getBtnEdit().addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                
+                if(menu!=null){
+                    Menu m = new MenuDialog().showDialog(menu);
+                    if(m!=null){
+                        FrameUtama.getSekuritiService().simpan(m);
+                        constructMenu();
+                    }
+                }
+            }
+        });
     }
 
 

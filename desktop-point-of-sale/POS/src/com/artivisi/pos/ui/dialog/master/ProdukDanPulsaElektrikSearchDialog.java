@@ -14,12 +14,14 @@ package com.artivisi.pos.ui.dialog.master;
 import com.artivisi.pos.model.master.Produk;
 import com.artivisi.pos.model.master.PulsaElektrik;
 import com.artivisi.pos.ui.frame.FrameUtama;
+import com.artivisi.pos.util.BigDecimalRenderer;
 import com.artivisi.pos.util.TextComponentUtils;
 import java.awt.event.KeyEvent;
-import java.util.Arrays;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.TreeSet;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -41,15 +43,16 @@ public class ProdukDanPulsaElektrikSearchDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         tblProduk.getSelectionModel().addListSelectionListener(new ProdukSelectionListener());
         tblProduk.setAutoCreateColumnsFromModel(false);
+        tblProduk.setDefaultRenderer(BigDecimal.class, new BigDecimalRenderer());
     }
 
     public Object showDialog(){
         List<Produk> produks = FrameUtama.getMasterService().semuaProdukNonPulsaElektrik();
         List<PulsaElektrik> pulsaElektriks = FrameUtama.getMasterService().semuaPulsaElektrik();
-        TreeSet produkDanPulsaElektriks = new TreeSet(new ProdukDanPulsaElektrik());
-        produks.addAll(produks);
-        produkDanPulsaElektriks.addAll(pulsaElektriks);
-        datas = Arrays.asList(produkDanPulsaElektriks.toArray());
+        datas = new ArrayList();
+        datas.addAll(produks);
+        datas.addAll(pulsaElektriks);
+        Collections.sort(datas,new ProdukDanPulsaElektrik());
         tblProduk.setModel(new ProdukTableModel());
         setVisible(true);
         if(isOk == false) selectedProduk = null;
@@ -80,7 +83,7 @@ public class ProdukDanPulsaElektrikSearchDialog extends javax.swing.JDialog {
         }
 
         public int getColumnCount() {
-            return 8;
+            return 6;
         }
 
         public Object getValueAt(int rowIndex, int columnIndex) {
@@ -91,11 +94,9 @@ public class ProdukDanPulsaElektrikSearchDialog extends javax.swing.JDialog {
                     case 0 : return p.getNama();
                     case 1 : return p.getId();
                     case 2 : return p.getSatuan();
-                    case 3 : return p.getHargaJual();
-                    case 4 : return p.getStok();
-                    case 5 : return p.getSatuan1();
-                    case 6 : return p.getHargaJual1();
-                    case 7 : return p.getStok1();
+                    case 3 : return p.getHargaPokok();
+                    case 4 : return p.getHargaJual();
+                    case 5 : return p.getStok();
                     default: return "";
                 }
             } else if (o instanceof PulsaElektrik){
@@ -104,12 +105,22 @@ public class ProdukDanPulsaElektrikSearchDialog extends javax.swing.JDialog {
                     case 0 : return p.getNama();
                     case 1 : return p.getId();
                     case 2 : return p.getProduk().getSatuan();
-                    case 3 : return p.getHargaJual();
-                    case 4 : return p.getProduk().getStok();
+                    case 3 : return p.getProduk().getHargaPokok();
+                    case 4 : return p.getHargaJual();
+                    case 5 : return p.getProduk().getStok();
                     default: return "";
                 }
             } else {
                 return "";
+            }
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch(columnIndex){
+                case 4 : return BigDecimal.class;
+                case 5 : return Integer.class;
+                default : return String.class;
             }
         }
 
@@ -147,7 +158,7 @@ public class ProdukDanPulsaElektrikSearchDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "Nama", "Kode Produk", "Satuan", "Harga Jual", "Stok", "Satuan1", "Harga Jual1", "Stok1"
+                "Nama", "Kode Produk", "Satuan", "Harga Pokok", "Harga Jual", "Stok"
             }
         ));
         jScrollPane1.setViewportView(tblProduk);

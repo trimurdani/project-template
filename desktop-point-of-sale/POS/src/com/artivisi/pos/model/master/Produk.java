@@ -7,10 +7,16 @@ package com.artivisi.pos.model.master;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.Cascade;
 
 /**
  *
@@ -29,35 +35,22 @@ public class Produk implements Serializable {
     @Column(name="HARGA_JUAL")
     private BigDecimal hargaJual = BigDecimal.ZERO;
 
-    @Column(name="HARGA_BELI")
-    private BigDecimal hargaBeli = BigDecimal.ZERO;
+    @Column(name="HARGA_POKOK")
+    private BigDecimal hargaPokok = BigDecimal.ZERO;
 
     @Column(name="STOK",nullable=false)
     private Integer stok = 0;
 
-    @Column(name="TOTAL_PEMBELIAN",nullable=false)
-    private Long totalPembelian = 0l;
-
-    @Column(name="SATUAN",length=90)
-    private String satuan;
-
-    @Column(name="HARGA_JUAL1")
-    private BigDecimal hargaJual1 = BigDecimal.ZERO;
-
-    @Column(name="HARGA_BELI1")
-    private BigDecimal hargaBeli1 = BigDecimal.ZERO;
-
-    @Column(name="STOK1",nullable=false)
-    private Integer stok1 = 0;
-
-    @Column(name="SATUAN1",length=90)
-    private String satuan1;
-
-    @Column(name="TOTAL_PEMBELIAN1",nullable=false)
-    private Long totalPembelian1 = 0l;
+    @ManyToOne(optional=false)
+    @JoinColumn(name="ID_SATUAN",referencedColumnName="ID_SATUAN")
+    private Satuan satuan;
 
     @Column(name="PULSA_ELEKTRIK",nullable=false)
     private Boolean pulsaElektrik = Boolean.FALSE;
+
+    @OneToMany(cascade=CascadeType.ALL,mappedBy="produk")
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+    private List<ProdukSatuan> produkSatuans;
 
     public String getId() {
         return id;
@@ -73,14 +66,6 @@ public class Produk implements Serializable {
 
     public void setNama(String nama) {
         this.nama = nama;
-    }
-
-    public BigDecimal getHargaBeli() {
-        return hargaBeli;
-    }
-
-    public void setHargaBeli(BigDecimal hargaBeli) {
-        this.hargaBeli = hargaBeli;
     }
 
     public BigDecimal getHargaJual() {
@@ -99,68 +84,58 @@ public class Produk implements Serializable {
         this.stok = stok;
     }
 
-    public BigDecimal getHargaBeli1() {
-        return hargaBeli1;
-    }
-
-    public void setHargaBeli1(BigDecimal hargaBeli1) {
-        this.hargaBeli1 = hargaBeli1;
-    }
-
-    public BigDecimal getHargaJual1() {
-        return hargaJual1;
-    }
-
-    public void setHargaJual1(BigDecimal hargaJual1) {
-        this.hargaJual1 = hargaJual1;
-    }
-
-    public Integer getStok1() {
-        return stok1;
-    }
-
-    public void setStok1(Integer stok1) {
-        this.stok1 = stok1;
-    }
-
-    public String getSatuan() {
-        return satuan;
-    }
-
-    public void setSatuan(String satuan) {
-        this.satuan = satuan;
-    }
-
-    public String getSatuan1() {
-        return satuan1;
-    }
-
-    public void setSatuan1(String satuan1) {
-        this.satuan1 = satuan1;
-    }
-
-    public Long getTotalPembelian() {
-        return totalPembelian;
-    }
-
-    public void setTotalPembelian(Long totalPembelian) {
-        this.totalPembelian = totalPembelian;
-    }
-
-    public Long getTotalPembelian1() {
-        return totalPembelian1;
-    }
-
-    public void setTotalPembelian1(Long totalPembelian1) {
-        this.totalPembelian1 = totalPembelian1;
-    }
-
     public Boolean isPulsaElektrik() {
         return pulsaElektrik;
     }
 
     public void setPulsaElektrik(Boolean pulsaElektrik) {
         this.pulsaElektrik = pulsaElektrik;
+    }
+
+    public BigDecimal getHargaPokok() {
+        return hargaPokok;
+    }
+
+    public void setHargaPokok(BigDecimal hargaPokok) {
+        this.hargaPokok = hargaPokok;
+    }
+
+    public Satuan getSatuan() {
+        return satuan;
+    }
+
+    public void setSatuan(Satuan satuan) {
+        this.satuan = satuan;
+    }
+
+    public List<ProdukSatuan> getProdukSatuans() {
+        return produkSatuans;
+    }
+
+    public void setProdukSatuans(List<ProdukSatuan> produkSatuans) {
+        this.produkSatuans = produkSatuans;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Produk other = (Produk) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
     }
 
 

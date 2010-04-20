@@ -214,10 +214,10 @@ public class MenuDialog extends javax.swing.JDialog {
         txtPanelClass.setText(menu.getPanelClass());
         txtUrutan.setText(String.valueOf(menu.getUrutan()));
         if(menu.getMenuLevel()!=null){
-            List<Menu> currentMenu = menuMap.get(menu.getMenuLevel());
-            if(currentMenu!=null && !currentMenu.isEmpty()){
-                cmbParent.setModel(new DefaultComboBoxModel(currentMenu.toArray()));
-                if(currentMenu.contains(menu.getParent())){
+            List<Menu> currentMenus = menuMap.get(menu.getMenuLevel()-1);
+            if(currentMenus!=null && !currentMenus.isEmpty()){
+                cmbParent.setModel(new DefaultComboBoxModel(currentMenus.toArray()));
+                if(currentMenus.contains(menu.getParent())){
                     cmbParent.setSelectedItem(menu.getParent());
                 } else {
                     cmbParent.setSelectedItem(null);

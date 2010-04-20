@@ -212,7 +212,7 @@ public class ProdukTableModel extends AbstractTableModel {
         switch(col){
             case 0 : return p.getId();
             case 1 : return p.getNama();
-            case 2 : return p.getHargaBeli();
+            case 2 : return p.getHargaPokok();
             case 3 : return p.getHargaJual();
             case 4 : return p.getStok();
             default : return "";

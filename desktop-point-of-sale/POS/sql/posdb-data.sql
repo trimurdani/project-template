@@ -40,7 +40,6 @@ UNLOCK TABLES;
 
 LOCK TABLES `MST_KASSA` WRITE;
 /*!40000 ALTER TABLE `MST_KASSA` DISABLE KEYS */;
-INSERT INTO `MST_KASSA` (`ID_KASSA`, `DESKRIPSI`, `LOCAL_IP`, `NAMA`) VALUES ('ASSSSDDDD','AA','','ASD');
 /*!40000 ALTER TABLE `MST_KASSA` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,8 +49,27 @@ UNLOCK TABLES;
 
 LOCK TABLES `MST_PRODUK` WRITE;
 /*!40000 ALTER TABLE `MST_PRODUK` DISABLE KEYS */;
-INSERT INTO `MST_PRODUK` (`ID_PRODUK`, `HARGA_BELI`, `HARGA_JUAL`, `NAMA`, `STOK`) VALUES ('ABC','10000.00','11000.00','KECAP ABC',19),('SOYJOY','5600.00','6200.00','SOYJOY SNACK',33);
+INSERT INTO `MST_PRODUK` (`ID_PRODUK`, `HARGA_JUAL`, `HARGA_POKOK`, `NAMA`, `PULSA_ELEKTRIK`, `STOK`, `ID_SATUAN`) VALUES ('101','15000.00','10000.00','INDOME AYAMBAWANG 1 DUS','\0',1,'DUS'),('`02','1000.00','890.00','INDOMIE AYAMBAWANG 1 BIJI','\0',12,'BJ');
 /*!40000 ALTER TABLE `MST_PRODUK` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `MST_PRODUK_SATUAN`
+--
+
+LOCK TABLES `MST_PRODUK_SATUAN` WRITE;
+/*!40000 ALTER TABLE `MST_PRODUK_SATUAN` DISABLE KEYS */;
+INSERT INTO `MST_PRODUK_SATUAN` (`ID_PRODUK_SATUAN`, `KUANTITAS_KEMASAN`, `ID_PRODUK`) VALUES ('INDOME AYAMBAWANG 1 DUS-DUS',0,'`02');
+/*!40000 ALTER TABLE `MST_PRODUK_SATUAN` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `MST_PULSA_ELEKTRIK`
+--
+
+LOCK TABLES `MST_PULSA_ELEKTRIK` WRITE;
+/*!40000 ALTER TABLE `MST_PULSA_ELEKTRIK` DISABLE KEYS */;
+/*!40000 ALTER TABLE `MST_PULSA_ELEKTRIK` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -60,8 +78,18 @@ UNLOCK TABLES;
 
 LOCK TABLES `MST_RUNNING_NUMBER` WRITE;
 /*!40000 ALTER TABLE `MST_RUNNING_NUMBER` DISABLE KEYS */;
-INSERT INTO `MST_RUNNING_NUMBER` (`ID`, `NUMBER`) VALUES ('ID_BELI0908',3),('ID_JUAL0908',2),('ID_SESI0908',3);
+INSERT INTO `MST_RUNNING_NUMBER` (`ID`, `NUMBER`) VALUES ('ID_SALDO_STOK0908',2);
 /*!40000 ALTER TABLE `MST_RUNNING_NUMBER` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `MST_SATUAN`
+--
+
+LOCK TABLES `MST_SATUAN` WRITE;
+/*!40000 ALTER TABLE `MST_SATUAN` DISABLE KEYS */;
+INSERT INTO `MST_SATUAN` (`ID_SATUAN`, `NAMA`) VALUES ('BJ','BIJI'),('DUS','KARDUS'),('KG','KILOGRAM');
+/*!40000 ALTER TABLE `MST_SATUAN` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -90,7 +118,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `SEC_MENU` WRITE;
 /*!40000 ALTER TABLE `SEC_MENU` DISABLE KEYS */;
-INSERT INTO `SEC_MENU` (`ID_MENU`, `MENU_LEVEL`, `PANEL_CLASS`, `URUTAN`, `ID_PARENT`) VALUES ('Bantuan',0,NULL,5,NULL),('Laporan',0,NULL,3,NULL),('Master',0,NULL,1,NULL),('Master Kartu Pembayaran',1,'com.artivisi.pos.ui.master.KartuPembayaranPanel',5,'Master'),('Master Kassa',1,'com.artivisi.pos.ui.master.KassaPanel',6,'Master'),('Master Produk',1,'com.artivisi.pos.ui.master.MasterProdukPanel',1,'Master'),('Master Running Number',1,'com.artivisi.pos.ui.master.RunningNumberPanel',2,'Master'),('Master Shift',1,'com.artivisi.pos.ui.master.ShiftPanel',4,'Master'),('Master System Property',1,'com.artivisi.pos.ui.master.SystemPropertyPanel',3,'Master'),('Menu',1,'com.artivisi.pos.ui.sekuriti.MenuPanel',3,'Sekuriti'),('Pembelian',1,'com.artivisi.pos.ui.transaksi.PembelianPanel',0,'Transaksi'),('Pengguna',1,'com.artivisi.pos.ui.sekuriti.PenggunaPanel',1,'Sekuriti'),('Penjualan',1,'com.artivisi.pos.ui.transaksi.PenjualanPanel',1,'Transaksi'),('Peran',1,'com.artivisi.pos.ui.sekuriti.PeranPanel',2,'Sekuriti'),('Sekuriti',0,NULL,4,NULL),('Transaksi',0,NULL,2,NULL);
+INSERT INTO `SEC_MENU` (`ID_MENU`, `MENU_LEVEL`, `PANEL_CLASS`, `URUTAN`, `ID_PARENT`) VALUES ('Bantuan',0,NULL,5,NULL),('Laporan',0,NULL,3,NULL),('Master',0,NULL,1,NULL),('Master Kartu Pembayaran',1,'com.artivisi.pos.ui.master.KartuPembayaranPanel',5,'Master'),('Master Kassa',1,'com.artivisi.pos.ui.master.KassaPanel',6,'Master'),('Master Produk',1,'com.artivisi.pos.ui.master.MasterProdukPanel',1,'Master'),('Master Running Number',1,'com.artivisi.pos.ui.master.RunningNumberPanel',2,'Master'),('Master Satuan',1,'com.artivisi.pos.ui.master.MasterSatuanPanel',7,'Master'),('Master Shift',1,'com.artivisi.pos.ui.master.ShiftPanel',4,'Master'),('Master System Property',1,'com.artivisi.pos.ui.master.SystemPropertyPanel',3,'Master'),('Menu',1,'com.artivisi.pos.ui.sekuriti.MenuPanel',3,'Sekuriti'),('Pembelian',1,'com.artivisi.pos.ui.transaksi.PembelianPanel',0,'Transaksi'),('Pengguna',1,'com.artivisi.pos.ui.sekuriti.PenggunaPanel',1,'Sekuriti'),('Penjualan',1,'com.artivisi.pos.ui.transaksi.PenjualanPanel',1,'Transaksi'),('Peran',1,'com.artivisi.pos.ui.sekuriti.PeranPanel',2,'Sekuriti'),('Sekuriti',0,NULL,4,NULL),('Transaksi',0,NULL,2,NULL);
 /*!40000 ALTER TABLE `SEC_MENU` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,7 +128,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `SEC_PENGGUNA` WRITE;
 /*!40000 ALTER TABLE `SEC_PENGGUNA` DISABLE KEYS */;
-INSERT INTO `SEC_PENGGUNA` (`ID_PENGGUNA`, `KATA_SANDI`, `NAMA_LENGKAP`) VALUES ('ADMIN','f6fdffe48c908deb0f4c3bd36c032e72','SUPER USER'),('KASIR','c7911af3adbd12a035b289556d96470a','KASIR');
+INSERT INTO `SEC_PENGGUNA` (`ID_PENGGUNA`, `KATA_SANDI`, `NAMA_LENGKAP`) VALUES ('ADMIN','f6fdffe48c908deb0f4c3bd36c032e72','ADMIN');
 /*!40000 ALTER TABLE `SEC_PENGGUNA` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -120,7 +148,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `SEC_PERAN_MENU` WRITE;
 /*!40000 ALTER TABLE `SEC_PERAN_MENU` DISABLE KEYS */;
-INSERT INTO `SEC_PERAN_MENU` (`ID_PERAN`, `ID_MENU`) VALUES ('KASIR','Transaksi'),('KASIR','Penjualan'),('SUPER USER','Master'),('SUPER USER','Master Produk'),('SUPER USER','Master Running Number'),('SUPER USER','Master System Property'),('SUPER USER','Master Shift'),('SUPER USER','Master Kartu Pembayaran'),('SUPER USER','Master Kassa'),('SUPER USER','Transaksi'),('SUPER USER','Pembelian'),('SUPER USER','Penjualan'),('SUPER USER','Laporan'),('SUPER USER','Sekuriti'),('SUPER USER','Pengguna'),('SUPER USER','Peran'),('SUPER USER','Menu'),('SUPER USER','Bantuan');
+INSERT INTO `SEC_PERAN_MENU` (`ID_PERAN`, `ID_MENU`) VALUES ('KASIR','Transaksi'),('KASIR','Penjualan'),('SUPER USER','Master'),('SUPER USER','Master Produk'),('SUPER USER','Master Running Number'),('SUPER USER','Master System Property'),('SUPER USER','Master Shift'),('SUPER USER','Master Kartu Pembayaran'),('SUPER USER','Master Kassa'),('SUPER USER','Master Satuan'),('SUPER USER','Transaksi'),('SUPER USER','Pembelian'),('SUPER USER','Penjualan'),('SUPER USER','Laporan'),('SUPER USER','Sekuriti'),('SUPER USER','Pengguna'),('SUPER USER','Peran'),('SUPER USER','Menu'),('SUPER USER','Bantuan');
 /*!40000 ALTER TABLE `SEC_PERAN_MENU` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,7 +158,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `SEC_PERAN_PENGGUNA` WRITE;
 /*!40000 ALTER TABLE `SEC_PERAN_PENGGUNA` DISABLE KEYS */;
-INSERT INTO `SEC_PERAN_PENGGUNA` (`ID_PERAN`, `ID_PENGGUNA`) VALUES ('SUPER USER','ADMIN'),('KASIR','KASIR');
+INSERT INTO `SEC_PERAN_PENGGUNA` (`ID_PERAN`, `ID_PENGGUNA`) VALUES ('SUPER USER','ADMIN');
 /*!40000 ALTER TABLE `SEC_PERAN_PENGGUNA` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,6 +208,16 @@ LOCK TABLES `TR_PENJUALAN_DETAIL` WRITE;
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `TR_SALDO_STOK`
+--
+
+LOCK TABLES `TR_SALDO_STOK` WRITE;
+/*!40000 ALTER TABLE `TR_SALDO_STOK` DISABLE KEYS */;
+INSERT INTO `TR_SALDO_STOK` (`ID_SALDO_STOK`, `BELI`, `BULAN`, `JUAL`, `RETUR_BELI`, `RETUR_JUAL`, `SALDO_AWAL`, `TAHUN`, `TOTAL_BELI`, `ID_PRODUK`) VALUES ('SALSYS090800001',0,'09',0,0,0,1,'2009',1,'101'),('SALSYS090800002',0,'09',0,0,0,12,'2009',12,'`02');
+/*!40000 ALTER TABLE `TR_SALDO_STOK` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `TR_SESI_KASSA`
 --
 
@@ -197,4 +235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-08-09 14:59:44
+-- Dump completed on 2009-09-25  5:40:45

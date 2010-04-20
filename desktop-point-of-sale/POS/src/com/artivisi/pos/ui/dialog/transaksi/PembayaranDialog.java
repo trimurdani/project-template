@@ -13,6 +13,7 @@ package com.artivisi.pos.ui.dialog.transaksi;
 
 import com.artivisi.pos.ui.frame.FrameUtama;
 import com.artivisi.pos.util.TextComponentUtils;
+import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -23,6 +24,8 @@ import org.netbeans.validation.api.builtin.Validators;
  * @author ifnu
  */
 public class PembayaranDialog extends javax.swing.JDialog {
+
+    private BigDecimal totalJual;
 
     /** Creates new form PembayaranDialog */
     public PembayaranDialog() {
@@ -45,7 +48,8 @@ public class PembayaranDialog extends javax.swing.JDialog {
     }
 
 
-    public BigDecimal showDialog(){
+    public BigDecimal showDialog(BigDecimal totalJual){
+        this.totalJual = totalJual;
         setVisible(true);
         return TextComponentUtils.parseNumberToBigDecimal(txtUangTunai.getText());
     }
@@ -64,10 +68,23 @@ public class PembayaranDialog extends javax.swing.JDialog {
         btnOk = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
         validationPanel = new org.netbeans.validation.api.ui.ValidationPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Uang Tunai");
+
+        txtUangTunai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUangTunaiActionPerformed(evt);
+            }
+        });
+        txtUangTunai.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtUangTunaiKeyReleased(evt);
+            }
+        });
 
         btnOk.setText("OK");
         btnOk.setEnabled(false);
@@ -84,6 +101,10 @@ public class PembayaranDialog extends javax.swing.JDialog {
             }
         });
 
+        jLabel2.setText("Kembalian");
+
+        jTextField1.setEditable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -92,32 +113,44 @@ public class PembayaranDialog extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(validationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtUangTunai, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(validationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnOk)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40))))
+                        .addGap(40, 40, 40))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField1)
+                            .addComponent(txtUangTunai, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
+                        .addContainerGap(18, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtUangTunai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(validationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnOk)
-                    .addComponent(btnBatal)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addComponent(validationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnOk)
+                            .addComponent(btnBatal))
+                        .addContainerGap())))
         );
 
         pack();
@@ -132,10 +165,29 @@ public class PembayaranDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnBatalActionPerformed
 
+    private void txtUangTunaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUangTunaiActionPerformed
+        btnOkActionPerformed(evt);
+    }//GEN-LAST:event_txtUangTunaiActionPerformed
+
+    private void txtUangTunaiKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUangTunaiKeyReleased
+        if(evt.getKeyCode() == KeyEvent.VK_ESCAPE){
+            txtUangTunai.setText("");
+            dispose();
+        } else {
+            BigDecimal bayar = TextComponentUtils.parseNumberToBigDecimal(txtUangTunai.getText());
+            if(bayar.compareTo(totalJual)>=0){
+                BigDecimal kembalian = totalJual.subtract(bayar);
+                txtUangTunai.setText(TextComponentUtils.formatNumber(kembalian));
+            }
+        }
+    }//GEN-LAST:event_txtUangTunaiKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBatal;
     private javax.swing.JButton btnOk;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField txtUangTunai;
     private org.netbeans.validation.api.ui.ValidationPanel validationPanel;
     // End of variables declaration//GEN-END:variables

@@ -69,11 +69,51 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
 CREATE TABLE `MST_PRODUK` (
   `ID_PRODUK` varchar(30) NOT NULL,
-  `HARGA_BELI` decimal(19,2) default NULL,
   `HARGA_JUAL` decimal(19,2) default NULL,
+  `HARGA_POKOK` decimal(19,2) default NULL,
   `NAMA` varchar(90) default NULL,
+  `PULSA_ELEKTRIK` bit(1) NOT NULL,
   `STOK` int(11) NOT NULL,
-  PRIMARY KEY  (`ID_PRODUK`)
+  `ID_SATUAN` varchar(10) default NULL,
+  PRIMARY KEY  (`ID_PRODUK`),
+  KEY `FKD0C5E61EBFC88137` (`ID_SATUAN`),
+  CONSTRAINT `FKD0C5E61EBFC88137` FOREIGN KEY (`ID_SATUAN`) REFERENCES `mst_satuan` (`ID_SATUAN`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `MST_PRODUK_SATUAN`
+--
+
+DROP TABLE IF EXISTS `MST_PRODUK_SATUAN`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `MST_PRODUK_SATUAN` (
+  `ID_PRODUK_SATUAN` varchar(60) NOT NULL,
+  `KUANTITAS_KEMASAN` bigint(20) default NULL,
+  `ID_PRODUK` varchar(30) NOT NULL,
+  PRIMARY KEY  (`ID_PRODUK_SATUAN`),
+  KEY `FK651C42FDB7658619` (`ID_PRODUK`),
+  CONSTRAINT `FK651C42FDB7658619` FOREIGN KEY (`ID_PRODUK`) REFERENCES `mst_produk` (`ID_PRODUK`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `MST_PULSA_ELEKTRIK`
+--
+
+DROP TABLE IF EXISTS `MST_PULSA_ELEKTRIK`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `MST_PULSA_ELEKTRIK` (
+  `ID_PULSA` varchar(30) NOT NULL,
+  `HARGA_JUAL` decimal(19,2) NOT NULL,
+  `NAMA` varchar(90) NOT NULL,
+  `NOMINAL` decimal(19,2) NOT NULL,
+  `ID_PRODUK` varchar(30) NOT NULL,
+  PRIMARY KEY  (`ID_PULSA`),
+  KEY `FK330CBBA8B7658619` (`ID_PRODUK`),
+  CONSTRAINT `FK330CBBA8B7658619` FOREIGN KEY (`ID_PRODUK`) REFERENCES `mst_produk` (`ID_PRODUK`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
@@ -88,6 +128,20 @@ CREATE TABLE `MST_RUNNING_NUMBER` (
   `ID` varchar(255) NOT NULL,
   `NUMBER` int(11) default NULL,
   PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `MST_SATUAN`
+--
+
+DROP TABLE IF EXISTS `MST_SATUAN`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `MST_SATUAN` (
+  `ID_SATUAN` varchar(10) NOT NULL,
+  `NAMA` varchar(25) default NULL,
+  PRIMARY KEY  (`ID_SATUAN`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
@@ -197,8 +251,8 @@ CREATE TABLE `SEC_PERAN_PENGGUNA` (
   `ID_PENGGUNA` varchar(30) NOT NULL,
   KEY `FKB39C7F12364D277B` (`ID_PERAN`),
   KEY `FKB39C7F12F84E457` (`ID_PENGGUNA`),
-  CONSTRAINT `FKB39C7F12F84E457` FOREIGN KEY (`ID_PENGGUNA`) REFERENCES `sec_pengguna` (`ID_PENGGUNA`),
-  CONSTRAINT `FKB39C7F12364D277B` FOREIGN KEY (`ID_PERAN`) REFERENCES `sec_peran` (`ID_PERAN`)
+  CONSTRAINT `FKB39C7F12364D277B` FOREIGN KEY (`ID_PERAN`) REFERENCES `sec_peran` (`ID_PERAN`),
+  CONSTRAINT `FKB39C7F12F84E457` FOREIGN KEY (`ID_PENGGUNA`) REFERENCES `sec_pengguna` (`ID_PENGGUNA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
@@ -294,15 +348,44 @@ SET character_set_client = utf8;
 CREATE TABLE `TR_PENJUALAN_DETAIL` (
   `ID_PENJUALAN_DETAIL` varchar(19) NOT NULL,
   `HARGA` decimal(19,2) NOT NULL,
+  `HARGA1` decimal(19,2) NOT NULL,
   `KUANTITAS` int(11) NOT NULL,
+  `KUANTITAS1` int(11) NOT NULL,
   `SUB_TOTAL` decimal(19,2) default NULL,
   `ID_PENJUALAN` varchar(16) NOT NULL,
   `ID_PRODUK` varchar(30) NOT NULL,
+  `ID_PULSA` varchar(30) default NULL,
   PRIMARY KEY  (`ID_PENJUALAN_DETAIL`),
+  KEY `FK221BF1F5583D08D8` (`ID_PULSA`),
   KEY `FK221BF1F5A61FC71D` (`ID_PENJUALAN`),
   KEY `FK221BF1F5B7658619` (`ID_PRODUK`),
-  CONSTRAINT `FK221BF1F5B7658619` FOREIGN KEY (`ID_PRODUK`) REFERENCES `mst_produk` (`ID_PRODUK`),
-  CONSTRAINT `FK221BF1F5A61FC71D` FOREIGN KEY (`ID_PENJUALAN`) REFERENCES `tr_penjualan` (`ID_PENJUALAN`)
+  CONSTRAINT `FK221BF1F5583D08D8` FOREIGN KEY (`ID_PULSA`) REFERENCES `mst_pulsa_elektrik` (`ID_PULSA`),
+  CONSTRAINT `FK221BF1F5A61FC71D` FOREIGN KEY (`ID_PENJUALAN`) REFERENCES `tr_penjualan` (`ID_PENJUALAN`),
+  CONSTRAINT `FK221BF1F5B7658619` FOREIGN KEY (`ID_PRODUK`) REFERENCES `mst_produk` (`ID_PRODUK`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `TR_SALDO_STOK`
+--
+
+DROP TABLE IF EXISTS `TR_SALDO_STOK`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `TR_SALDO_STOK` (
+  `ID_SALDO_STOK` varchar(15) NOT NULL,
+  `BELI` bigint(20) NOT NULL,
+  `BULAN` varchar(2) NOT NULL,
+  `JUAL` bigint(20) NOT NULL,
+  `RETUR_BELI` bigint(20) NOT NULL,
+  `RETUR_JUAL` bigint(20) NOT NULL,
+  `SALDO_AWAL` bigint(20) NOT NULL,
+  `TAHUN` varchar(4) NOT NULL,
+  `TOTAL_BELI` bigint(20) NOT NULL,
+  `ID_PRODUK` varchar(30) NOT NULL,
+  PRIMARY KEY  (`ID_SALDO_STOK`),
+  KEY `FK4424EE14B7658619` (`ID_PRODUK`),
+  CONSTRAINT `FK4424EE14B7658619` FOREIGN KEY (`ID_PRODUK`) REFERENCES `mst_produk` (`ID_PRODUK`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
@@ -326,9 +409,9 @@ CREATE TABLE `TR_SESI_KASSA` (
   KEY `FK8F098E5568670837` (`ID_KASSA`),
   KEY `FK8F098E55694E8F65` (`ID_SHIFT`),
   KEY `FK8F098E55F84E457` (`ID_PENGGUNA`),
-  CONSTRAINT `FK8F098E55F84E457` FOREIGN KEY (`ID_PENGGUNA`) REFERENCES `sec_pengguna` (`ID_PENGGUNA`),
   CONSTRAINT `FK8F098E5568670837` FOREIGN KEY (`ID_KASSA`) REFERENCES `mst_kassa` (`ID_KASSA`),
-  CONSTRAINT `FK8F098E55694E8F65` FOREIGN KEY (`ID_SHIFT`) REFERENCES `mst_shift` (`ID_SHIFT`)
+  CONSTRAINT `FK8F098E55694E8F65` FOREIGN KEY (`ID_SHIFT`) REFERENCES `mst_shift` (`ID_SHIFT`),
+  CONSTRAINT `FK8F098E55F84E457` FOREIGN KEY (`ID_PENGGUNA`) REFERENCES `sec_pengguna` (`ID_PENGGUNA`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -341,4 +424,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-08-09 14:59:54
+-- Dump completed on 2009-09-25  5:40:31

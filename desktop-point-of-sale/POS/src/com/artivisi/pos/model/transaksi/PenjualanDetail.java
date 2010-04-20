@@ -40,12 +40,6 @@ public class PenjualanDetail implements Serializable {
     @Column(name="HARGA",nullable=false)
     private BigDecimal harga = BigDecimal.ZERO;
 
-    @Column(name="KUANTITAS1",nullable=false)
-    private Integer kuantitas1 = 0;
-
-    @Column(name="HARGA1",nullable=false)
-    private BigDecimal harga1 = BigDecimal.ZERO;
-
     @ManyToOne
     @JoinColumn(name="ID_PULSA",referencedColumnName="ID_PULSA")
     private PulsaElektrik pulsaElektrik;
@@ -101,28 +95,34 @@ public class PenjualanDetail implements Serializable {
         this.subTotal = subTotal;
     }
 
-    public BigDecimal getHarga1() {
-        return harga1;
-    }
-
-    public void setHarga1(BigDecimal harga1) {
-        this.harga1 = harga1;
-    }
-
-    public Integer getKuantitas1() {
-        return kuantitas1;
-    }
-
-    public void setKuantitas1(Integer kuantitas1) {
-        this.kuantitas1 = kuantitas1;
-    }
-
     public PulsaElektrik getPulsaElektrik() {
         return pulsaElektrik;
     }
 
     public void setPulsaElektrik(PulsaElektrik pulsaElektrik) {
         this.pulsaElektrik = pulsaElektrik;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PenjualanDetail other = (PenjualanDetail) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 31 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
     }
 
    

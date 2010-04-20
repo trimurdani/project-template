@@ -11,23 +11,30 @@ import com.artivisi.pos.dao.master.KassaDao;
 import com.artivisi.pos.dao.master.ProdukDao;
 import com.artivisi.pos.dao.master.PulsaElektrikDao;
 import com.artivisi.pos.dao.master.RunningNumberDao;
+import com.artivisi.pos.dao.master.SatuanDao;
 import com.artivisi.pos.dao.master.ShiftDao;
 import com.artivisi.pos.dao.master.SystemPropertyDao;
+import com.artivisi.pos.dao.transaksi.SaldoStokDao;
 import com.artivisi.pos.model.master.Cabang;
 import com.artivisi.pos.model.master.KartuPembayaran;
 import com.artivisi.pos.model.master.Kassa;
 import com.artivisi.pos.model.master.Produk;
 import com.artivisi.pos.model.master.PulsaElektrik;
 import com.artivisi.pos.model.master.RunningNumber;
+import com.artivisi.pos.model.master.Satuan;
 import com.artivisi.pos.model.master.Shift;
 import com.artivisi.pos.model.master.SystemProperty;
 import com.artivisi.pos.model.master.constant.MasterRunningNumberEnum;
 import com.artivisi.pos.model.master.constant.TransaksiRunningNumberEnum;
+import com.artivisi.pos.model.transaksi.SaldoStok;
 import com.artivisi.pos.service.MasterService;
+import com.artivisi.pos.util.StringUtils;
 import java.util.Date;
 import java.util.List;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -41,15 +48,35 @@ public class MasterServiceImpl implements MasterService{
     @Autowired private ProdukDao produkDao;
     @Autowired private PulsaElektrikDao pulsaElektrikDao;
     @Autowired private CabangDao cabangDao;
+    @Autowired private SatuanDao satuanDao;
     @Autowired private KassaDao kassaDao;
     @Autowired private ShiftDao shiftDao;
     @Autowired private KartuPembayaranDao kartuPembayaranDao;
     @Autowired private RunningNumberDao runningNumberDao;
     @Autowired private SystemPropertyDao systemPropertyDao;
+    @Autowired private SaldoStokDao saldoStokDao;
 
     @Transactional
     public void simpan(Produk p) {
         produkDao.simpan(p);
+    }
+    @Transactional(isolation=Isolation.SERIALIZABLE)
+    public void simpan(Produk p,Long saldoAwal) {
+        Produk produkDb = produkDao.cariBerdasarId(p.getId());
+        if(produkDb!=null){
+            produkDao.merge(p);
+        } else {
+            produkDao.simpan(p);
+            Date stokSekarang = new Date();
+            SaldoStok saldoStok = new SaldoStok();
+            saldoStok.setTahun(String.valueOf(new DateTime(stokSekarang.getTime()).getYear()));
+            saldoStok.setBulan(StringUtils.bulanDuaDigit(stokSekarang));
+            saldoStok.setSaldoAwal(saldoAwal);
+            saldoStok.setProduk(p);
+            saldoStok.setTotalBeli(saldoAwal);
+            saldoStok.setId(runningNumberDao.ambilBerikutnyaDanSimpan(TransaksiRunningNumberEnum.SALDO_STOK));
+            saldoStokDao.simpan(saldoStok);
+        }
     }
 
     @Transactional
@@ -100,6 +127,24 @@ public class MasterServiceImpl implements MasterService{
 
     public List<Cabang> semuaCabang() {
         return cabangDao.semua();
+    }
+
+    @Transactional
+    public void hapus(Satuan s){
+        satuanDao.hapus(s);
+    }
+
+    @Transactional
+    public void simpan(Satuan s){
+        satuanDao.simpan(s);
+    }
+    
+    public List<Satuan> semuaSatuan(){
+        return satuanDao.semua();
+    }
+
+    public Satuan satuanBerdasarId(String id){
+        return satuanDao.cariBerdasarId(id);
     }
 
     public Cabang cabangBerdasarId(String id) {
