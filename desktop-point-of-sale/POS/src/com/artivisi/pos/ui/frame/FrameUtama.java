@@ -415,7 +415,7 @@ public class FrameUtama extends javax.swing.JFrame {
 
         AbstractApplicationContext ctx =
             new ClassPathXmlApplicationContext
-            ("classpath:applicationContext.xml");
+            ("classpath:clientContext.xml");
           ctx.registerShutdownHook();
 
         transaksiService = (TransaksiService) ctx.getBean("transaksiService");
