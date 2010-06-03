@@ -6,8 +6,10 @@
        <bean class="org.springframework.remoting.support.SimpleHttpServerFactoryBean">
            <property name="contexts">
                <map>
-                   <entry key="/ArsipService" value-ref="arsipServiceExporter"/>
-                   <entry key="/SecurityService" value-ref="securityServiceExporter"/>
+                   <entry key="/TransaksiService" value-ref="transaksiServiceExporter"/>
+                   <entry key="/ReportService" value-ref="reportServiceExporter"/>
+                   <entry key="/MasterService" value-ref="masterServiceExporter"/>
+                   <entry key="/SekuritiService" value-ref="sekuritiServiceExporter"/>
                    <entry key="/app" value-ref="jnlpHandler"/>
                </map>
            </property>
@@ -22,7 +24,7 @@
         </bean>
        <bean id="sekuritiServiceExporter"
         class="org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter">
-            <property name="service" ref="securityService"/>
+            <property name="service" ref="sekuritiService"/>
             <property name="serviceInterface" value="com.artivisi.pos.service.SekuritiService"/>
         </bean>
        <bean id="reportServiceExporter"

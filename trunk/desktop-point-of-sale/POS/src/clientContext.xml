@@ -2,22 +2,22 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
-    <bean id="masterServiceRemote"
+    <bean id="masterService"
     class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
         <property name="serviceUrl" value="http://localhost:9090/MasterService"/>
         <property name="serviceInterface" value="com.artivisi.pos.service.MasterService"/>
     </bean>
-    <bean id="sekuritiServiceRemote"
+    <bean id="sekuritiService"
     class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
         <property name="serviceUrl" value="http://localhost:9090/SekuritiService"/>
         <property name="serviceInterface" value="com.artivisi.pos.service.SekuritiService"/>
     </bean>
-    <bean id="reportServiceRemote"
+    <bean id="reportService"
     class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
         <property name="serviceUrl" value="http://localhost:9090/ReportService"/>
         <property name="serviceInterface" value="com.artivisi.pos.service.ReportService"/>
     </bean>
-    <bean id="transaksiServiceRemote"
+    <bean id="transaksiService"
     class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
         <property name="serviceUrl" value="http://localhost:9090/TransaksiService"/>
         <property name="serviceInterface" value="com.artivisi.pos.service.TransaksiService"/>
