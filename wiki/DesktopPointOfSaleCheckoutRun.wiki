@@ -61,7 +61,7 @@ $ mysql -u root -p posdb < POS/sql/posdb-schema.sql
 $ mysql -u root -p posdb < POS/sql/posdb-data.sql
 }}}
    * folder {{{/home/ifnu/NetBeansProject}}} adalah folder dimana hasil ckeckout repository diletakkan. kalau di windows misalnya {{{c:\Document and Settings\ifnu\My Documents\NetBeansProject\desktop-point-of-sale}}}
-   * Setelah semua siap, tinggal klik kanan dari project POS, kemudian pilih menu Run
+   * Setelah semua siap, sekarang tinggal menjalankan aplikasinya. Project ini sudah dilengkapi dengan mode three tier. Untuk menjalankanya anda harus menjalankan server terlebih dahulu kemudian baru clientnya. Cara menjalankan server: klik kanan class com.artivisi.pos.server.Server kemudian pilih run. Berikutnya jalankan client dengan memilih com.artivisi.pos.ui.frame.FrameUtama klik kanan kemudian pilih run. Mekanisme three tier banyak saya jelaskan di blog ifnu.artivisi.com, silahkan dibuka arsipnya
    * Login ke aplikasi dengan user ADMIN dan password adminadmin
 
 Selamat mencoba
