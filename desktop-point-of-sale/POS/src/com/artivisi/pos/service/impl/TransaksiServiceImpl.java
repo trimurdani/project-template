@@ -69,7 +69,7 @@ public class TransaksiServiceImpl implements TransaksiService{
 
     private void updateSaldoStok(Penjualan penjualan){
         for(PenjualanDetail d : penjualan.getDetails()){
-            SaldoStok saldoStok = saldoStokDao.cari(d.getProduk());
+            SaldoStok saldoStok = saldoStokDao.cari(d.getProduk(),penjualan.getTanggal(),penjualan.getCabang());
             saldoStok.setBeli(saldoStok.getJual() + d.getKuantitas());
             saldoStokDao.simpan(saldoStok);
         }
@@ -106,7 +106,7 @@ public class TransaksiServiceImpl implements TransaksiService{
 
     private void updateSaldoStok(Pembelian pembelian){
         for(PembelianDetail d : pembelian.getDetails()){
-            SaldoStok saldoStok = saldoStokDao.cari(d.getProduk());
+            SaldoStok saldoStok = saldoStokDao.cari(d.getProduk(),pembelian.getTanggal(),pembelian.getCabang());
             saldoStok.setBeli(saldoStok.getBeli() + d.getKuantitas());
             saldoStokDao.simpan(saldoStok);
         }

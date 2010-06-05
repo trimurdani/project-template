@@ -6,12 +6,16 @@
 package com.artivisi.pos.dao.transaksi;
 
 import com.artivisi.pos.dao.BaseDaoHibernate;
+import com.artivisi.pos.dao.master.RunningNumberDao;
+import com.artivisi.pos.model.master.Cabang;
 import com.artivisi.pos.model.master.Produk;
-import com.artivisi.pos.model.transaksi.SaldoStok;
+import com.artivisi.pos.model.master.constant.TransaksiRunningNumberEnum;
 import com.artivisi.pos.model.transaksi.SaldoStok;
 import com.artivisi.pos.util.StringUtils;
+import java.util.Date;
 import java.util.List;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -21,7 +25,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class SaldoStokDao extends BaseDaoHibernate<SaldoStok>{
 
-    public SaldoStok cari(Produk p){
+    @Autowired private RunningNumberDao runningNumberDao;
+
+    public SaldoStok cari(Produk p, Date tanggal, Cabang cabang){
         DateTime dateTime = new DateTime();
         String bulan = StringUtils.bulanDuaDigit(dateTime.toDate());
         String tahun = String.valueOf(dateTime.getYear());
@@ -43,6 +49,8 @@ public class SaldoStokDao extends BaseDaoHibernate<SaldoStok>{
                 }
             }
             s = new SaldoStok();
+            s.setId(runningNumberDao.ambilBerikutnyaDanSimpan(TransaksiRunningNumberEnum.SALDO_STOK,
+                    tanggal,cabang.getId()));
             s.setProduk(p);
             if(bulanSebelumnya!=null){
                 s.setSaldoAwal(bulanSebelumnya.getBeli()
