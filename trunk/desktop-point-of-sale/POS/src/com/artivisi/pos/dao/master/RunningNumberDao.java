@@ -78,7 +78,7 @@ public class RunningNumberDao {
         return id.getPrefix() + idCabang + StringUtils.padWithZero(r.getNumber(), id.getDigit());
     }
 
-    public String ambilBerikutnyaDanSimpan(TransaksiRunningNumberEnum id,Date tanggal, String idCabang){
+    public String ambilBerikutnyaDanSimpan(TransaksiRunningNumberEnum id, Date tanggal, String idCabang){
         String strTanggal =  new SimpleDateFormat("yyMM").format(tanggal);
         RunningNumber r = (RunningNumber) sessionFactory.getCurrentSession().get(RunningNumber.class, id.getId() + strTanggal);
         if(r==null){
