@@ -1,21 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/dao/PersonDao.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/model/Person.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/model/Customer.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/util/GenerateTables.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/model/PurchaseDetail.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/model/Purchase.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/model/Role.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/model/Menu.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/model/Product.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/dao/PurchaseDao.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/service/PurchaseService.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/service/impl/PurchaseServiceImpl.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/MainLIE.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/MainSpring.java</file>
-        <file>file:/Users/ifnu/NetBeansProjects/BukuJavaDesktop/src/com/googlecode/projecttemplate/pos/report/DailySalesReport.java</file>
-    </open-files>
 </project-private>
