@@ -1,6 +1,7 @@
 package com.googlecode.projecttemplate.pos.model;
 
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ import org.hibernate.annotations.Cascade;
  */
 @Entity
 @Table(name="T_SALES")
-public class Sales {
+public class Sales implements Serializable{
 
     @Id @GeneratedValue
     @Column(name="ID")

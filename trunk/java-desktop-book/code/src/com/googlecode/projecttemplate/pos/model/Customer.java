@@ -1,11 +1,18 @@
 package com.googlecode.projecttemplate.pos.model;
 
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -25,9 +32,11 @@ import org.hibernate.annotations.IndexColumn;
  */
 @Entity
 @Table(name="T_CUSTOMER")
-public class Customer {
+@Inheritance(strategy=InheritanceType.JOINED)
+public class Customer implements Serializable{
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name="ID")
     private Long id;
 

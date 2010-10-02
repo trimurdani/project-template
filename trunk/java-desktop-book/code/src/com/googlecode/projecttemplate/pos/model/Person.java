@@ -23,6 +23,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Index;
 
 /**
  *
@@ -30,13 +33,21 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name="T_PERSON",uniqueConstraints={@UniqueConstraint(columnNames={"NAME"})})
+@org.hibernate.annotations.Table(
+    appliesTo="T_PERSON",
+    indexes={
+        @Index(name="NAME_INDEX",columnNames={"NAME"})
+    }
+)
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class Person implements Serializable {
-    @OneToOne(mappedBy = "person")
-    private Customer customer;
 
     @Id @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name="ID")
     private Integer id;
+
+    @OneToOne(mappedBy = "person")
+    private Customer customer;
 
     @Column(name="NAME",unique=true,length=100)
     private String name;

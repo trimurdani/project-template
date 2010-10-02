@@ -8,9 +8,12 @@
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/pos</property>
     <property name="hibernate.connection.username">root</property>
-    <property name="hibernate.hbm2ddl.auto">create-drop</property>
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.format_sql">true</property>
+    <property name="cache.provider_class">
+            org.hibernate.cache.EhCacheProvider
+    </property>
+    <property name="cache.use_second_level_cache">true</property>
     <mapping class="com.googlecode.projecttemplate.pos.model.Person"/>
     <mapping class="com.googlecode.projecttemplate.pos.model.Customer"/>
     <mapping class="com.googlecode.projecttemplate.pos.model.MemberCustomer"/>

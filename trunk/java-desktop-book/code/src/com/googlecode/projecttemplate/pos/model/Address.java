@@ -7,6 +7,7 @@ package com.googlecode.projecttemplate.pos.model;
 
 
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -15,7 +16,7 @@ import javax.persistence.Embeddable;
  * @author ifnu
  */
 @Embeddable
-public class Address {
+public class Address implements Serializable{
 
     @Column(name="ADDRESS1",length=180,nullable=false)
     private String address1;
