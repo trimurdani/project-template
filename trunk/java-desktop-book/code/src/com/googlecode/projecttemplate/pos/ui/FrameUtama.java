@@ -1,11 +1,9 @@
 package com.googlecode.projecttemplate.pos.ui;
 
-import com.googlecode.projecttemplate.pos.service.PersonService;
-import com.googlecode.projecttemplate.pos.ui.renderer.JDateChooserCellEditor;
-import com.googlecode.projecttemplate.pos.ui.tablemodel.PersonTableModel;
-import java.util.Date;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import com.googlecode.projecttemplate.pos.ui.security.PersonPanel;
+import java.beans.PropertyVetoException;
+import javax.swing.JFrame;
+import org.apache.log4j.Logger;
 
 /*
  * To change this template, choose Tools | Templates
@@ -24,9 +22,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class FrameUtama extends javax.swing.JFrame {
 
+    private static final Logger log = Logger.getLogger(FrameUtama.class);
+
     /** Creates new form NewJFrame */
     public FrameUtama() {
         initComponents();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /** This method is called from within the constructor to
@@ -38,27 +39,73 @@ public class FrameUtama extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        desktopPane = new javax.swing.JDesktopPane();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        mnuPerson = new javax.swing.JMenuItem();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Master Data");
+
+        mnuPerson.setText("Pengguna");
+        mnuPerson.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuPersonActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnuPerson);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 591, Short.MAX_VALUE)
+            .add(desktopPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 440, Short.MAX_VALUE)
+            .add(desktopPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 418, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public PersonPanel personPanel;
+
+    private void mnuPersonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPersonActionPerformed
+        try {
+            if (personPanel == null) {
+                personPanel = new PersonPanel();
+                desktopPane.add(personPanel);
+            } else {
+                personPanel.toFront();
+            }
+            personPanel.setVisible(true);
+            personPanel.setSelected(true);
+            personPanel.setSize(desktopPane.getSize());
+        } catch (PropertyVetoException ex) {
+            log.error("error ketika menampilkan person panel", ex);
+        }
+    }//GEN-LAST:event_mnuPersonActionPerformed
 
     /**
     * @param args the command line arguments
     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDesktopPane desktopPane;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem mnuPerson;
     // End of variables declaration//GEN-END:variables
 
 }

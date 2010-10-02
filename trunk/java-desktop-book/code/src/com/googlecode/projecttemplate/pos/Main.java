@@ -6,7 +6,9 @@
 package com.googlecode.projecttemplate.pos;
 
 import com.googlecode.projecttemplate.pos.service.SecurityService;
-import com.sun.j3d.utils.applet.MainFrame;
+import com.googlecode.projecttemplate.pos.ui.FrameUtama;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -15,19 +17,28 @@ import com.sun.j3d.utils.applet.MainFrame;
 public class Main {
 
     private static SecurityService securityService;
-    private static MainFrame frame;
+    private static FrameUtama frame;
 
     public static SecurityService getSecurityService() {
         return securityService;
     }
 
-    public static MainFrame getFrame() {
+    public static FrameUtama getFrame() {
         return frame;
     }
 
 
     public static void main(String[] args) throws ClassNotFoundException {
-        
+         java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                ApplicationContext applicationContext =
+                        new ClassPathXmlApplicationContext("applicationContext.xml");
+                securityService = (SecurityService) applicationContext.getBean("securityService");
+                frame = new FrameUtama();
+                frame.setVisible(true);
+            }
+        });
+
     }
 }
 
