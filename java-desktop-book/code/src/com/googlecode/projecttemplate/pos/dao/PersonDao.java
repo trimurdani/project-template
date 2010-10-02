@@ -18,11 +18,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PersonDao {
     @Autowired private SessionFactory sessionFactory;
-    public void save(Person person){
+    public Person save(Person person){
         sessionFactory.getCurrentSession().saveOrUpdate(person);
+        return person;
     }
-    public void delete(Person person){
+    public Person delete(Person person){
         sessionFactory.getCurrentSession().delete(person);
+        return person;
     }
     public Long count(){
         return (Long) sessionFactory.getCurrentSession()
@@ -35,11 +37,13 @@ public class PersonDao {
                 .setParameter("id", id)
                 .uniqueResult();
     }
+
     public List<Person> getAll(){
         return sessionFactory.getCurrentSession()
                 .createQuery("from Person p")
                 .list();
     }
+
     public List<Person> getAll(int start, int num){
         return sessionFactory.getCurrentSession()
                 .createQuery("from Person p")

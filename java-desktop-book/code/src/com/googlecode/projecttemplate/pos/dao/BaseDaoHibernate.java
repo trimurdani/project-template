@@ -18,15 +18,17 @@ public class BaseDaoHibernate<T> {
         this.domainClass = (Class) ((ParameterizedType) getClass().getGenericSuperclass())
                 .getActualTypeArguments()[0];
     }
-    public void save(T domain) {
+    public T save(T domain) {
         sessionFactory.getCurrentSession().saveOrUpdate(domain);
+        return domain;
     }
     @SuppressWarnings("unchecked")
     public T getById(Long id) {
         return (T) sessionFactory.getCurrentSession().get(domainClass, id);
     }
-    public void delete(T domain) {
+    public T delete(T domain) {
         sessionFactory.getCurrentSession().delete(domain);
+        return domain;
     }
     @SuppressWarnings("unchecked")
     public Long count() {

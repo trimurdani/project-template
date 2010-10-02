@@ -1,6 +1,7 @@
 package com.googlecode.projecttemplate.pos.model;
 
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="T_PRODUCT")
-public class Product {
+public class Product implements Serializable{
 
     @Id @GeneratedValue
     @Column(name="ID")

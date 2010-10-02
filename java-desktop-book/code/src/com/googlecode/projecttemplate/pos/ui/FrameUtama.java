@@ -1,5 +1,12 @@
 package com.googlecode.projecttemplate.pos.ui;
 
+import com.googlecode.projecttemplate.pos.service.PersonService;
+import com.googlecode.projecttemplate.pos.ui.renderer.JDateChooserCellEditor;
+import com.googlecode.projecttemplate.pos.ui.tablemodel.PersonTableModel;
+import java.util.Date;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -41,7 +48,7 @@ public class FrameUtama extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(0, 418, Short.MAX_VALUE)
+            .add(0, 440, Short.MAX_VALUE)
         );
 
         pack();
@@ -50,13 +57,6 @@ public class FrameUtama extends javax.swing.JFrame {
     /**
     * @param args the command line arguments
     */
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrameUtama().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

@@ -69,7 +69,7 @@ public class GenerateTables {
             s.save(c);
         }
         s.getTransaction().commit();
-        
+
         List<Person> persons = s.createQuery("from Person p")
                 .list();
 
