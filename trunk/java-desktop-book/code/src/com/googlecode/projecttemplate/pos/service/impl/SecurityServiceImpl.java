@@ -24,64 +24,49 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("securityService")
 @Transactional(readOnly=true)
 public class SecurityServiceImpl implements SecurityService{
-
     @Autowired private PersonDao personDao;
     @Autowired private MenuDao menuDao;
     @Autowired private RoleDao roleDao;
-
     @Transactional
     public Person save(Person person) {
         return personDao.save(person);
     }
-
     @Transactional
     public Person delete(Person person) {
         return personDao.delete(person);
     }
-
-    public Person getPerson(Long id) {
+    public Person getPerson(Integer id) {
         return personDao.getById(id);
     }
-
     public List<Person> getPersons() {
         return personDao.getAll();
     }
-
     @Transactional
     public Menu save(Menu menu) {
         return menuDao.save(menu);
     }
-
     @Transactional
     public Menu delete(Menu menu) {
         return menuDao.delete(menu);
     }
-
-    public Menu getMenu(Long id) {
+    public Menu getMenu(Integer id) {
         return menuDao.getById(id);
     }
-
     public List<Menu> getMenus() {
         return menuDao.getAll();
     }
-
     @Transactional
     public Role save(Role role) {
         return roleDao.save(role);
     }
-
     @Transactional
     public Role delete(Role role) {
         return roleDao.delete(role);
     }
-
-    public Role getRole(Long id) {
+    public Role getRole(Integer id) {
         return roleDao.getById(id);
     }
-
     public List<Role> getRoles() {
         return roleDao.getAll();
     }
-
-
 }

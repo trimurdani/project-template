@@ -31,7 +31,7 @@ public class PersonDao {
                 .createQuery("select count(*) from Person p")
                 .uniqueResult();
     }
-    public Person getById(Long id){
+    public Person getById(Integer id){
         return (Person) sessionFactory.getCurrentSession()
                 .createQuery("from Person p where p.id=:id")
                 .setParameter("id", id)

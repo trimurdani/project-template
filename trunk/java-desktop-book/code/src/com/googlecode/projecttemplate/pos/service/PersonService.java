@@ -17,7 +17,7 @@ public interface PersonService {
     void save(Person person);
     void delete(Person person);
     Long count();
-    Person getPerson(Long id);
+    Person getPerson(Integer id);
     List<Person> getPersons();
     List<Person> getPersons(int start, int num);
 

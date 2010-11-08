@@ -1,6 +1,7 @@
 package com.googlecode.projecttemplate.pos.ui;
 
 import com.googlecode.projecttemplate.pos.ui.security.PersonPanel;
+import com.googlecode.projecttemplate.pos.ui.transaction.SalesPanel;
 import java.beans.PropertyVetoException;
 import javax.swing.JFrame;
 import org.apache.log4j.Logger;
@@ -20,15 +21,15 @@ import org.apache.log4j.Logger;
  *
  * @author ifnu
  */
-public class FrameUtama extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame {
 
-    private static final Logger log = Logger.getLogger(FrameUtama.class);
+    private static final Logger log = Logger.getLogger(MainFrame.class);
 
     /** Creates new form NewJFrame */
-    public FrameUtama() {
-        initComponents();
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-    }
+public MainFrame() {
+    initComponents();
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
+}
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -42,15 +43,17 @@ public class FrameUtama extends javax.swing.JFrame {
         desktopPane = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        mnuMasterData = new javax.swing.JMenu();
         mnuPerson = new javax.swing.JMenuItem();
+        mnuTransaction = new javax.swing.JMenu();
+        mnuSales = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Master Data");
+        mnuMasterData.setText("Master Data");
 
         mnuPerson.setText("Pengguna");
         mnuPerson.addActionListener(new java.awt.event.ActionListener() {
@@ -58,9 +61,21 @@ public class FrameUtama extends javax.swing.JFrame {
                 mnuPersonActionPerformed(evt);
             }
         });
-        jMenu2.add(mnuPerson);
+        mnuMasterData.add(mnuPerson);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(mnuMasterData);
+
+        mnuTransaction.setText("Transaksi");
+
+        mnuSales.setText("Penjualan");
+        mnuSales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSalesActionPerformed(evt);
+            }
+        });
+        mnuTransaction.add(mnuSales);
+
+        jMenuBar1.add(mnuTransaction);
 
         setJMenuBar(jMenuBar1);
 
@@ -96,6 +111,23 @@ public class FrameUtama extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mnuPersonActionPerformed
 
+    public SalesPanel salesPanel;
+    private void mnuSalesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSalesActionPerformed
+        try {
+            if (salesPanel == null) {
+                salesPanel = new SalesPanel();
+                desktopPane.add(salesPanel);
+            } else {
+                salesPanel.toFront();
+            }
+            salesPanel.setVisible(true);
+            salesPanel.setSelected(true);
+            salesPanel.setSize(desktopPane.getSize());
+        } catch (PropertyVetoException ex) {
+            log.error("error ketika menampilkan sales panel", ex);
+        }
+    }//GEN-LAST:event_mnuSalesActionPerformed
+
     /**
     * @param args the command line arguments
     */
@@ -103,9 +135,11 @@ public class FrameUtama extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu mnuMasterData;
     private javax.swing.JMenuItem mnuPerson;
+    private javax.swing.JMenuItem mnuSales;
+    private javax.swing.JMenu mnuTransaction;
     // End of variables declaration//GEN-END:variables
 
 }

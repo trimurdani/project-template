@@ -48,36 +48,35 @@ public class PersonPanel extends javax.swing.JInternalFrame {
     private Person person;
     private JFileChooser chooser;
     private final int maxPictureSize = 128;
-    private static final Logger log = Logger.getLogger(PersonPanel.class);
     private ImageIcon image;
-    private String fileType;
+    private static final Logger log = Logger.getLogger(PersonPanel.class);
 
     /** Creates new form UserPanel */
-    public PersonPanel() {
-        initComponents();
+public PersonPanel() {
+    initComponents();
 
-        TextComponentUtils.setMaximumLength(100, txtName);
+    TextComponentUtils.setMaximumLength(100, txtName);
 
-        tblPerson.setAutoCreateColumnsFromModel(false);
-        tblPerson.getSelectionModel().addListSelectionListener(new PersonTableSelectionListener());
-        refreshTable();
+    tblPerson.setAutoCreateColumnsFromModel(false);
+    tblPerson.getSelectionModel().addListSelectionListener(new PersonTableSelectionListener());
+    refreshTable();
 
-        enableForm(false);
+    enableForm(false);
 
-        cmbMaritalStatus.setModel(new DefaultComboBoxModel(MaritalStatus.values()));
+    cmbMaritalStatus.setModel(new DefaultComboBoxModel(MaritalStatus.values()));
 
-        //pengaturan tombol
-        btnDelete.setEnabled(false);
-        btnAdd.setEnabled(true);
-        btnCancel.setEnabled(false);
-        btnEdit.setEnabled(false);
-        btnSave.setEnabled(false);
-    }
+    //pengaturan tombol ketika person panel dibuka
+    btnDelete.setEnabled(false);
+    btnAdd.setEnabled(true);
+    btnCancel.setEnabled(false);
+    btnEdit.setEnabled(false);
+    btnSave.setEnabled(false);
+}
 
-    private void refreshTable(){
-        persons = Main.getSecurityService().getPersons();
-        tblPerson.setModel(new PersonTableModel(persons));
-    }
+private void refreshTable(){
+    persons = Main.getSecurityService().getPersons();
+    tblPerson.setModel(new PersonTableModel(persons));
+}
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -121,6 +120,23 @@ public class PersonPanel extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setResizable(true);
         setTitle("Pengguna");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosed(evt);
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jLabel1.setText("Cari");
 
@@ -412,7 +428,6 @@ public class PersonPanel extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
-
         for(int i=0;i<tblPerson.getRowCount();i++){
             if(tblPerson.getValueAt(i, 0).toString().startsWith(txtSearch.getText())){
                 //select baris yang ditemukan
@@ -421,8 +436,7 @@ public class PersonPanel extends javax.swing.JInternalFrame {
                 ComponentUtils.scrollToRect(tblPerson, i);
                 break;
             }
-        }
-        
+        }        
     }//GEN-LAST:event_txtSearchKeyReleased
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
@@ -448,9 +462,6 @@ public class PersonPanel extends javax.swing.JInternalFrame {
                         img = img.getScaledInstance(maxPictureSize, heightSize, Image.SCALE_SMOOTH);
                     }
                 }
-                int indexDot = f.getName().lastIndexOf(".");
-                //index dot pasti nilainya valid karena file sudah difilter fi fileChooser
-                fileType = f.getName().substring(indexDot+1,f.getName().length());
                 image = new ImageIcon(img);
                 lblFoto.setIcon(image);
                 txtFoto.setText(f.getAbsolutePath());
@@ -462,7 +473,6 @@ public class PersonPanel extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        // TODO add your handling code here:
         if(person!=null){
             enableForm(true);
             btnDelete.setEnabled(false);
@@ -473,136 +483,134 @@ public class PersonPanel extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnEditActionPerformed
 
-    private void loadModelToForm(){
-        txtId.setText(String.valueOf(person.getId()));
-        txtName.setText(person.getName());
-        txtPassword.setText(person.getPassword());
-        jdcBirthDate.setDate(person.getBirthDate());
-        cmbMaritalStatus.setSelectedItem(person.getStatus());
-        txtRemark.setText(person.getRemark());
-        if(person.getPicture()!=null){
-            try {
-                ObjectInputStream objectInputStream = 
-                        new ObjectInputStream(new ByteArrayInputStream(person.getPicture()));
-                image = (ImageIcon) objectInputStream.readObject();
-                lblFoto.setIcon(image);
-            } catch (ClassNotFoundException ex) {
-                log.error("Image gagal dibaca", ex);
-            } catch (IOException ex) {
-                log.error("Image gagal dibaca", ex);
-            }
-        } else {
-            lblFoto.setIcon(null);
-        }
-    }
+    private void formInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosed
+        Main.getFrame().personPanel = null;
+    }//GEN-LAST:event_formInternalFrameClosed
 
-    private void loadFormToModel(){
-        person.setName(txtName.getText());
-        if(person.getPassword()==null
-                || !person.getPassword().equals(
-                    new String(txtPassword.getPassword()))){
-            //encrypt kata sandi dengan MD5
-            String kataSandi = new MD5(new String(txtPassword.getPassword())).asHex();
-            person.setPassword(kataSandi);
+private void loadModelToForm(){
+    txtId.setText(String.valueOf(person.getId()));
+    txtName.setText(person.getName());
+    txtPassword.setText(person.getPassword());
+    jdcBirthDate.setDate(person.getBirthDate());
+    cmbMaritalStatus.setSelectedItem(person.getStatus());
+    txtRemark.setText(person.getRemark());
+    if(person.getPicture()!=null){
+        try {
+            ObjectInputStream objectInputStream =
+                    new ObjectInputStream(new ByteArrayInputStream(person.getPicture()));
+            image = (ImageIcon) objectInputStream.readObject();
+            lblFoto.setIcon(image);
+        } catch (ClassNotFoundException ex) {
+            log.error("Image gagal dibaca", ex);
+        } catch (IOException ex) {
+            log.error("Image gagal dibaca", ex);
         }
-        person.setRemark(txtRemark.getText());
-        person.setBirthDate(jdcBirthDate.getDate());
-        person.setStatus((MaritalStatus) cmbMaritalStatus.getSelectedItem());
-        if(!txtFoto.getText().equals("")){
-            ObjectOutputStream dataOutputStream = null;
-            try {
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                dataOutputStream = new ObjectOutputStream(outputStream);
-                dataOutputStream.writeObject(image);
-                dataOutputStream.flush();
-                person.setPicture(outputStream.toByteArray());
-            } catch (IOException ex) {
-                log.error("gagal mengubah Image ke bytearray",ex);
-            } finally {
-                try {
-                    dataOutputStream.close();
-                } catch (IOException ex) {
-                    Exceptions.printStackTrace(ex);
-                }
-            }
-        }
-    }
-
-    private boolean validateForm(){
-        if(txtName.getText().length()>0 &&
-                txtPassword.getPassword()!=null &&
-                txtPassword.getPassword().length>0){
-            return true;
-        } else {
-            JOptionPane.showMessageDialog(Main.getFrame(), "Isi semua field!","Error",JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
-
-    private void clearForm(){
-        txtId.setText("");
-        txtName.setText("");
-        txtPassword.setText("");
-        txtRemark.setText("");
-        txtFoto.setText("");
-        tblPerson.getSelectionModel().clearSelection();
-        jdcBirthDate.setDate(null);
-        person = null;
+    } else {
         lblFoto.setIcon(null);
     }
+}
 
-    private void enableForm(boolean status){
-        txtName.setEnabled(status);
-        txtPassword.setEnabled(status);
-        jdcBirthDate.setEnabled(status);
-        btnBrowse.setEnabled(status);
-        txtFoto.setEnabled(false);
-        txtRemark.setEnabled(status);
-        cmbMaritalStatus.setEnabled(status);
+private void loadFormToModel(){
+    person.setName(txtName.getText());
+    if(person.getPassword()==null
+            || !person.getPassword().equals(
+                new String(txtPassword.getPassword()))){
+        //encrypt kata sandi dengan MD5
+        String kataSandi = new MD5(new String(txtPassword.getPassword())).asHex();
+        person.setPassword(kataSandi);
     }
-
-    private class PersonTableModel extends AbstractTableModel{
-
-        private List<Person> listPersons;
-
-        public PersonTableModel(List<Person> listPersons) {
-            this.listPersons = listPersons;
-        }
-
-        public int getRowCount() {
-            return listPersons.size();
-        }
-
-        public int getColumnCount() {
-            return 2;
-        }
-
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            Person p = persons.get(rowIndex);
-            switch(columnIndex){
-                case 0 : return p.getName();
-                case 1 : return p.getBirthDate();
-                default: return "";
+    person.setRemark(txtRemark.getText());
+    person.setBirthDate(jdcBirthDate.getDate());
+    person.setStatus((MaritalStatus) cmbMaritalStatus.getSelectedItem());
+    if(!txtFoto.getText().equals("")){
+        ObjectOutputStream dataOutputStream = null;
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            dataOutputStream = new ObjectOutputStream(outputStream);
+            dataOutputStream.writeObject(image);
+            dataOutputStream.flush();
+            person.setPicture(outputStream.toByteArray());
+        } catch (IOException ex) {
+            log.error("gagal mengubah Image ke bytearray",ex);
+        } finally {
+            try {
+                dataOutputStream.close();
+            } catch (IOException ex) {
+                Exceptions.printStackTrace(ex);
             }
         }
-        
     }
+}
 
-    private class PersonTableSelectionListener implements ListSelectionListener{
+private boolean validateForm(){
+    if(txtName.getText().length()>0 &&
+            txtPassword.getPassword()!=null &&
+            txtPassword.getPassword().length>0){
+        return true;
+    } else {
+        JOptionPane.showMessageDialog(Main.getFrame(),
+                "Isi semua field!","Error",JOptionPane.ERROR_MESSAGE);
+        return false;
+    }
+}
 
-        public void valueChanged(ListSelectionEvent e) {
-            if(tblPerson.getSelectedRow()>=0){
-                person = persons.get(tblPerson.getSelectedRow());
-                loadModelToForm();
-                btnDelete.setEnabled(true);
-                btnAdd.setEnabled(false);
-                btnCancel.setEnabled(true);
-                btnEdit.setEnabled(true);
-                btnSave.setEnabled(false);
-            }
+private void clearForm(){
+    txtId.setText("");
+    txtName.setText("");
+    txtPassword.setText("");
+    txtRemark.setText("");
+    txtFoto.setText("");
+    tblPerson.getSelectionModel().clearSelection();
+    jdcBirthDate.setDate(null);
+    person = null;
+    lblFoto.setIcon(null);
+}
+
+private void enableForm(boolean status){
+    txtName.setEnabled(status);
+    txtPassword.setEnabled(status);
+    jdcBirthDate.setEnabled(status);
+    btnBrowse.setEnabled(status);
+    txtFoto.setEnabled(false);
+    txtRemark.setEnabled(status);
+    cmbMaritalStatus.setEnabled(status);
+}
+
+private class PersonTableModel extends AbstractTableModel{
+    private List<Person> listPersons;
+    public PersonTableModel(List<Person> listPersons) {
+        this.listPersons = listPersons;
+    }
+    public int getRowCount() {
+        return listPersons.size();
+    }
+    public int getColumnCount() {
+        return 2;
+    }
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        Person p = persons.get(rowIndex);
+        switch(columnIndex){
+            case 0 : return p.getName();
+            case 1 : return p.getBirthDate();
+            default: return "";
         }
-
     }
+}
+
+private class PersonTableSelectionListener implements ListSelectionListener{
+    public void valueChanged(ListSelectionEvent e) {
+        if(tblPerson.getSelectedRow()>=0){
+            person = persons.get(tblPerson.getSelectedRow());
+            person = Main.getSecurityService().getPerson(person.getId());
+            loadModelToForm();
+            btnDelete.setEnabled(true);
+            btnAdd.setEnabled(false);
+            btnCancel.setEnabled(true);
+            btnEdit.setEnabled(true);
+            btnSave.setEnabled(false);
+        }
+    }
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
