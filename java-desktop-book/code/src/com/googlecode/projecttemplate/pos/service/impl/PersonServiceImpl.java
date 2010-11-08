@@ -20,33 +20,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("personService")
 @Transactional(readOnly=true)
 public class PersonServiceImpl implements PersonService{
-
     @Autowired private PersonDao personDao;
-
     @Transactional(readOnly=false)
     public void save(Person person) {
         personDao.save(person);
     }
-
     @Transactional(readOnly=false)
     public void delete(Person person) {
         personDao.delete(person);
     }
-
     public Long count() {
         return personDao.count();
     }
-
-    public Person getPerson(Long id) {
+    public Person getPerson(Integer id) {
         return personDao.getById(id);
     }
-
     public List<Person> getPersons() {
         return personDao.getAll();
     }
-
     public List<Person> getPersons(int start, int num) {
         return personDao.getAll(start, num);
     }
-
 }

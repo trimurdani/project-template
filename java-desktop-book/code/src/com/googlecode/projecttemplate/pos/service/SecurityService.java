@@ -18,17 +18,17 @@ public interface SecurityService {
 
     public Person save(Person person);
     public Person delete(Person person);
-    public Person getPerson(Long id);
+    public Person getPerson(Integer id);
     public List<Person> getPersons();
 
     public Menu save(Menu menu);
     public Menu delete(Menu menu);
-    public Menu getMenu(Long id);
+    public Menu getMenu(Integer id);
     public List<Menu> getMenus();
 
     public Role save(Role role);
     public Role delete(Role role);
-    public Role getRole(Long id);
+    public Role getRole(Integer id);
     public List<Role> getRoles();
 
 }
