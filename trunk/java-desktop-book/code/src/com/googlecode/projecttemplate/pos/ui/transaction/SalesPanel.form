@@ -54,7 +54,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnLookupProduct" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="label1" pref="317" max="32767" attributes="0"/>
+                              <Component id="lblTotal" pref="317" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -83,7 +83,7 @@
                       <Component id="txtProductId" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnLookupProduct" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="label1" min="-2" pref="46" max="-2" attributes="0"/>
+                  <Component id="lblTotal" min="-2" pref="46" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" pref="388" max="32767" attributes="0"/>
@@ -164,7 +164,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/images/mnuFind.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Search"/>
+        <Property name="text" type="java.lang.String" value="Cari"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchActionPerformed"/>
@@ -210,7 +210,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLookupProductActionPerformed"/>
       </Events>
     </Component>
-    <Component class="java.awt.Label" name="label1">
+    <Component class="java.awt.Label" name="lblTotal">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Courier New" size="24" style="1"/>

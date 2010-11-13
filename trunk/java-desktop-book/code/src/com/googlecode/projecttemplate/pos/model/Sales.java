@@ -46,4 +46,36 @@ public class Sales implements Serializable{
     @Column(name="TOTAL_SALES",precision=18,scale=0,nullable=false)
     private BigDecimal totalSales;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getSalesDate() {
+        return salesDate;
+    }
+
+    public void setSalesDate(Date salesDate) {
+        this.salesDate = salesDate;
+    }
+
+    public List<SalesDetail> getSalesDetails() {
+        return salesDetails;
+    }
+
+    public void setSalesDetails(List<SalesDetail> salesDetails) {
+        this.salesDetails = salesDetails;
+    }
+
+    public BigDecimal getTotalSales() {
+        return totalSales;
+    }
+
+    public void setTotalSales(BigDecimal totalSales) {
+        this.totalSales = totalSales;
+    }
+
 }
