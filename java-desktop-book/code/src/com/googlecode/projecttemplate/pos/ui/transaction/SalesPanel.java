@@ -13,8 +13,12 @@ package com.googlecode.projecttemplate.pos.ui.transaction;
 
 import com.googlecode.projecttemplate.pos.Main;
 import com.googlecode.projecttemplate.pos.model.Sales;
+import com.googlecode.projecttemplate.pos.model.SalesDetail;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.AbstractTableModel;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -23,11 +27,14 @@ import javax.swing.JOptionPane;
 public class SalesPanel extends javax.swing.JInternalFrame {
 
     private Sales sales;
+    private List<SalesDetail> salesDetails = new ArrayList<SalesDetail>();
     private List<Sales> salesList;
+    private static Logger log = Logger.getLogger(SalesPanel.class);
 
     /** Creates new form SalesPanel */
     public SalesPanel() {
         initComponents();
+        tblSalesDetail.setAutoCreateColumnsFromModel(false);
     }
 
     /** This method is called from within the constructor to
@@ -51,7 +58,7 @@ public class SalesPanel extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         txtProductId = new javax.swing.JTextField();
         btnLookupProduct = new javax.swing.JButton();
-        label1 = new java.awt.Label();
+        lblTotal = new java.awt.Label();
 
         setClosable(true);
         setIconifiable(true);
@@ -107,7 +114,7 @@ public class SalesPanel extends javax.swing.JInternalFrame {
         });
 
         btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mnuFind.png"))); // NOI18N
-        btnSearch.setText("Search");
+        btnSearch.setText("Cari");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchActionPerformed(evt);
@@ -139,8 +146,8 @@ public class SalesPanel extends javax.swing.JInternalFrame {
             }
         });
 
-        label1.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
-        label1.setText("Rp. 0");
+        lblTotal.setFont(new java.awt.Font("Courier New", 1, 24));
+        lblTotal.setText("Rp. 0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -174,7 +181,7 @@ public class SalesPanel extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnLookupProduct)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)))
+                                .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
 
@@ -198,7 +205,7 @@ public class SalesPanel extends javax.swing.JInternalFrame {
                         .addComponent(jLabel1)
                         .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnLookupProduct))
-                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
                 .addContainerGap())
@@ -210,18 +217,32 @@ public class SalesPanel extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void clearForm(){
-
+        txtProductId.setText("");
+        lblTotal.setText("Rp. 0");
     }
 
     private void enableForm(boolean status){
-        
+        txtProductId.setEnabled(status);
+        btnLookupProduct.setEnabled(status);
+        tblSalesDetail.setEnabled(status);
     }
 
     private boolean validateForm(){
-        return false;
+        if(salesDetails==null || salesDetails.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Transaksi tidak boleh kosong!"
+                    ,"Error",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
-    private 
+    private void loadFormToModel(){
+        sales.
+    }
+
+    private void refreshTable(){
+        tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
+    }
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         Main.getFrame().salesPanel = null;
@@ -246,7 +267,7 @@ public class SalesPanel extends javax.swing.JInternalFrame {
             }
             loadFormToModel();
             try{
-                Main.getSecurityService().save(sales);
+                Main.getSalesService().save(sales);
                 clearForm();
                 refreshTable();
                 enableForm(false);
@@ -267,7 +288,7 @@ public class SalesPanel extends javax.swing.JInternalFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if(sales!=null){
             try{
-                Main.getSecurityService().delete(sales);
+                Main.getSalesService().delete(sales);
                 clearForm();
                 sales = null;
                 refreshTable();
@@ -320,6 +341,36 @@ public class SalesPanel extends javax.swing.JInternalFrame {
         
     }//GEN-LAST:event_btnLookupProductActionPerformed
 
+    private class SalesDetailTableModel extends AbstractTableModel{
+
+        private List<SalesDetail> salesDetails;
+
+        SalesDetailTableModel(List<SalesDetail> salesDetails) {
+            this.salesDetails = salesDetails;
+        }
+
+        public int getRowCount() {
+            return salesDetails.size();
+        }
+
+        public int getColumnCount() {
+            return 5;
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            SalesDetail s = salesDetails.get(rowIndex);
+            switch(columnIndex){
+                case 0: return s.getProduct().getId();
+                case 1: return s.getProduct().getName();
+                case 2: return s.getPrice();
+                case 3: return s.getQuantity();
+                case 4: return s.getSubtotal();
+                default: return "";
+            }
+        }
+        
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -332,7 +383,7 @@ public class SalesPanel extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private java.awt.Label label1;
+    private java.awt.Label lblTotal;
     private javax.swing.JTable tblSalesDetail;
     private javax.swing.JTextField txtProductId;
     // End of variables declaration//GEN-END:variables

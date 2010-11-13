@@ -5,6 +5,7 @@
 
 package com.googlecode.projecttemplate.pos;
 
+import com.googlecode.projecttemplate.pos.service.SalesService;
 import com.googlecode.projecttemplate.pos.service.SecurityService;
 import com.googlecode.projecttemplate.pos.ui.MainFrame;
 import org.springframework.context.ApplicationContext;
@@ -17,10 +18,15 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Main {
 
     private static SecurityService securityService;
+    private static SalesService salesService;
     private static MainFrame frame;
 
     public static SecurityService getSecurityService() {
         return securityService;
+    }
+
+    public static SalesService getSalesService() {
+        return salesService;
     }
 
     public static MainFrame getFrame() {
@@ -33,6 +39,7 @@ public class Main {
                 ApplicationContext applicationContext =
                         new ClassPathXmlApplicationContext("applicationContext.xml");
                 securityService = (SecurityService) applicationContext.getBean("securityService");
+                salesService = (SalesService) applicationContext.getBean("salesService");
                 frame = new MainFrame();
                 frame.setVisible(true);
             }
