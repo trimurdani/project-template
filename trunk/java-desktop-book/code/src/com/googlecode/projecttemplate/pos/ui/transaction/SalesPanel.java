@@ -12,9 +12,14 @@
 package com.googlecode.projecttemplate.pos.ui.transaction;
 
 import com.googlecode.projecttemplate.pos.Main;
+import com.googlecode.projecttemplate.pos.Main;
+import com.googlecode.projecttemplate.pos.model.Product;
 import com.googlecode.projecttemplate.pos.model.Sales;
 import com.googlecode.projecttemplate.pos.model.SalesDetail;
+import com.googlecode.projecttemplate.pos.util.TextComponentUtils;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
@@ -28,13 +33,19 @@ public class SalesPanel extends javax.swing.JInternalFrame {
 
     private Sales sales;
     private List<SalesDetail> salesDetails = new ArrayList<SalesDetail>();
-    private List<Sales> salesList;
     private static Logger log = Logger.getLogger(SalesPanel.class);
 
     /** Creates new form SalesPanel */
     public SalesPanel() {
         initComponents();
         tblSalesDetail.setAutoCreateColumnsFromModel(false);
+        jdcTransaction.setDate(new Date());
+        enableForm(false);
+        btnDelete.setEnabled(false);
+        btnAdd.setEnabled(true);
+        btnCancel.setEnabled(false);
+        btnEdit.setEnabled(false);
+        btnSave.setEnabled(false);
     }
 
     /** This method is called from within the constructor to
@@ -59,11 +70,16 @@ public class SalesPanel extends javax.swing.JInternalFrame {
         txtProductId = new javax.swing.JTextField();
         btnLookupProduct = new javax.swing.JButton();
         lblTotal = new java.awt.Label();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
+        jdcTransaction = new com.toedter.calendar.JDateChooser();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
+        setTitle("Penjualan");
 
         btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mnudoor.png"))); // NOI18N
         btnExit.setText("Keluar");
@@ -149,6 +165,14 @@ public class SalesPanel extends javax.swing.JInternalFrame {
         lblTotal.setFont(new java.awt.Font("Courier New", 1, 24));
         lblTotal.setText("Rp. 0");
 
+        jLabel2.setText("ID Transaksi");
+
+        jLabel3.setText("Tanggal");
+
+        txtId.setEnabled(false);
+
+        jdcTransaction.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -172,17 +196,29 @@ public class SalesPanel extends javax.swing.JInternalFrame {
                         .addComponent(btnExit)
                         .addGap(73, 73, 73))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnLookupProduct)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                                .addComponent(btnLookupProduct))
+                            .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jdcTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+                                .addGap(20, 20, 20))))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdd, btnCancel, btnDelete, btnEdit, btnExit, btnSave, btnSearch});
@@ -199,7 +235,14 @@ public class SalesPanel extends javax.swing.JInternalFrame {
                     .addComponent(btnEdit)
                     .addComponent(btnSearch)
                     .addComponent(btnExit))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)
+                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jdcTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
@@ -207,7 +250,7 @@ public class SalesPanel extends javax.swing.JInternalFrame {
                         .addComponent(btnLookupProduct))
                     .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -219,6 +262,10 @@ public class SalesPanel extends javax.swing.JInternalFrame {
     private void clearForm(){
         txtProductId.setText("");
         lblTotal.setText("Rp. 0");
+        jdcTransaction.setDate(new Date());
+        salesDetails = new ArrayList<SalesDetail>();
+        sales = null;
+        tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
     }
 
     private void enableForm(boolean status){
@@ -237,11 +284,34 @@ public class SalesPanel extends javax.swing.JInternalFrame {
     }
 
     private void loadFormToModel(){
-        sales.
+        sales.setSalesDetails(salesDetails);
+        sales.setSalesDate(new Date());
+        BigDecimal total = BigDecimal.ZERO;
+        for (SalesDetail salesDetail : salesDetails) {
+            total = total.add(salesDetail.getSubtotal());
+            salesDetail.setSales(sales);
+        }
+        sales.setTotalSales(total);
+    }
+
+    private void loadModelToForm(){
+        salesDetails = sales.getSalesDetails();
+        tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
+        lblTotal.setText(TextComponentUtils.formatNumber(sales.getTotalSales()));
     }
 
     private void refreshTable(){
         tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
+    }
+
+    private void refreshTotalLabel(){
+        if(salesDetails!=null && !salesDetails.isEmpty()){
+            BigDecimal total = BigDecimal.ZERO;
+            for (SalesDetail salesDetail : salesDetails) {
+                total = total.add(salesDetail.getSubtotal());
+            }
+            lblTotal.setText("Rp. " + TextComponentUtils.formatNumber(total));
+        }
     }
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
@@ -330,15 +400,57 @@ public class SalesPanel extends javax.swing.JInternalFrame {
 }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        
+        Sales s = new SalesLookupDialog().getSales();
+        if(s!=null){
+            sales = Main.getSalesService().getSales(s.getId());
+            loadModelToForm();
+            //edit mode
+            btnDelete.setEnabled(true);
+            btnAdd.setEnabled(false);
+            btnCancel.setEnabled(true);
+            btnEdit.setEnabled(true);
+            btnSave.setEnabled(false);
+        }
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void txtProductIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProductIdActionPerformed
-        
+        String productId = txtProductId.getText();
+        try {
+            Long pId = Long.valueOf(productId);
+            Product p = Main.getProductService().getProduct(pId);
+            addSalesDetail(p);
+            txtProductId.setText("");
+        } catch (NumberFormatException numberFormatException) {
+            JOptionPane.showMessageDialog(this, "Id barang harus berupa angka!"
+                    ,"Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_txtProductIdActionPerformed
 
+    private void addSalesDetail(Product p){
+        if(p!=null){
+            SalesDetail salesDetail = new SalesDetail();
+            salesDetail.setProduct(p);
+            salesDetail.setPrice(p.getPrice());
+            salesDetail.setQuantity(1);
+            if(salesDetail.getSubtotal() != null){
+                salesDetail.setSubtotal(salesDetail.getSubtotal().add(p.getPrice()));
+            } else {
+                salesDetail.setSubtotal(p.getPrice());
+            }
+            salesDetails.add(salesDetail);
+            refreshTable();
+            refreshTotalLabel();
+        } else {
+            JOptionPane.showMessageDialog(this, "Barang tidak ada!"
+                ,"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     private void btnLookupProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLookupProductActionPerformed
-        
+        Product p = new ProductLookupDialog().getProduct();
+        if(p!=null){
+            addSalesDetail(p);
+        }
     }//GEN-LAST:event_btnLookupProductActionPerformed
 
     private class SalesDetailTableModel extends AbstractTableModel{
@@ -368,6 +480,41 @@ public class SalesPanel extends javax.swing.JInternalFrame {
                 default: return "";
             }
         }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            if(columnIndex == 2 || columnIndex == 4){
+                return BigDecimal.class;
+            } else if(columnIndex == 3){
+                return Integer.class;
+            }
+            return String.class;
+        }
+
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            if(columnIndex == 3) {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+            SalesDetail s = salesDetails.get(rowIndex);
+            if(columnIndex == 3){
+                s.setQuantity((Integer) aValue);
+                s.setSubtotal(s.getPrice().multiply(new BigDecimal(s.getQuantity())));
+                BigDecimal total = BigDecimal.ZERO;
+                for (SalesDetail salesDetail : salesDetails) {
+                    total = total.add(salesDetail.getSubtotal());
+                }
+                if(s.getSales()!=null){
+                    s.getSales().setTotalSales(total);
+                }
+                lblTotal.setText(TextComponentUtils.formatNumber(total));
+            }
+        }
         
     }
 
@@ -382,9 +529,13 @@ public class SalesPanel extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private com.toedter.calendar.JDateChooser jdcTransaction;
     private java.awt.Label lblTotal;
     private javax.swing.JTable tblSalesDetail;
+    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtProductId;
     // End of variables declaration//GEN-END:variables
 

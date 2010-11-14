@@ -34,7 +34,7 @@ public class SalesDetail implements Serializable{
     private BigDecimal price;
 
     @Column(name="SUBTOTAL",nullable=false,precision=18,scale=0)
-    private BigDecimal subtotal;
+    private BigDecimal subtotal = BigDecimal.ZERO;
 
     @ManyToOne
     @JoinColumn(name="SALES_ID",nullable=false)

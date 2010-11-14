@@ -23,7 +23,7 @@ public class BaseDaoHibernate<T> {
         return domain;
     }
     @SuppressWarnings("unchecked")
-    public T getById(Integer id) {
+    public T getById(Long id) {
         return (T) sessionFactory.getCurrentSession().get(domainClass, id);
     }
     public T delete(T domain) {

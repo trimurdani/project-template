@@ -16,7 +16,7 @@ public interface SalesService {
 
     Sales save(Sales sales);
     Sales delete(Sales sales);
-    Sales getSales(Integer id);
+    Sales getSales(Long id);
     List<Sales> getSales();
     List<Sales> getSales(int start, int num);
 
