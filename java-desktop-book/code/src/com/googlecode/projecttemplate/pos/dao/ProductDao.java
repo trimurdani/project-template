@@ -5,7 +5,7 @@
 
 package com.googlecode.projecttemplate.pos.dao;
 
-import com.googlecode.projecttemplate.pos.model.Sales;
+import com.googlecode.projecttemplate.pos.model.Product;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
  * @author ifnu
  */
 @Repository
-public class SalesDao extends BaseDaoHibernate<Sales>{
+public class ProductDao extends BaseDaoHibernate<Product>{
 
 }

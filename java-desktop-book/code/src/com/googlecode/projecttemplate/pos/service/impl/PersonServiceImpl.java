@@ -32,7 +32,7 @@ public class PersonServiceImpl implements PersonService{
     public Long count() {
         return personDao.count();
     }
-    public Person getPerson(Integer id) {
+    public Person getPerson(Long id) {
         return personDao.getById(id);
     }
     public List<Person> getPersons() {

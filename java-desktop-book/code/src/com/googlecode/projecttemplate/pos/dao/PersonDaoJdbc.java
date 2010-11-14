@@ -48,19 +48,19 @@ public class PersonDaoJdbc {
 	if (person.getId() == null) {
 	  insertStatement.setString(1, person.getName());
 	  insertStatement.setString(2, person.getPassword());
-	  int id = insertStatement.executeUpdate();
+	  long id = insertStatement.executeUpdate();
 	  person.setId(id);
 	} else {
 	  updateStatement.setString(1, person.getName());
 	  updateStatement.setString(2, person.getPassword());
-	  updateStatement.setInt(3, person.getId());
+	  updateStatement.setLong(3, person.getId());
 	  updateStatement.executeUpdate();
 	}
 	return person;
     }
 
     public Person delete(Person person) throws SQLException{
-	deleteStatement.setInt(1, person.getId());
+	deleteStatement.setLong(1, person.getId());
 	deleteStatement.executeUpdate();
 	return person;
     }
@@ -71,7 +71,7 @@ public class PersonDaoJdbc {
 	//proses mapping dari relational ke object
 	if (rs.next()) {
 	  Person person = new Person();
-	  person.setId(rs.getInt("id"));
+	  person.setId(rs.getLong("id"));
 	  person.setName(rs.getString("name"));
 	  person.setPassword(rs.getString("password"));
 	  return person;
@@ -84,7 +84,7 @@ public class PersonDaoJdbc {
 	ResultSet rs = getAllStatement.executeQuery();
 	while(rs.next()){
 	  Person person = new Person();
-	  person.setId(rs.getInt("id"));
+	  person.setId(rs.getLong("id"));
 	  person.setName(rs.getString("name"));
 	  person.setPassword(rs.getString("password"));
 	  persons.add(person);

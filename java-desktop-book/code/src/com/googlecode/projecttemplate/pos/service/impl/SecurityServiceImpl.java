@@ -35,7 +35,7 @@ public class SecurityServiceImpl implements SecurityService{
     public Person delete(Person person) {
         return personDao.delete(person);
     }
-    public Person getPerson(Integer id) {
+    public Person getPerson(Long id) {
         return personDao.getById(id);
     }
     public List<Person> getPersons() {
@@ -49,7 +49,7 @@ public class SecurityServiceImpl implements SecurityService{
     public Menu delete(Menu menu) {
         return menuDao.delete(menu);
     }
-    public Menu getMenu(Integer id) {
+    public Menu getMenu(Long id) {
         return menuDao.getById(id);
     }
     public List<Menu> getMenus() {
@@ -63,7 +63,7 @@ public class SecurityServiceImpl implements SecurityService{
     public Role delete(Role role) {
         return roleDao.delete(role);
     }
-    public Role getRole(Integer id) {
+    public Role getRole(Long id) {
         return roleDao.getById(id);
     }
     public List<Role> getRoles() {
