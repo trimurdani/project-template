@@ -21,7 +21,7 @@ public class MainJdbc {
         dataSource.setPassword("");
         dataSource.setDatabaseName("latihan");
         dataSource.setServerName("localhost");
-        dataSource.setPortNumber(1527);
+        dataSource.setPortNumber(3306);
 
         ServiceJdbc service = new ServiceJdbc();
         service.setDataSource(dataSource);
