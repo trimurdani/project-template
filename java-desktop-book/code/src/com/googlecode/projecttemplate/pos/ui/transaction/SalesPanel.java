@@ -12,7 +12,6 @@
 package com.googlecode.projecttemplate.pos.ui.transaction;
 
 import com.googlecode.projecttemplate.pos.Main;
-import com.googlecode.projecttemplate.pos.Main;
 import com.googlecode.projecttemplate.pos.model.Product;
 import com.googlecode.projecttemplate.pos.model.Sales;
 import com.googlecode.projecttemplate.pos.model.SalesDetail;
@@ -80,6 +79,23 @@ public class SalesPanel extends javax.swing.JInternalFrame {
         setMaximizable(true);
         setResizable(true);
         setTitle("Penjualan");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosing(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         btnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/mnudoor.png"))); // NOI18N
         btnExit.setText("Keluar");
@@ -145,6 +161,7 @@ public class SalesPanel extends javax.swing.JInternalFrame {
                 "Kode Barang", "Nama Barang", "Harga Satuan", "Kuantitas", "Sub Total"
             }
         ));
+        tblSalesDetail.setCellSelectionEnabled(true);
         jScrollPane1.setViewportView(tblSalesDetail);
 
         jLabel1.setText("Kode Barang");
@@ -162,7 +179,7 @@ public class SalesPanel extends javax.swing.JInternalFrame {
             }
         });
 
-        lblTotal.setFont(new java.awt.Font("Courier New", 1, 24));
+        lblTotal.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
         lblTotal.setText("Rp. 0");
 
         jLabel2.setText("ID Transaksi");
@@ -259,60 +276,80 @@ public class SalesPanel extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void clearForm(){
-        txtProductId.setText("");
-        lblTotal.setText("Rp. 0");
-        jdcTransaction.setDate(new Date());
-        salesDetails = new ArrayList<SalesDetail>();
-        sales = null;
-        tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
-    }
+private void clearForm(){
+    txtProductId.setText("");
+    lblTotal.setText("Rp. 0");
+    jdcTransaction.setDate(new Date());
+    salesDetails = new ArrayList<SalesDetail>();
+    sales = null;
+    tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
+}
 
-    private void enableForm(boolean status){
-        txtProductId.setEnabled(status);
-        btnLookupProduct.setEnabled(status);
-        tblSalesDetail.setEnabled(status);
-    }
+private void enableForm(boolean status){
+    txtProductId.setEnabled(status);
+    btnLookupProduct.setEnabled(status);
+    tblSalesDetail.setEnabled(status);
+}
 
-    private boolean validateForm(){
-        if(salesDetails==null || salesDetails.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Transaksi tidak boleh kosong!"
-                    ,"Error",JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        return true;
+private boolean validateForm(){
+    if(salesDetails==null || salesDetails.isEmpty()){
+        JOptionPane.showMessageDialog(this, "Transaksi tidak boleh kosong!"
+                ,"Error",JOptionPane.ERROR_MESSAGE);
+        return false;
     }
+    return true;
+}
 
-    private void loadFormToModel(){
-        sales.setSalesDetails(salesDetails);
-        sales.setSalesDate(new Date());
+private void loadFormToModel(){
+    sales.setSalesDetails(salesDetails);
+    sales.setSalesDate(new Date());
+    BigDecimal total = BigDecimal.ZERO;
+    for (SalesDetail salesDetail : salesDetails) {
+        total = total.add(salesDetail.getSubtotal());
+        salesDetail.setSales(sales);
+    }
+    sales.setTotalSales(total);
+}
+
+private void loadModelToForm(){
+    salesDetails = sales.getSalesDetails();
+    tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
+    lblTotal.setText(TextComponentUtils.formatNumber(sales.getTotalSales()));
+}
+
+private void refreshTable(){
+    tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
+}
+
+private void refreshTotalLabel(){
+    if(salesDetails!=null && !salesDetails.isEmpty()){
         BigDecimal total = BigDecimal.ZERO;
         for (SalesDetail salesDetail : salesDetails) {
             total = total.add(salesDetail.getSubtotal());
-            salesDetail.setSales(sales);
         }
-        sales.setTotalSales(total);
+        lblTotal.setText("Rp. " + TextComponentUtils.formatNumber(total));
     }
+}
 
-    private void loadModelToForm(){
-        salesDetails = sales.getSalesDetails();
-        tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
-        lblTotal.setText(TextComponentUtils.formatNumber(sales.getTotalSales()));
-    }
-
-    private void refreshTable(){
-        tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
-    }
-
-    private void refreshTotalLabel(){
-        if(salesDetails!=null && !salesDetails.isEmpty()){
-            BigDecimal total = BigDecimal.ZERO;
-            for (SalesDetail salesDetail : salesDetails) {
-                total = total.add(salesDetail.getSubtotal());
-            }
-            lblTotal.setText("Rp. " + TextComponentUtils.formatNumber(total));
+private void addSalesDetail(Product p){
+    if(p!=null){
+        SalesDetail salesDetail = new SalesDetail();
+        salesDetail.setProduct(p);
+        salesDetail.setPrice(p.getPrice());
+        salesDetail.setQuantity(1);
+        if(salesDetail.getSubtotal() != null){
+            salesDetail.setSubtotal(salesDetail.getSubtotal().add(p.getPrice()));
+        } else {
+            salesDetail.setSubtotal(p.getPrice());
         }
+        salesDetails.add(salesDetail);
+        refreshTable();
+        refreshTotalLabel();
+    } else {
+        JOptionPane.showMessageDialog(this, "Barang tidak ada!"
+            ,"Error",JOptionPane.ERROR_MESSAGE);
     }
+}
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         Main.getFrame().salesPanel = null;
@@ -416,9 +453,28 @@ public class SalesPanel extends javax.swing.JInternalFrame {
     private void txtProductIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProductIdActionPerformed
         String productId = txtProductId.getText();
         try {
+            //cari apakah barang sudah ada di dalam tblSalesDetail
             Long pId = Long.valueOf(productId);
-            Product p = Main.getProductService().getProduct(pId);
-            addSalesDetail(p);
+            boolean isProductInSalesDetails = false;
+            for (SalesDetail salesDetail : salesDetails) {
+                if(salesDetail.getId()!=null
+                        && salesDetail.getProduct().getId().equals(pId)){
+                    salesDetail.setQuantity(salesDetail.getQuantity() + 1);
+                    salesDetail.setSubtotal(
+                        salesDetail.getPrice().multiply(
+                            new BigDecimal(salesDetail.getQuantity())));
+                    isProductInSalesDetails = true;
+                    break;
+                }
+            }
+            if(isProductInSalesDetails){
+                refreshTotalLabel();
+            } else {
+                Product p = Main.getProductService().getProduct(pId);
+                if(p!=null){
+                    addSalesDetail(p);
+                }
+            }
             txtProductId.setText("");
         } catch (NumberFormatException numberFormatException) {
             JOptionPane.showMessageDialog(this, "Id barang harus berupa angka!"
@@ -426,97 +482,92 @@ public class SalesPanel extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_txtProductIdActionPerformed
 
-    private void addSalesDetail(Product p){
-        if(p!=null){
-            SalesDetail salesDetail = new SalesDetail();
-            salesDetail.setProduct(p);
-            salesDetail.setPrice(p.getPrice());
-            salesDetail.setQuantity(1);
-            if(salesDetail.getSubtotal() != null){
-                salesDetail.setSubtotal(salesDetail.getSubtotal().add(p.getPrice()));
-            } else {
-                salesDetail.setSubtotal(p.getPrice());
-            }
-            salesDetails.add(salesDetail);
-            refreshTable();
-            refreshTotalLabel();
-        } else {
-            JOptionPane.showMessageDialog(this, "Barang tidak ada!"
-                ,"Error",JOptionPane.ERROR_MESSAGE);
-        }
-    }
 
     private void btnLookupProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLookupProductActionPerformed
         Product p = new ProductLookupDialog().getProduct();
         if(p!=null){
-            addSalesDetail(p);
+            boolean isProductInSalesDetails = false;
+            for (SalesDetail salesDetail : salesDetails) {
+                if(salesDetail.getId()!=null
+                        && salesDetail.getProduct().getId().equals(p.getId())){
+                    salesDetail.setQuantity(salesDetail.getQuantity() + 1);
+                    salesDetail.setSubtotal(
+                        salesDetail.getPrice().multiply(
+                            new BigDecimal(salesDetail.getQuantity())));
+                    isProductInSalesDetails = true;
+                    break;
+                }
+            }
+            if(isProductInSalesDetails){
+                refreshTotalLabel();
+            } else {
+                addSalesDetail(p);
+            }
         }
     }//GEN-LAST:event_btnLookupProductActionPerformed
 
-    private class SalesDetailTableModel extends AbstractTableModel{
+    private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
+        Main.getFrame().salesPanel = null;
+    }//GEN-LAST:event_formInternalFrameClosing
 
-        private List<SalesDetail> salesDetails;
+private class SalesDetailTableModel extends AbstractTableModel{
 
-        SalesDetailTableModel(List<SalesDetail> salesDetails) {
-            this.salesDetails = salesDetails;
-        }
+    private List<SalesDetail> salesDetails;
 
-        public int getRowCount() {
-            return salesDetails.size();
-        }
-
-        public int getColumnCount() {
-            return 5;
-        }
-
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            SalesDetail s = salesDetails.get(rowIndex);
-            switch(columnIndex){
-                case 0: return s.getProduct().getId();
-                case 1: return s.getProduct().getName();
-                case 2: return s.getPrice();
-                case 3: return s.getQuantity();
-                case 4: return s.getSubtotal();
-                default: return "";
-            }
-        }
-
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            if(columnIndex == 2 || columnIndex == 4){
-                return BigDecimal.class;
-            } else if(columnIndex == 3){
-                return Integer.class;
-            }
-            return String.class;
-        }
-
-        @Override
-        public boolean isCellEditable(int rowIndex, int columnIndex) {
-            if(columnIndex == 3) {
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-            SalesDetail s = salesDetails.get(rowIndex);
-            if(columnIndex == 3){
-                s.setQuantity((Integer) aValue);
-                s.setSubtotal(s.getPrice().multiply(new BigDecimal(s.getQuantity())));
-                BigDecimal total = BigDecimal.ZERO;
-                for (SalesDetail salesDetail : salesDetails) {
-                    total = total.add(salesDetail.getSubtotal());
-                }
-                if(s.getSales()!=null){
-                    s.getSales().setTotalSales(total);
-                }
-                lblTotal.setText(TextComponentUtils.formatNumber(total));
-            }
-        }
-        
+    SalesDetailTableModel(List<SalesDetail> salesDetails) {
+        this.salesDetails = salesDetails;
     }
+
+    public int getRowCount() {
+        return salesDetails.size();
+    }
+
+    public int getColumnCount() {
+        return 5;
+    }
+
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        SalesDetail s = salesDetails.get(rowIndex);
+        switch(columnIndex){
+            case 0: return s.getProduct().getId();
+            case 1: return s.getProduct().getName();
+            case 2: return s.getPrice();
+            case 3: return s.getQuantity();
+            case 4: return s.getSubtotal();
+            default: return "";
+        }
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        if(columnIndex == 2 || columnIndex == 4){
+            return BigDecimal.class;
+        } else if(columnIndex == 3){
+            return Integer.class;
+        }
+        return String.class;
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        if(columnIndex == 3) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        SalesDetail s = salesDetails.get(rowIndex);
+        if(columnIndex == 3){
+            s.setQuantity((Integer) aValue);
+            s.setSubtotal(s.getPrice().multiply(
+                    new BigDecimal(s.getQuantity())));
+            refreshTotalLabel();
+        }
+    }
+
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

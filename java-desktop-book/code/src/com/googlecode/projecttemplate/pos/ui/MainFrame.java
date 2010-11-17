@@ -49,6 +49,7 @@ public MainFrame() {
         mnuSales = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Aplikasi POS Toko Bangkit");
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);

@@ -20,5 +20,4 @@ public interface SalesService {
     List<Sales> getSales();
     List<Sales> getSales(int start, int num);
 
-
 }
