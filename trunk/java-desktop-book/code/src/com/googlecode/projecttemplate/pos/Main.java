@@ -5,7 +5,6 @@
 
 package com.googlecode.projecttemplate.pos;
 
-import com.googlecode.projecttemplate.pos.model.Product;
 import com.googlecode.projecttemplate.pos.service.ProductService;
 import com.googlecode.projecttemplate.pos.service.SalesService;
 import com.googlecode.projecttemplate.pos.service.SecurityService;

@@ -14,7 +14,6 @@ package com.googlecode.projecttemplate.pos.ui.transaction;
 import com.googlecode.projecttemplate.pos.Main;
 import com.googlecode.projecttemplate.pos.model.Product;
 import com.googlecode.projecttemplate.pos.util.ComponentUtils;
-import com.googlecode.projecttemplate.pos.util.TextComponentUtils;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -30,7 +29,6 @@ public class ProductLookupDialog extends javax.swing.JDialog {
     private Product product;
     private List<Product> products;
 
-    /** Creates new form ProductLookupDialog */
     public ProductLookupDialog() {
         super(Main.getFrame(), true);
         initComponents();
@@ -68,11 +66,6 @@ public class ProductLookupDialog extends javax.swing.JDialog {
 
         jLabel1.setText("Cari");
 
-        txtSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSearchActionPerformed(evt);
-            }
-        });
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtSearchKeyReleased(evt);
@@ -140,10 +133,6 @@ public class ProductLookupDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        btnOkActionPerformed(evt);
-    }//GEN-LAST:event_txtSearchActionPerformed
-
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         for(int i =0;i<tblProduct.getRowCount();i++){
             String val = tblProduct.getValueAt(i, 0).toString();
@@ -179,33 +168,33 @@ public class ProductLookupDialog extends javax.swing.JDialog {
 
     }
 
-    private class ProductTableModel extends AbstractTableModel{
+private class ProductTableModel extends AbstractTableModel{
 
-        private List<Product> products;
+    private List<Product> products;
 
-        public ProductTableModel(List<Product> products) {
-            this.products = products;
-        }
-
-        public int getRowCount() {
-            return products.size();
-        }
-
-        public int getColumnCount() {
-            return 3;
-        }
-
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            Product p = products.get(rowIndex);
-            switch(columnIndex){
-                case 0: return p.getId();
-                case 1: return p.getName();
-                case 2: return p.getPrice();
-                default: return "";
-            }
-        }
-
+    public ProductTableModel(List<Product> products) {
+        this.products = products;
     }
+
+    public int getRowCount() {
+        return products.size();
+    }
+
+    public int getColumnCount() {
+        return 3;
+    }
+
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        Product p = products.get(rowIndex);
+        switch(columnIndex){
+            case 0: return p.getId();
+            case 1: return p.getName();
+            case 2: return p.getPrice();
+            default: return "";
+        }
+    }
+
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
