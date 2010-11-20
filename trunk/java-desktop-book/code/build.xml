@@ -10,6 +10,25 @@
 <project name="POS" default="default" basedir=".">
     <description>Builds, tests, and runs the project POS.</description>
     <import file="nbproject/build-impl.xml"/>
+    <taskdef name="jrc"
+        classname="net.sf.jasperreports.ant.JRAntCompileTask">
+        <classpath>
+            <fileset dir="./lib">
+                <include name="**/*.jar"/>
+            </fileset>
+        </classpath>
+    </taskdef>
+    <target name="-post-compile">
+        <mkdir dir="./build/reports"/>
+        <jrc
+            srcdir="./src/reports"
+            destdir="./src/reports"
+            tempdir="./build/reports"
+            keepjava="true"
+            xmlvalidation="true">
+            <include name="**/*.jrxml"/>
+        </jrc>
+    </target>
     <!--
 
     There exist several targets which are by default empty and which can be 
