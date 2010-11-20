@@ -470,7 +470,7 @@ private void addSalesDetail(Product p){
                 }
             }
             if(isProductInSalesDetails){
-                tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
+                refreshTable();
                 refreshTotalLabel();
             } else {
                 Product p = Main.getProductService().getProduct(pId);
@@ -501,7 +501,7 @@ private void addSalesDetail(Product p){
                 }
             }
             if(isProductInSalesDetails){
-                tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
+                refreshTable();
                 refreshTotalLabel();
             } else {
                 addSalesDetail(p);

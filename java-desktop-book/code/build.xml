@@ -20,6 +20,9 @@
     </taskdef>
     <target name="-post-compile">
         <mkdir dir="./build/reports"/>
+        <delete>
+            <fileset file="./src/reports/*.jasper"/>
+        </delete>
         <jrc
             srcdir="./src/reports"
             destdir="./src/reports"
