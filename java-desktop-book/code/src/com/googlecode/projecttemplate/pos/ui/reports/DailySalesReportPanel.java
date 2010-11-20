@@ -44,6 +44,7 @@ public class DailySalesReportPanel extends javax.swing.JInternalFrame {
         btnKeluar = new javax.swing.JButton();
         pnlReport = new javax.swing.JPanel();
 
+        setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);

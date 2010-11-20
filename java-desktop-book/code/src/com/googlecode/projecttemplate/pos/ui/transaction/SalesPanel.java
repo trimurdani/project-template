@@ -68,11 +68,11 @@ public class SalesPanel extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         txtProductId = new javax.swing.JTextField();
         btnLookupProduct = new javax.swing.JButton();
-        lblTotal = new java.awt.Label();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         jdcTransaction = new com.toedter.calendar.JDateChooser();
+        lblTotal = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -179,9 +179,6 @@ public class SalesPanel extends javax.swing.JInternalFrame {
             }
         });
 
-        lblTotal.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
-        lblTotal.setText("Rp. 0");
-
         jLabel2.setText("ID Transaksi");
 
         jLabel3.setText("Tanggal");
@@ -189,6 +186,9 @@ public class SalesPanel extends javax.swing.JInternalFrame {
         txtId.setEnabled(false);
 
         jdcTransaction.setEnabled(false);
+
+        lblTotal.setFont(new java.awt.Font("Courier New", 1, 36)); // NOI18N
+        lblTotal.setText("Rp. 0");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -227,15 +227,15 @@ public class SalesPanel extends javax.swing.JInternalFrame {
                                 .addComponent(btnLookupProduct))
                             .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jdcTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
+                                .addGap(80, 80, 80))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                                .addGap(20, 20, 20))))))
+                                .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())))))
         );
 
         layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdd, btnCancel, btnDelete, btnEdit, btnExit, btnSave, btnSearch});
@@ -259,14 +259,17 @@ public class SalesPanel extends javax.swing.JInternalFrame {
                         .addComponent(jLabel3)
                         .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jdcTransaction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnLookupProduct))
-                    .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtProductId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnLookupProduct)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(9, 9, 9)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -457,8 +460,7 @@ private void addSalesDetail(Product p){
             Long pId = Long.valueOf(productId);
             boolean isProductInSalesDetails = false;
             for (SalesDetail salesDetail : salesDetails) {
-                if(salesDetail.getId()!=null
-                        && salesDetail.getProduct().getId().equals(pId)){
+                if(salesDetail.getProduct().getId().equals(pId)){
                     salesDetail.setQuantity(salesDetail.getQuantity() + 1);
                     salesDetail.setSubtotal(
                         salesDetail.getPrice().multiply(
@@ -468,6 +470,7 @@ private void addSalesDetail(Product p){
                 }
             }
             if(isProductInSalesDetails){
+                tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
                 refreshTotalLabel();
             } else {
                 Product p = Main.getProductService().getProduct(pId);
@@ -488,8 +491,7 @@ private void addSalesDetail(Product p){
         if(p!=null){
             boolean isProductInSalesDetails = false;
             for (SalesDetail salesDetail : salesDetails) {
-                if(salesDetail.getId()!=null
-                        && salesDetail.getProduct().getId().equals(p.getId())){
+                if(salesDetail.getProduct().getId().equals(p.getId())){
                     salesDetail.setQuantity(salesDetail.getQuantity() + 1);
                     salesDetail.setSubtotal(
                         salesDetail.getPrice().multiply(
@@ -499,6 +501,7 @@ private void addSalesDetail(Product p){
                 }
             }
             if(isProductInSalesDetails){
+                tblSalesDetail.setModel(new SalesDetailTableModel(salesDetails));
                 refreshTotalLabel();
             } else {
                 addSalesDetail(p);
@@ -584,7 +587,7 @@ private class SalesDetailTableModel extends AbstractTableModel{
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private com.toedter.calendar.JDateChooser jdcTransaction;
-    private java.awt.Label lblTotal;
+    private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblSalesDetail;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtProductId;
