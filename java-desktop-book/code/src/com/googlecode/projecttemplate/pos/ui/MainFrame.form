@@ -39,7 +39,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="btnReport">
+        <Menu class="javax.swing.JMenu" name="mnuReport">
           <Properties>
             <Property name="text" type="java.lang.String" value="Laporan"/>
           </Properties>

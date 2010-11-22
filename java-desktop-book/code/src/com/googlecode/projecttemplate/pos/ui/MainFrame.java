@@ -48,7 +48,7 @@ public MainFrame() {
         mnuPerson = new javax.swing.JMenuItem();
         mnuTransaction = new javax.swing.JMenu();
         mnuSales = new javax.swing.JMenuItem();
-        btnReport = new javax.swing.JMenu();
+        mnuReport = new javax.swing.JMenu();
         mnuDailySalesReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -81,7 +81,7 @@ public MainFrame() {
 
         jMenuBar1.add(mnuTransaction);
 
-        btnReport.setText("Laporan");
+        mnuReport.setText("Laporan");
 
         mnuDailySalesReport.setText("Laporan Penjualan Harian");
         mnuDailySalesReport.addActionListener(new java.awt.event.ActionListener() {
@@ -89,9 +89,9 @@ public MainFrame() {
                 mnuDailySalesReportActionPerformed(evt);
             }
         });
-        btnReport.add(mnuDailySalesReport);
+        mnuReport.add(mnuDailySalesReport);
 
-        jMenuBar1.add(btnReport);
+        jMenuBar1.add(mnuReport);
 
         setJMenuBar(jMenuBar1);
 
@@ -145,7 +145,6 @@ public MainFrame() {
     }//GEN-LAST:event_mnuSalesActionPerformed
 
     public DailySalesReportPanel dailySalesReportPanel;
-
     private void mnuDailySalesReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuDailySalesReportActionPerformed
        try {
             if (dailySalesReportPanel == null) {
@@ -167,13 +166,13 @@ public MainFrame() {
     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu btnReport;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem mnuDailySalesReport;
     private javax.swing.JMenu mnuMasterData;
     private javax.swing.JMenuItem mnuPerson;
+    private javax.swing.JMenu mnuReport;
     private javax.swing.JMenuItem mnuSales;
     private javax.swing.JMenu mnuTransaction;
     // End of variables declaration//GEN-END:variables

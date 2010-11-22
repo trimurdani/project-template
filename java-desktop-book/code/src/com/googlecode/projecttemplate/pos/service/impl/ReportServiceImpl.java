@@ -43,7 +43,8 @@ public class ReportServiceImpl implements ReportService{
                     + " where day(s.sales.salesDate) = day(:date) "
                     + " group by s.product.name order by s.product.name")
                     .setParameter("date", date)
-                    .setResultTransformer(Transformers.aliasToBean(DailySalesReport.class))
+                    .setResultTransformer(
+                        Transformers.aliasToBean(DailySalesReport.class))
                     .list();
 
             InputStream is = ReportServiceImpl.class
@@ -52,8 +53,8 @@ public class ReportServiceImpl implements ReportService{
             Map<String,Object> parameters = new HashMap<String, Object>();
             parameters.put("date", date);
 
-            return JasperFillManager.fillReport(is, parameters, new
-                    JRBeanCollectionDataSource(dailySalesReports));
+            return JasperFillManager.fillReport(is, parameters, 
+                    new JRBeanCollectionDataSource(dailySalesReports));
         }catch(JRException ex){
             log.error("error generate DailySalesReport", ex);
         }

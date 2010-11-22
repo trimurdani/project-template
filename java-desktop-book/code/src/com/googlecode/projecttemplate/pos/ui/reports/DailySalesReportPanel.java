@@ -41,7 +41,7 @@ public class DailySalesReportPanel extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jdcTransactionDate = new com.toedter.calendar.JDateChooser();
         btnOk = new javax.swing.JButton();
-        btnKeluar = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
         pnlReport = new javax.swing.JPanel();
 
         setClosable(true);
@@ -76,10 +76,10 @@ public class DailySalesReportPanel extends javax.swing.JInternalFrame {
             }
         });
 
-        btnKeluar.setText("Keluar");
-        btnKeluar.addActionListener(new java.awt.event.ActionListener() {
+        btnExit.setText("Keluar");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnKeluarActionPerformed(evt);
+                btnExitActionPerformed(evt);
             }
         });
 
@@ -100,7 +100,7 @@ public class DailySalesReportPanel extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnOk)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnKeluar)))
+                        .addComponent(btnExit)))
                 .addContainerGap(233, Short.MAX_VALUE))
             .addComponent(pnlReport, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
         );
@@ -114,7 +114,7 @@ public class DailySalesReportPanel extends javax.swing.JInternalFrame {
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnOk)
-                    .addComponent(btnKeluar))
+                    .addComponent(btnExit))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlReport, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE))
         );
@@ -131,10 +131,10 @@ public class DailySalesReportPanel extends javax.swing.JInternalFrame {
         pnlReport.updateUI();
     }//GEN-LAST:event_btnOkActionPerformed
 
-    private void btnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKeluarActionPerformed
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         Main.getFrame().dailySalesReportPanel = null;
         dispose();;
-    }//GEN-LAST:event_btnKeluarActionPerformed
+    }//GEN-LAST:event_btnExitActionPerformed
 
     private void formInternalFrameClosing(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosing
         Main.getFrame().dailySalesReportPanel = null;
@@ -142,7 +142,7 @@ public class DailySalesReportPanel extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnKeluar;
+    private javax.swing.JButton btnExit;
     private javax.swing.JButton btnOk;
     private javax.swing.JLabel jLabel1;
     private com.toedter.calendar.JDateChooser jdcTransactionDate;
