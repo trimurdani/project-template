@@ -48,8 +48,10 @@ public class Main {
     public static void main(String[] args) {
          java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+//                ApplicationContext applicationContext =
+//                        new ClassPathXmlApplicationContext("applicationContext.xml");
                 ApplicationContext applicationContext =
-                        new ClassPathXmlApplicationContext("applicationContext.xml");
+                        new ClassPathXmlApplicationContext("clientContext.xml");
                 securityService = (SecurityService) applicationContext.getBean("securityService");
                 salesService = (SalesService) applicationContext.getBean("salesService");
                 productService = (ProductService) applicationContext.getBean("productService");

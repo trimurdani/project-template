@@ -37,7 +37,7 @@ public class ReportServiceImpl implements ReportService{
     public JasperPrint getDailySalesReport(Date date) {
         try{
             List<DailySalesReport> dailySalesReports =
-                    sessionFactory.getCurrentSession()
+                sessionFactory.getCurrentSession()
                     .createQuery("select s.product.name as productName, sum(s.quantity) as quantity, "
                     + " sum(s.subtotal) as subTotal from SalesDetail s "
                     + " where day(s.sales.salesDate) = day(:date) "

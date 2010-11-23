@@ -1,0 +1,75 @@
+2010-11-21 15:53:24,387 [AWT-EventQueue-0] INFO (AbstractApplicationContext.java:411) ­ Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@332611a7: display name [org.springframework.context.support.ClassPathXmlApplicationContext@332611a7]; startup date [Sun Nov 21 15:53:24 SGT 2010]; root of context hierarchy
+2010-11-21 15:53:25,282 [AWT-EventQueue-0] INFO (XmlBeanDefinitionReader.java:323) ­ Loading XML bean definitions from class path resource [applicationContext.xml]
+2010-11-21 15:53:26,872 [AWT-EventQueue-0] INFO (AbstractApplicationContext.java:426) ­ Bean factory for application context [org.springframework.context.support.ClassPathXmlApplicationContext@332611a7]: org.springframework.beans.factory.support.DefaultListableBeanFactory@79038de7
+2010-11-21 15:53:27,210 [AWT-EventQueue-0] INFO (PropertiesLoaderSupport.java:178) ­ Loading properties file from class path resource [jdbc.properties]
+2010-11-21 15:53:27,507 [AWT-EventQueue-0] INFO (DefaultListableBeanFactory.java:414) ­ Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@79038de7: defining beans [org.springframework.beans.factory.config.PropertyPlaceholderConfigurer#0,menuDao,personDao,productDao,purchaseDao,roleDao,salesDao,personService,productService,purchaseService,reportService,salesService,securityService,org.springframework.context.annotation.internalPersistenceAnnotationProcessor,org.springframework.context.annotation.internalCommonAnnotationProcessor,org.springframework.context.annotation.internalAutowiredAnnotationProcessor,org.springframework.context.annotation.internalRequiredAnnotationProcessor,org.springframework.aop.config.internalAutoProxyCreator,org.springframework.transaction.annotation.AnnotationTransactionAttributeSource#0,org.springframework.transaction.interceptor.TransactionInterceptor#0,org.springframework.transaction.config.internalTransactionAdvisor,dataSource,sessionFactory,transactionManager]; root of factory hierarchy
+2010-11-21 15:53:27,860 [AWT-EventQueue-0] INFO (DriverManagerDataSource.java:155) ­ Loaded JDBC driver: com.mysql.jdbc.Driver
+2010-11-21 15:53:28,025 [AWT-EventQueue-0] INFO (Version.java:15) ­ Hibernate Annotations 3.3.1.GA
+2010-11-21 15:53:28,104 [AWT-EventQueue-0] INFO (Environment.java:514) ­ Hibernate 3.2.5
+2010-11-21 15:53:28,108 [AWT-EventQueue-0] INFO (Environment.java:547) ­ hibernate.properties not found
+2010-11-21 15:53:28,111 [AWT-EventQueue-0] INFO (Environment.java:681) ­ Bytecode provider name : cglib
+2010-11-21 15:53:28,116 [AWT-EventQueue-0] INFO (Environment.java:598) ­ using JDK 1.4 java.sql.Timestamp handling
+2010-11-21 15:53:28,919 [AWT-EventQueue-0] INFO (Configuration.java:1441) ­ configuring from url: file:/Users/ifnu/NetBeansProjects/project-template/java-desktop-book/code/build/classes/hibernate.cfg.xml
+2010-11-21 15:53:29,281 [AWT-EventQueue-0] INFO (Configuration.java:1541) ­ Configured SessionFactory: null
+2010-11-21 15:53:29,430 [AWT-EventQueue-0] INFO (AnnotationBinder.java:418) ­ Binding entity from annotated class: com.googlecode.projecttemplate.pos.model.Person
+2010-11-21 15:53:29,505 [AWT-EventQueue-0] INFO (EntityBinder.java:424) ­ Bind entity com.googlecode.projecttemplate.pos.model.Person on table T_PERSON
+2010-11-21 15:53:29,762 [AWT-EventQueue-0] INFO (AnnotationBinder.java:418) ­ Binding entity from annotated class: com.googlecode.projecttemplate.pos.model.Customer
+2010-11-21 15:53:29,763 [AWT-EventQueue-0] INFO (EntityBinder.java:424) ­ Bind entity com.googlecode.projecttemplate.pos.model.Customer on table T_CUSTOMER
+2010-11-21 15:53:29,810 [AWT-EventQueue-0] INFO (AnnotationBinder.java:418) ­ Binding entity from annotated class: com.googlecode.projecttemplate.pos.model.MemberCustomer
+2010-11-21 15:53:29,811 [AWT-EventQueue-0] INFO (EntityBinder.java:424) ­ Bind entity com.googlecode.projecttemplate.pos.model.MemberCustomer on table T_MEMBER_CUSTOMER
+2010-11-21 15:53:29,848 [AWT-EventQueue-0] INFO (AnnotationBinder.java:418) ­ Binding entity from annotated class: com.googlecode.projecttemplate.pos.model.Menu
+2010-11-21 15:53:29,849 [AWT-EventQueue-0] INFO (EntityBinder.java:424) ­ Bind entity com.googlecode.projecttemplate.pos.model.Menu on table T_MENU
+2010-11-21 15:53:29,851 [AWT-EventQueue-0] INFO (AnnotationBinder.java:418) ­ Binding entity from annotated class: com.googlecode.projecttemplate.pos.model.Product
+2010-11-21 15:53:29,852 [AWT-EventQueue-0] INFO (EntityBinder.java:424) ­ Bind entity com.googlecode.projecttemplate.pos.model.Product on table T_PRODUCT
+2010-11-21 15:53:29,855 [AWT-EventQueue-0] INFO (AnnotationBinder.java:418) ­ Binding entity from annotated class: com.googlecode.projecttemplate.pos.model.Purchase
+2010-11-21 15:53:29,855 [AWT-EventQueue-0] INFO (EntityBinder.java:424) ­ Bind entity com.googlecode.projecttemplate.pos.model.Purchase on table T_PURCHASE
+2010-11-21 15:53:29,883 [AWT-EventQueue-0] INFO (AnnotationBinder.java:418) ­ Binding entity from annotated class: com.googlecode.projecttemplate.pos.model.PurchaseDetail
+2010-11-21 15:53:29,884 [AWT-EventQueue-0] INFO (EntityBinder.java:424) ­ Bind entity com.googlecode.projecttemplate.pos.model.PurchaseDetail on table T_PURCHASE_DETAIL
+2010-11-21 15:53:29,889 [AWT-EventQueue-0] INFO (AnnotationBinder.java:418) ­ Binding entity from annotated class: com.googlecode.projecttemplate.pos.model.Role
+2010-11-21 15:53:29,889 [AWT-EventQueue-0] INFO (EntityBinder.java:424) ­ Bind entity com.googlecode.projecttemplate.pos.model.Role on table T_ROLE
+2010-11-21 15:53:29,897 [AWT-EventQueue-0] INFO (AnnotationBinder.java:418) ­ Binding entity from annotated class: com.googlecode.projecttemplate.pos.model.Sales
+2010-11-21 15:53:29,898 [AWT-EventQueue-0] INFO (EntityBinder.java:424) ­ Bind entity com.googlecode.projecttemplate.pos.model.Sales on table T_SALES
+2010-11-21 15:53:29,900 [AWT-EventQueue-0] INFO (AnnotationBinder.java:418) ­ Binding entity from annotated class: com.googlecode.projecttemplate.pos.model.SalesDetail
+2010-11-21 15:53:29,901 [AWT-EventQueue-0] INFO (EntityBinder.java:424) ­ Bind entity com.googlecode.projecttemplate.pos.model.SalesDetail on table T_SALES_DETAIL
+2010-11-21 15:53:29,973 [AWT-EventQueue-0] INFO (CollectionBinder.java:651) ­ Mapping collection: com.googlecode.projecttemplate.pos.model.Purchase.purchaseDetail -> T_PURCHASE_DETAIL
+2010-11-21 15:53:29,973 [AWT-EventQueue-0] INFO (CollectionBinder.java:651) ­ Mapping collection: com.googlecode.projecttemplate.pos.model.Sales.salesDetails -> T_SALES_DETAIL
+2010-11-21 15:53:29,976 [AWT-EventQueue-0] INFO (AnnotationConfiguration.java:365) ­ Hibernate Validator not found: ignoring
+2010-11-21 15:53:29,977 [AWT-EventQueue-0] INFO (LocalSessionFactoryBean.java:730) ­ Building new Hibernate SessionFactory
+2010-11-21 15:53:30,032 [AWT-EventQueue-0] INFO (ConnectionProviderFactory.java:72) ­ Initializing connection provider: org.springframework.orm.hibernate3.LocalDataSourceConnectionProvider
+2010-11-21 15:53:31,246 [AWT-EventQueue-0] INFO (SettingsFactory.java:89) ­ RDBMS: MySQL, version: 5.1.52
+2010-11-21 15:53:31,247 [AWT-EventQueue-0] INFO (SettingsFactory.java:90) ­ JDBC driver: MySQL-AB JDBC Driver, version: mysql-connector-java-5.1.6 ( Revision: ${svn.Revision} )
+2010-11-21 15:53:31,286 [AWT-EventQueue-0] INFO (Dialect.java:152) ­ Using dialect: org.hibernate.dialect.MySQLInnoDBDialect
+2010-11-21 15:53:31,290 [AWT-EventQueue-0] INFO (TransactionFactoryFactory.java:34) ­ Transaction strategy: org.springframework.orm.hibernate3.SpringTransactionFactory
+2010-11-21 15:53:31,307 [AWT-EventQueue-0] INFO (TransactionManagerLookupFactory.java:33) ­ No TransactionManagerLookup configured (in JTA environment, use of read-write or transactional second-level cache is not recommended)
+2010-11-21 15:53:31,309 [AWT-EventQueue-0] INFO (SettingsFactory.java:143) ­ Automatic flush during beforeCompletion(): disabled
+2010-11-21 15:53:31,309 [AWT-EventQueue-0] INFO (SettingsFactory.java:147) ­ Automatic session close at end of transaction: disabled
+2010-11-21 15:53:31,310 [AWT-EventQueue-0] INFO (SettingsFactory.java:154) ­ JDBC batch size: 15
+2010-11-21 15:53:31,311 [AWT-EventQueue-0] INFO (SettingsFactory.java:157) ­ JDBC batch updates for versioned data: disabled
+2010-11-21 15:53:31,313 [AWT-EventQueue-0] INFO (SettingsFactory.java:162) ­ Scrollable result sets: enabled
+2010-11-21 15:53:31,313 [AWT-EventQueue-0] INFO (SettingsFactory.java:170) ­ JDBC3 getGeneratedKeys(): enabled
+2010-11-21 15:53:31,314 [AWT-EventQueue-0] INFO (SettingsFactory.java:178) ­ Connection release mode: auto
+2010-11-21 15:53:31,316 [AWT-EventQueue-0] INFO (SettingsFactory.java:202) ­ Maximum outer join fetch depth: 2
+2010-11-21 15:53:31,317 [AWT-EventQueue-0] INFO (SettingsFactory.java:205) ­ Default batch fetch size: 1
+2010-11-21 15:53:31,317 [AWT-EventQueue-0] INFO (SettingsFactory.java:209) ­ Generate SQL with comments: disabled
+2010-11-21 15:53:31,318 [AWT-EventQueue-0] INFO (SettingsFactory.java:213) ­ Order SQL updates by primary key: disabled
+2010-11-21 15:53:31,318 [AWT-EventQueue-0] INFO (SettingsFactory.java:217) ­ Order SQL inserts for batching: disabled
+2010-11-21 15:53:31,321 [AWT-EventQueue-0] INFO (SettingsFactory.java:386) ­ Query translator: org.hibernate.hql.ast.ASTQueryTranslatorFactory
+2010-11-21 15:53:31,400 [AWT-EventQueue-0] INFO (ASTQueryTranslatorFactory.java:24) ­ Using ASTQueryTranslatorFactory
+2010-11-21 15:53:31,401 [AWT-EventQueue-0] INFO (SettingsFactory.java:225) ­ Query language substitutions: {}
+2010-11-21 15:53:31,401 [AWT-EventQueue-0] INFO (SettingsFactory.java:230) ­ JPA-QL strict compliance: disabled
+2010-11-21 15:53:31,402 [AWT-EventQueue-0] INFO (SettingsFactory.java:235) ­ Second-level cache: enabled
+2010-11-21 15:53:31,402 [AWT-EventQueue-0] INFO (SettingsFactory.java:239) ­ Query cache: disabled
+2010-11-21 15:53:31,403 [AWT-EventQueue-0] INFO (SettingsFactory.java:373) ­ Cache provider: org.hibernate.cache.EhCacheProvider
+2010-11-21 15:53:31,426 [AWT-EventQueue-0] INFO (SettingsFactory.java:254) ­ Optimize cache for minimal puts: disabled
+2010-11-21 15:53:31,427 [AWT-EventQueue-0] INFO (SettingsFactory.java:263) ­ Structured second-level cache entries: disabled
+2010-11-21 15:53:31,437 [AWT-EventQueue-0] INFO (SettingsFactory.java:283) ­ Echoing all SQL to stdout
+2010-11-21 15:53:31,437 [AWT-EventQueue-0] INFO (SettingsFactory.java:290) ­ Statistics: disabled
+2010-11-21 15:53:31,438 [AWT-EventQueue-0] INFO (SettingsFactory.java:294) ­ Deleted entity synthetic identifier rollback: disabled
+2010-11-21 15:53:31,438 [AWT-EventQueue-0] INFO (SettingsFactory.java:309) ­ Default entity-mode: pojo
+2010-11-21 15:53:31,439 [AWT-EventQueue-0] INFO (SettingsFactory.java:313) ­ Named query checking : enabled
+2010-11-21 15:53:31,517 [AWT-EventQueue-0] INFO (SessionFactoryImpl.java:161) ­ building session factory
+2010-11-21 15:53:32,264 [AWT-EventQueue-0] WARN (EhCacheProvider.java:86) ­ Could not find configuration [com.googlecode.projecttemplate.pos.model.Person]; using defaults.
+2010-11-21 15:53:32,275 [AWT-EventQueue-0] WARN (CacheFactory.java:43) ­ read-only cache configured for mutable class: com.googlecode.projecttemplate.pos.model.Menu
+2010-11-21 15:53:32,276 [AWT-EventQueue-0] WARN (EhCacheProvider.java:86) ­ Could not find configuration [com.googlecode.projecttemplate.pos.model.Menu]; using defaults.
+2010-11-21 15:53:32,406 [AWT-EventQueue-0] INFO (SessionFactoryObjectFactory.java:82) ­ Not binding factory to JNDI, no JNDI name configured
+2010-11-21 15:53:32,752 [AWT-EventQueue-0] INFO (HibernateTransactionManager.java:421) ­ Using DataSource [org.springframework.jdbc.datasource.DriverManagerDataSource@67e779a1] of Hibernate SessionFactory for HibernateTransactionManager
