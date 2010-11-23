@@ -21,34 +21,12 @@ import java.util.List;
  *
  * @author ifnu
  */
-public class JnlpHandler implements HttpHandler{
+public class JarHandler implements HttpHandler{
 
     public void handle(HttpExchange xchg) throws IOException {
         try{
             String path  = xchg.getRequestURI().getPath();
-            if(path!=null && path.toLowerCase().endsWith("jnlp")){
-                Headers headers = xchg.getRequestHeaders();
-                List<String> contentDisposition = new ArrayList<String>();
-                contentDisposition.add("attachment; filename=arsip.jnlp");
-                headers.put("Content-Disposition", contentDisposition);
-                List<String> contentType = new ArrayList<String>();
-                contentType.add("application/x-java-jnlp-file");
-                headers.put("Content-Type", contentType);
-
-                OutputStream outputStream = xchg.getResponseBody();
-                InputStream inputStream = getClass().getResourceAsStream("/arsip.jnlp");
-                //baca dari jar
-                ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    byteArray.write(buffer,0,bytesRead);
-                }
-                xchg.sendResponseHeaders(200, byteArray.size());
-                outputStream.write(byteArray.toByteArray(),0,byteArray.size());
-                outputStream.close();
-            } else if(path!=null && path.toLowerCase().endsWith("jar")){
+            if(path!=null && path.toLowerCase().endsWith("jar")){
                 Headers headers = xchg.getRequestHeaders();
                 String fileName = path.substring(path.lastIndexOf("/") + 1,path.length());
                 List<String> contentDisposition = new ArrayList<String>();
