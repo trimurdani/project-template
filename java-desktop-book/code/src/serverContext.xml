@@ -11,20 +11,24 @@
           http://www.springframework.org/schema/tx
           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
-    <context:property-placeholder location="classpath:server.properties"/>
-
-    <bean class="org.springframework.remoting.support.SimpleHttpServerFactoryBean"
-        p:port="${server.port}">
+    <bean class="org.springframework.remoting.support.SimpleHttpServerFactoryBean">
         <property name="contexts">
             <map>
-                <entry key="/PersonService" value-ref="personServiceHttpInvoker"/>
-                <entry key="/ProductService" value-ref="productServiceHttpInvoker"/>
-                <entry key="/PurchaseService" value-ref="purchaseServiceHttpInvoker"/>
-                <entry key="/ReportService" value-ref="reportServiceHttpInvoker"/>
-                <entry key="/SalesService" value-ref="salesServiceHttpInvoker"/>
-                <entry key="/SecurityService" value-ref="securityServiceHttpInvoker"/>
+                <entry key="/PersonService"
+                    value-ref="personServiceHttpInvoker"/>
+                <entry key="/ProductService"
+                    value-ref="productServiceHttpInvoker"/>
+                <entry key="/PurchaseService"
+                    value-ref="purchaseServiceHttpInvoker"/>
+                <entry key="/ReportService"
+                    value-ref="reportServiceHttpInvoker"/>
+                <entry key="/SalesService"
+                    value-ref="salesServiceHttpInvoker"/>
+                <entry key="/SecurityService"
+                    value-ref="securityServiceHttpInvoker"/>
             </map>
         </property>
+        <property name="port" value="9090"/>
     </bean>
     <bean id="personServiceHttpInvoker"
       class="org.springframework.remoting.httpinvoker.SimpleHttpInvokerServiceExporter"
