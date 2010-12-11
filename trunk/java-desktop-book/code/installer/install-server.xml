@@ -29,14 +29,16 @@
         <panel classname="FinishPanel"/>
     </panels>
     <packs>
-        <pack name="Server Files" required="yes">
-            <description>Server Files</description>
+        <pack name="POS Server" required="yes">
+            <description>POS Server</description>
             <file src="installer/Licence.txt" targetdir="$INSTALL_PATH"/>
             <file src="installer/Readme-server.txt" targetdir="$INSTALL_PATH"/>
             <file src="dist/lib" targetdir="$INSTALL_PATH"/>
             <file src="dist/POS.jar" targetdir="$INSTALL_PATH"/>
-            <file src="installer/start-server.bat" targetdir="$INSTALL_PATH" condition="izpack.windowsinstall"/>
-            <file src="installer/start-server.sh" targetdir="$INSTALL_PATH" condition="!izpack.windowsinstall"/>
+            <file src="installer/start-server.bat"
+                targetdir="$INSTALL_PATH" condition="izpack.windowsinstall"/>
+            <file src="installer/start-server.sh"
+                targetdir="$INSTALL_PATH" condition="!izpack.windowsinstall"/>
         </pack>
     </packs>
 </installation>
