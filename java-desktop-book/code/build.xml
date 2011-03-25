@@ -32,26 +32,6 @@
             <include name="**/*.jrxml"/>
         </jrc>
     </target>
-<taskdef name="IzPack"
-    classname="com.izforge.izpack.ant.IzPackTask">
-    <classpath>
-        <fileset dir="./installer-lib">
-            <include name="**/*.jar"/>
-        </fileset>
-    </classpath>
-</taskdef>
-<property name="base.dir"
-    value="/Users/ifnu/NetBeansProjects/project-template/java-desktop-book/code"/>
-<target name="-post-jar">
-    <IzPack input="${base.dir}/installer/install-client.xml"
-        output="${base.dir}/dist/POS-client-installer.jar"
-        installerType="standard"
-        basedir="${base.dir}"/>
-    <IzPack input="${base.dir}/installer/install-server.xml"
-        output="${base.dir}/dist/POS-server-installer.jar"
-        installerType="standard"
-        basedir="${base.dir}"/>
-</target>
     <!--
 
     There exist several targets which are by default empty and which can be 
